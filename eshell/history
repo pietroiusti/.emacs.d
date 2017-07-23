@@ -1,0 +1,128 @@
+
+cd si
+cd ../Dropbox/Programming/projects/simon_game/
+ls
+touch index.html
+mkdir css js
+ls -l
+git status
+cd
+cd Downloads/
+ls
+vim simon* ../Dropbox/Programming/projects/simon_game/audio/
+ls -l
+cd ..
+cd audio/
+ls
+ls -l
+cd 
+cd Dropbox/Programming/FreeCodeCamp_Algorithm_Scripting/
+ls
+cd intermediate_algorithm_scripting/
+clear
+
+ls
+ls
+ls -l
+ls -l
+cd ../Dropbox/Programming/cs50-2016/week_8/
+ls -l
+python hello.py 
+python hello.py 
+python hello.py 
+python hello.py 
+python string.py 
+python string.py 
+python string.py 
+python string.py 
+python string.py 
+python string.py 
+python string.pyc
+python string.py
+ls -l
+fm string.pyc
+rm string.pyc
+clear
+
+ls -l
+rm cs50.pyc
+rm cs50.py 
+ls -l
+python string.py 
+python string.py 
+clera
+clear
+
+ls -l
+cat string.pyc
+rm string.pyc
+ls -l
+cat string.py 
+clear
+
+ls -l
+rm string.pyc
+rm string.py~
+clear
+
+pwd
+python3 ascii0.py 
+python3 ascii0.py 
+echo "suca"
+python argv0.py 
+python3 argv0.py suca
+python3 argv1.py
+python3 argv1.py
+python3 argv1.py foo bar baz
+python3 argv1.py foo bar baz
+clear
+
+clear
+
+cd
+cd Dropbox/Programming/FreeCodeCamp_Algorithm_Scripting/
+ls
+cd basic_algorithm_scripting/
+cd ..
+cd intermediate_algorithm_scripting/
+ls -l
+ls -l
+clear
+
+cd ..
+cd ..
+cd cs50-2016/
+ls
+cd week_8/
+ls
+clear
+
+python3 exit.py 
+python3 exit.py 
+python3 exit.py suca
+python3 exit.py suca
+python3 exit.py suca
+python3 exit.py 
+echo $?
+python3 exit.py suca
+echo $?
+python3 compare.py 
+python3 compare.py 
+clear
+
+python3 copy1.py 
+python3 noswap.py 
+python3 noswap.py 
+python3 noswap.py 
+python3 noswap.py 
+python3 swap.py 
+python3 structs.py
+python structs.py
+python structs.py
+python3 structs.py
+python3 structs1.py
+ls -l
+clear
+
+ls -l
+rm *~ -i
