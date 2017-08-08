@@ -101,6 +101,17 @@
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
 
+;; js2-mode as a defalut for js files
+(add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
+
+;; send things to the javascript interpreter inside of js2-mode
+(add-hook 'js2-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
+              (local-set-key (kbd "C-c b") 'js-send-buffer)
+              ))
+
+
 ;; solarized-emacs
 ;; Avoid all font-size changes
 (setq solarized-height-minus-1 1.0)
@@ -160,7 +171,7 @@
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
+    (js-comint php-mode yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
