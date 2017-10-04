@@ -144,9 +144,9 @@
 (setq sublimity-map-text-scale -7)
 
 (add-hook 'sublimity-map-setup-hook
-          (lambda ()
-            (setq buffer-face-mode-face '(:family "Monospace"))
-            (buffer-face-mode)))
+(lambda ()
+(setq buffer-face-mode-face '(:family "Monospace"))
+(buffer-face-mode)))
 
 (sublimity-map-set-delay nil)
 
