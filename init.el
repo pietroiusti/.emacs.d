@@ -59,6 +59,8 @@
 ;; org
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+(setq org-src-fontify-natively t)
+
 ;; If you enable Delete Selection mode, a minor mode, then inserting
 ;; text while the mark is active causes the selected text to be
 ;; deleted first. This also deactivates the mark.
@@ -127,7 +129,26 @@
 (define-key js-mode-map (kbd "M-.") nil)
 
 (add-hook 'js2-mode-hook (lambda ()
-  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+			   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+
+
+
+;; sublimity  (call command M-x sublimity-mode)
+(require 'sublimity)
+;; (require 'sublimity-scroll)
+(require 'sublimity-map) ;; experimental
+;; (require 'sublimity-attractive)
+
+(setq sublimity-map-size 20)
+(setq sublimity-map-fraction 0.3)
+(setq sublimity-map-text-scale -7)
+
+(add-hook 'sublimity-map-setup-hook
+          (lambda ()
+            (setq buffer-face-mode-face '(:family "Monospace"))
+            (buffer-face-mode)))
+
+(sublimity-map-set-delay nil)
 
 
 ;; solarized-emacs
@@ -189,7 +210,7 @@
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (ag xref-js2 js2-refactor pdf-tools js-comint php-mode yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
+    (sublimity company-tern ag xref-js2 js2-refactor pdf-tools js-comint php-mode yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
