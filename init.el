@@ -46,10 +46,12 @@
 
 ;; evil
 (require 'evil)
-;; emacs keybindings as a default!
-(setq evil-default-state 'emacs
-      evil-insert-state-modes nil
-      evil-motion-state-modes nil)
+
+(evil-set-initial-state 'dired-mode 'emacs)
+(evil-set-initial-state 'Info-mode 'emacs)
+
+(evil-search-module 'evil-search)
+
 (evil-mode 1)
  
 
@@ -210,7 +212,7 @@
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
  '(package-selected-packages
    (quote
-    (sublimity company-tern ag xref-js2 js2-refactor pdf-tools js-comint php-mode yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
+    (sublimity company-tern ag xref-js2 js2-refactor js-comint php-mode yasnippet zenburn-theme web-mode speed-type solarized-theme pomidor org-ref org-bullets magit js2-mode iy-go-to-char impatient-mode expand-region evil auto-complete auctex ace-jump-mode)))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
