@@ -50,7 +50,7 @@
 (evil-set-initial-state 'dired-mode 'emacs)
 (evil-set-initial-state 'Info-mode 'emacs)
 
-(evil-search-module 'evil-search)
+(setq evil-search-module 'evil-search)
 
 (evil-mode 1)
  
