@@ -47,13 +47,35 @@
 ;; evil
 (require 'evil)
 
-(evil-set-initial-state 'dired-mode 'emacs)
-(evil-set-initial-state 'Info-mode 'emacs)
-
+;; emacs state as default in the following modes 
+;; (evil-set-initial-state 'dired-mode 'emacs)
+;; (evil-set-initial-state 'Info-mode 'emacs)
+;; (evil-set-initial-state 'help-mode 'emacs)
+;; (evil-set-initial-state 'eshell-mode 'emacs)
+;; (evil-set-initial-state 'calendar-mode 'emacs)
+;; (evil-set-initial-state 'erc-mode 'emacs)
+;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
+  
 (setq evil-search-module 'evil-search)
 
+;; change cursor color in different modes
+;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el
+(setq evil-emacs-state-cursor '("grey" box))
+(setq evil-motion-state-cursor '("red" box))
+(setq evil-normal-state-cursor '("red" box))
+(setq evil-visual-state-cursor '("red" box))
+(setq evil-insert-state-cursor '("red" bar))
+(setq evil-replace-state-cursor '("red" bar))
+(setq evil-operator-state-cursor '("red" hollow))
+;; TODO: change color of cursor when it is in the minibuffer
+
+;; emacs keybindings as a default!
+(setq evil-default-state 'emacs
+      evil-insert-state-modes nil
+      evil-motion-state-modes nil)
+
 (evil-mode 1)
- 
+
 
 (require 'helm-config)
 (helm-mode 1)
