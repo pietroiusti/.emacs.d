@@ -1,3 +1,8 @@
+;; TODO
+;; create a key chord that behaves as Control
+;; The same way C-[ behaves like ESC (which behaves like Meta)
+;; Possible?
+
 (setq user-full-name "Giulio Pietroiusti"
       user-mail-address "giulio.pietroiusti@gmail.com")
 
@@ -81,9 +86,10 @@
 (helm-mode 1)
 
 ;; org
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 (setq org-src-fontify-natively t)
+
+(setq org-hide-leading-stars t)
 
 ;; If you enable Delete Selection mode, a minor mode, then inserting
 ;; text while the mark is active causes the selected text to be
