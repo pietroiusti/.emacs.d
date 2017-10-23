@@ -6,6 +6,10 @@
 (setq user-full-name "Giulio Pietroiusti"
       user-mail-address "giulio.pietroiusti@gmail.com")
 
+;; set default file encoding
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
 ;; turn off beep
 ;;(setq ring-bell-function 'ignore)
 ;; get visual indication
@@ -87,9 +91,9 @@
 
 ;; org
 (require 'org)
-;; (setq org-startup-indented t)
-;; (setq org-indent-mode t)
-;; (setq org-hide-leading-stars t)
+(setq org-startup-indented t)
+(setq org-indent-mode t)
+(setq org-hide-leading-stars t)
 (setq org-src-fontify-natively t)
 
 ;; If you enable Delete Selection mode, a minor mode, then inserting

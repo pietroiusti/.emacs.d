@@ -3,8 +3,8 @@
 ;;; Code:
 (add-to-list 'load-path (directory-file-name (or (file-name-directory #$) (car load-path))))
 
-;;;### (autoloads nil "sublimity" "sublimity.el" (22997 25766 361848
-;;;;;;  117000))
+;;;### (autoloads nil "sublimity" "sublimity.el" (23011 15635 242671
+;;;;;;  801000))
 ;;; Generated autoloads from sublimity.el
 
 (defvar sublimity-mode nil "\
@@ -25,8 +25,8 @@ smooth-scrolling and minimap, like sublime editor
 ;;;***
 
 ;;;### (autoloads nil nil ("sublimity-attractive.el" "sublimity-map.el"
-;;;;;;  "sublimity-pkg.el" "sublimity-scroll.el") (22997 25766 406847
-;;;;;;  501000))
+;;;;;;  "sublimity-pkg.el" "sublimity-scroll.el") (23011 15635 288671
+;;;;;;  57000))
 
 ;;;***
 
