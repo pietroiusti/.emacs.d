@@ -19,3 +19,33 @@ clear
 ls
 sudo node script.js 
 systemctl suspend
+systemctl suspend
+node app.js 
+clear
+
+node app.js 
+node app.js 
+node app.js 
+ls
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+clear
+
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+node app.js 
+clear
+
+node app.js 
+node app.js 
