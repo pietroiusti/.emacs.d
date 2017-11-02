@@ -94,6 +94,14 @@
 (setq org-indent-mode t)
 (setq org-hide-leading-stars t)
 (setq org-src-fontify-natively t)
+;; The four Org commands org-store-link, org-capture, org-agenda, and
+;; org-iswitchb should be accessible through global keys (i.e.,
+;; anywhere in Emacs, not just in Org buffers).
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 
 ;; If you enable Delete Selection mode, a minor mode, then inserting
 ;; text while the mark is active causes the selected text to be
@@ -214,6 +222,7 @@
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
+ '(org-agenda-files (quote ("~/Dropbox/org/todos.org")))
  '(package-selected-packages
    (quote
     (js2-mode zenburn-theme web-mode sublimity speed-type solarized-theme pomidor php-mode org-ref org-bullets magit iy-go-to-char impatient-mode expand-region evil company-tern auto-complete auctex ag ace-jump-mode)))
