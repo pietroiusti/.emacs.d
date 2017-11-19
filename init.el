@@ -3,6 +3,7 @@
 ;; The same way C-[ behaves like ESC (which behaves like Meta)
 ;; Possible?
 
+
 (setq user-full-name "Giulio Pietroiusti"
       user-mail-address "giulio.pietroiusti@gmail.com")
 
@@ -29,6 +30,11 @@
 (menu-bar-mode 0)
 (when window-system
   (scroll-bar-mode -1))
+
+;; org agenda at startup
+(setq inhibit-splash-screen t)
+(org-agenda-list)
+(delete-other-windows)
 
 ;; show matching parenthesis
 (show-paren-mode 1)
@@ -179,6 +185,7 @@
 
 ;; (load-theme 'solarized-light t)
 (load-theme 'solarized-dark t)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -193,7 +200,7 @@
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    (quote
-    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(fci-rule-color "#073642")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
@@ -222,10 +229,10 @@
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(org-agenda-files (quote ("~/Dropbox/org/todos.org")))
+ '(org-agenda-files (quote ("~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (js2-mode zenburn-theme web-mode sublimity speed-type solarized-theme pomidor php-mode org-ref org-bullets magit iy-go-to-char impatient-mode expand-region evil company-tern auto-complete auctex ag ace-jump-mode)))
+    (sublimity solarized-theme magit js2-mode iy-go-to-char helm expand-region evil auctex ace-jump-mode)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
