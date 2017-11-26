@@ -119,31 +119,11 @@
 (global-set-key (kbd "C-c F") 'iy-go-up-to-char-backward)
 ;; make the every key behave normally after these commands
 (setq iy-go-to-char-override-local-map 'nil)
+ 
 
-
-;;
-;; ace jump mode major function
-;; 
-(add-to-list 'load-path "/full/path/where/ace-jump-mode.el/in/")
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-;; you can select the key you prefer to
-(define-key global-map (kbd "C-;") 'ace-jump-mode)
-
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+;; avy
+(global-set-key (kbd "C-;") 'avy-goto-char)
+(global-set-key (kbd "C-:") 'avy-goto-line)
 
 
 (require 'js2-mode)
@@ -229,10 +209,12 @@
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(org-agenda-files (quote ("~/Dropbox/org/activities.org")))
+ '(org-agenda-files
+   (quote
+    ("~/Dropbox/org/meetings.org" "~/Dropbox/org/todos.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (sublimity solarized-theme magit js2-mode iy-go-to-char helm expand-region evil auctex ace-jump-mode)))
+    (avy sublimity solarized-theme magit js2-mode iy-go-to-char helm expand-region evil auctex ace-jump-mode)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
