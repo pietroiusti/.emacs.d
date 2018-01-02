@@ -91,7 +91,6 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 ;; org capture
 (setq org-default-notes-file "~/Dropbox/org/capture.org")
-(define-key global-map "\C-cc" 'org-capture)
 
 ;; org agenda at startup
 (setq inhibit-splash-screen t)
@@ -129,3 +128,18 @@
 
 ;; (load-theme 'solarized-light t)
 (load-theme 'solarized-dark t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/Dropbox/org/todos.org")))
+ '(package-selected-packages
+   (quote
+    (solarized-theme ox-twbs org-edna js2-mode iy-go-to-char helm evil avy))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
