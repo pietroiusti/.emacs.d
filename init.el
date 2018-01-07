@@ -136,7 +136,7 @@
  '(org-agenda-files (quote ("~/Dropbox/org/todos.org")))
  '(package-selected-packages
    (quote
-    (solarized-theme ox-twbs org-edna js2-mode iy-go-to-char helm evil avy))))
+    (web-mode solarized-theme ox-twbs org-edna js2-mode iy-go-to-char helm evil avy))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
