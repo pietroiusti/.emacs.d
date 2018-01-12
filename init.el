@@ -4,10 +4,35 @@
 ;; Reinclude tetris, which is not present in Fedora
 (load "~/.emacs.d/tetris.el")
 
+;; Include common lisp functions and macros
+(require 'cl)
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
+
+
+(require 'paredit)
+(require 'rainbow-delimiters)
+(require 'company)
+;; Enable paredit, rainbow-delimiters and show-paren-mode for Emacs lisp
+;; mode (mode to edit Emacs files *.el) and lisp-interaction-mode (mode
+;; to edit *scratch* buffer)
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (paredit-mode t)
+            (rainbow-delimiters-mode t)
+            (show-paren-mode 1)
+            ))
+(add-hook 'lisp-interaction-mode
+          (lambda ()
+            (paredit-mode t)
+            (rainbow-delimiters-mode t)
+            (show-paren-mode 1)
+            ))
+
 
 ;; set default file encoding
 (set-language-environment "UTF-8")
@@ -73,14 +98,14 @@
 
 (evil-mode 1)
 
-(require 'helm-config)
-(helm-mode 1)
+;; (require 'helm-config)
+;; (helm-mode 1)
 
 ;; Let's try ido mode
-;; (require `ido)
-;; (setq ido-enable-flex-matching t)
-;; (setq ido-everywhere t)
-;; (ido-mode 1)
+(require `ido)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
 
 ;; org
 (require 'org)
@@ -134,3 +159,18 @@
 
 ;; (load-theme 'solarized-light t)
 (load-theme 'solarized-dark t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/Dropbox/org/activities.org")))
+ '(package-selected-packages
+   (quote
+    (company paredit rainbow-delimiters web-mode solarized-theme rjsx-mode ox-twbs org-edna iy-go-to-char helm evil avy))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
