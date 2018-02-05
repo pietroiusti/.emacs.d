@@ -208,7 +208,7 @@
  '(magit-diff-use-overlays nil)
  '(org-agenda-files
    (quote
-    ("~/Dropbox/org/readings.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
+    ("~/Dropbox/org/todos.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
     (auctex tern company paredit rainbow-delimiters web-mode solarized-theme rjsx-mode ox-twbs org-edna iy-go-to-char helm evil avy)))
