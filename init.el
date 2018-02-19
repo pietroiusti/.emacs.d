@@ -12,6 +12,10 @@
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
+;; Minor mode that displays key bindings
+(require 'which-key)
+(which-key-mode)
+(which-key-setup-side-window-bottom)
 
 (require 'paredit)
 (require 'rainbow-delimiters)
@@ -43,11 +47,13 @@
 ;; get visual indication
 (setq visible-bell 1)
 
-;; Don't show bars
+;; Don't show tool bar
 (tool-bar-mode 0)
+;; Don't show menu bar
 (menu-bar-mode 0)
+;; Don't show scroll bar
 (when window-system
-  (scroll-bar-mode -1))
+  (scroll-bar-mode 0))
 
 ;; show matching parenthesis
 (show-paren-mode 1)
@@ -211,7 +217,7 @@
     ("~/Dropbox/org/todos.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (auctex tern company paredit rainbow-delimiters web-mode solarized-theme rjsx-mode ox-twbs org-edna iy-go-to-char helm evil avy)))
+    (which-key auctex tern company paredit rainbow-delimiters web-mode solarized-theme rjsx-mode ox-twbs org-edna iy-go-to-char helm evil avy)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
