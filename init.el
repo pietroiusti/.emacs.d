@@ -47,6 +47,12 @@
 ;; get visual indication
 (setq visible-bell 1)
 
+;; Highlight current line
+(when window-system (global-hl-line-mode t))
+
+;; Font font size 
+(set-face-attribute 'default (selected-frame) :height 110)
+
 ;; Don't show tool bar
 (tool-bar-mode 0)
 ;; Don't show menu bar
@@ -107,11 +113,14 @@
 ;; (require 'helm-config)
 ;; (helm-mode 1)
 
-;; Let's try ido mode
-(require `ido)
+;; Ido mode and ido vertical mode
+(require 'ido)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (ido-mode 1)
+
+;; Smex
+(global-set-key (kbd "M-x") 'smex)
 
 ;; org
 (require 'org)
@@ -171,7 +180,6 @@
 ;; (load-theme 'solarized-light t)
 (load-theme 'solarized-dark t)
 
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -186,7 +194,7 @@
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
+    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(fci-rule-color "#073642")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
@@ -212,12 +220,9 @@
    (quote
     ("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36")))
  '(magit-diff-use-overlays nil)
- '(org-agenda-files
-   (quote
-    ("~/Dropbox/org/todos.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (which-key auctex tern company paredit rainbow-delimiters web-mode solarized-theme rjsx-mode ox-twbs org-edna iy-go-to-char helm evil avy)))
+    (smex which-key web-mode tern solarized-theme rjsx-mode rainbow-delimiters paredit ox-twbs org-edna iy-go-to-char helm evil company avy)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
