@@ -37,6 +37,9 @@
             (show-paren-mode 1)
             ))
 
+;; C style
+(setq c-default-style "linux"
+      c-basic-offset 4)
 
 ;; set default file encoding
 (set-language-environment "UTF-8")
@@ -89,7 +92,7 @@
 ;; (evil-set-initial-state 'calendar-mode 'emacs)
 ;; (evil-set-initial-state 'erc-mode 'emacs)
 ;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
-  
+
 (setq evil-search-module 'evil-search)
 
 ;; change cursor color in different modes
@@ -141,7 +144,7 @@
 
 ;; Define todo states
 (setq org-todo-keywords
-  '((sequence "TODO" "IN PROGRESS" "DONE" )))
+      '((sequence "TODO" "IN PROGRESS" "DONE" )))
 
 ;; org agenda at startup
 (setq inhibit-splash-screen t)
