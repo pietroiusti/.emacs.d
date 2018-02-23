@@ -23,15 +23,6 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
-* Melpa stable
-#+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (package-initialize)
-#+END_SRC
-
-
 * which-key
 Minor mode that displays key bindings
 #+BEGIN_SRC emacs-lisp
@@ -113,11 +104,13 @@ Minor mode that displays key bindings
     (scroll-bar-mode 0))
 #+END_SRC
 
+
 * Show matching parenthesis
 #+BEGIN_SRC emacs-lisp
   ;; show matching parenthesis
   (show-paren-mode 1)
 #+END_SRC
+
 
 * Auto-fill
 #+BEGIN_SRC emacs-lisp
@@ -125,6 +118,7 @@ Minor mode that displays key bindings
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
 #+END_SRC
+
 
 * Tabs
 #+BEGIN_SRC emacs-lisp
@@ -134,6 +128,7 @@ Minor mode that displays key bindings
 (defvaralias 'cperl-indent-level 'tab-width)
 #+END_SRC
 
+
 * AUCTeX
 #+BEGIN_SRC emacs-lisp
   ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
@@ -142,6 +137,7 @@ Minor mode that displays key bindings
   (setq Tex-parse-self t)
   (setq-default TeX-master nil)
 #+END_SRC
+
 
 * evil
 #+BEGIN_SRC emacs-lisp
@@ -176,6 +172,7 @@ Minor mode that displays key bindings
   (evil-mode 1)
 #+END_SRC
 
+
 * ido
 #+BEGIN_SRC emacs-lisp
   ;; Ido mode and ido vertical mode
@@ -190,6 +187,7 @@ Minor mode that displays key bindings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-x") 'smex)
 #+END_SRC
+
 
 * org
 #+BEGIN_SRC emacs-lisp
@@ -223,6 +221,7 @@ Minor mode that displays key bindings
   (org-agenda-list 14)
   (delete-other-windows)
 #+END_SRC
+
 
 * Delete Selection Mode
 #+BEGIN_SRC emacs-lisp
