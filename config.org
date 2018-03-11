@@ -218,8 +218,18 @@ Minor mode that displays key bindings
 #+BEGIN_SRC emacs-lisp
   ;; org agenda at startup
   (setq inhibit-splash-screen t)
-  (org-agenda-list 14)
+  (org-agenda-list)
+  (switch-to-buffer "*Org Agenda*")
   (delete-other-windows)
+
+
+  (split-window-right)
+  (other-window 1)
+  (find-file "~/Dropbox/org/")
+  (beginning-of-buffer)
+  (other-window 1)
+
+  (add-hook 'after-init-hook 'org-agenda-list)
 #+END_SRC
 
 
