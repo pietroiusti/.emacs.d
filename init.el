@@ -46,7 +46,7 @@
  '(magit-diff-use-overlays nil)
  '(org-agenda-files
    (quote
-    ("~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
+    ("~/Dropbox/org/todos.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
     (which-key web-mode tern solarized-theme smex rjsx-mode rainbow-delimiters paredit ox-twbs org-edna iy-go-to-char evil company avy)))
