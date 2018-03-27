@@ -49,7 +49,7 @@
     ("~/Dropbox/org/todos.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (which-key web-mode tern solarized-theme smex rjsx-mode rainbow-delimiters paredit ox-twbs org-edna iy-go-to-char evil company avy)))
+    (magit which-key web-mode tern solarized-theme smex rjsx-mode rainbow-delimiters paredit ox-twbs org-edna iy-go-to-char evil company avy)))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
