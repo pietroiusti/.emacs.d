@@ -5,6 +5,8 @@
 
 (require 'cl)
 
+(global-set-key (kbd "C-x g") 'magit-status)
+
 (require 'which-key)
 (which-key-mode)
 (which-key-setup-side-window-bottom)

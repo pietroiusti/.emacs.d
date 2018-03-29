@@ -23,6 +23,12 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* Magit
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+
 * which-key
 Minor mode that displays key bindings
 #+BEGIN_SRC emacs-lisp
