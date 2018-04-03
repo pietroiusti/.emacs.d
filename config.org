@@ -23,6 +23,12 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* pdf-tools
+#+BEGIN_SRC emacs-lisp
+  (pdf-tools-install)
+#+END_SRC
+
+
 * Magit
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x g") 'magit-status)

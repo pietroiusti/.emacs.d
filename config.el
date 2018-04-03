@@ -5,6 +5,8 @@
 
 (require 'cl)
 
+(pdf-tools-install)
+
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (require 'which-key)
@@ -151,9 +153,11 @@
 ;; deleted first. This also deactivates the mark.
 (delete-selection-mode 1)
 
-;; simulate vim 'f' (also backward)
-(global-set-key (kbd "C-c f") 'iy-go-up-to-char)
-(global-set-key (kbd "C-c F") 'iy-go-up-to-char-backward)
+;; Emulate vim 'f' and 't'
+(global-set-key (kbd "C-c f") 'iy-go-to-char)
+(global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
+(global-set-key (kbd "C-c t") 'iy-go-up-to-char)
+(global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
 ;; make the every key behave normally after these commands
 (setq iy-go-to-char-override-local-map 'nil)
 
