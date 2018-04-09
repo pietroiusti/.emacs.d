@@ -116,6 +116,11 @@ Minor mode that displays key bindings
     (scroll-bar-mode 0))
 #+END_SRC
 
+* Scrolling
+#+BEGIN_SRC emacs-lisp
+  (setq scroll-conservatively 100)
+#+END_SRC
+
 
 * Show matching parenthesis
 #+BEGIN_SRC emacs-lisp
