@@ -1,7 +1,6 @@
 #+TITLE: Emacs config
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
-#+CREATOR: Emacs 25.3.1 (Org mode 9.1.5)
 
 * Me
 #+BEGIN_SRC emacs-lisp
@@ -23,32 +22,44 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
-* pdf-tools
+* which-key
 #+BEGIN_SRC emacs-lisp
-  (pdf-tools-install)
+  (use-package which-key
+               :ensure t
+               :config
+               (which-key-mode))
 #+END_SRC
 
 
 * Magit
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x g") 'magit-status)
+  (use-package magit
+               :ensure t
+               :config
+               (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
 
 
-* which-key
-Minor mode that displays key bindings
+* pdf-tools
 #+BEGIN_SRC emacs-lisp
-  (require 'which-key)
-  (which-key-mode)
-  (which-key-setup-side-window-bottom)
+  (use-package pdf-tools
+               :ensure t
+               :config
+               (pdf-tools-install))
 #+END_SRC
 
 
 * Elisp configuration
 #+BEGIN_SRC emacs-lisp
-  (require 'paredit)
-  (require 'rainbow-delimiters)
-  (require 'company)
+  (use-package paredit
+               :ensure t)
+
+  (use-package rainbow-delimiters
+               :ensure t)
+
+  (use-package company
+               :ensure t)
+
   ;; Enable paredit, rainbow-delimiters and show-paren-mode for Emacs lisp
   ;; mode (mode to edit Emacs files *.el) and lisp-interaction-mode (mode
   ;; to edit *scratch* buffer)
@@ -116,11 +127,6 @@ Minor mode that displays key bindings
     (scroll-bar-mode 0))
 #+END_SRC
 
-* Scrolling
-#+BEGIN_SRC emacs-lisp
-  (setq scroll-conservatively 100)
-#+END_SRC
-
 
 * Show matching parenthesis
 #+BEGIN_SRC emacs-lisp
@@ -148,86 +154,99 @@ Minor mode that displays key bindings
 
 * AUCTeX
 #+BEGIN_SRC emacs-lisp
-  ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
-  ;; documents right away, insert the following in your '.emacs' file. 
-  (setq TeX-auto-save t)
-  (setq Tex-parse-self t)
-  (setq-default TeX-master nil)
+
+  (use-package auctex
+    :defer t
+    :ensure t
+    :config
+    ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
+    ;; documents right away, insert the following in your '.emacs' file. 
+    (setq TeX-auto-save t)
+    (setq Tex-parse-self t)
+    (setq-default TeX-master nil))
+
 #+END_SRC
 
 
 * evil
 #+BEGIN_SRC emacs-lisp
-  (require 'evil)
-  ;; emacs state as default in the following modes 
-  ;; (evil-set-initial-state 'dired-mode 'emacs)
-  ;; (evil-set-initial-state 'Info-mode 'emacs)
-  ;; (evil-set-initial-state 'help-mode 'emacs)
-  ;; (evil-set-initial-state 'eshell-mode 'emacs)
-  ;; (evil-set-initial-state 'calendar-mode 'emacs)
-  ;; (evil-set-initial-state 'erc-mode 'emacs)
-  ;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
+  (use-package evil
+               :ensure t
+               :config
+               ;; emacs state as default in the following modes 
+               ;; (evil-set-initial-state 'dired-mode 'emacs)
+               ;; (evil-set-initial-state 'Info-mode 'emacs)
+               ;; (evil-set-initial-state 'help-mode 'emacs)
+               ;; (evil-set-initial-state 'eshell-mode 'emacs)
+               ;; (evil-set-initial-state 'calendar-mode 'emacs)
+               ;; (evil-set-initial-state 'erc-mode 'emacs)
+               ;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
 
-  (setq evil-search-module 'evil-search)
+               (setq evil-search-module 'evil-search)
 
-  ;; Change cursor color in different modes
-  ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el
-  (setq evil-emacs-state-cursor '("grey" box))
-  (setq evil-motion-state-cursor '("red" box))
-  (setq evil-normal-state-cursor '("red" box))
-  (setq evil-visual-state-cursor '("red" box))
-  (setq evil-insert-state-cursor '("red" bar))
-  (setq evil-replace-state-cursor '("red" bar))
-  (setq evil-operator-state-cursor '("red" hollow))
-  ;; TODO: change color of cursor when it is in the minibuffer
+               ;; Change cursor color in different modes
+               ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el
+               (setq evil-emacs-state-cursor '("grey" box))
+               (setq evil-motion-state-cursor '("red" box))
+               (setq evil-normal-state-cursor '("red" box))
+               (setq evil-visual-state-cursor '("red" box))
+               (setq evil-insert-state-cursor '("red" bar))
+               (setq evil-replace-state-cursor '("red" bar))
+               (setq evil-operator-state-cursor '("red" hollow))
+               ;; TODO: change color of cursor when it is in the minibuffer
 
-  ;; emacs keybindings as a default!
-  (setq evil-default-state 'emacs
-        evil-insert-state-modes nil
-        evil-motion-state-modes nil)
+               ;; emacs keybindings as a default!
+               (setq evil-default-state 'emacs
+                     evil-insert-state-modes nil
+                     evil-motion-state-modes nil)
 
-  (evil-mode 1)
+               (evil-mode 1))
 #+END_SRC
 
 
 * ido
 #+BEGIN_SRC emacs-lisp
-  ;; Ido mode and ido vertical mode
-  (require 'ido)
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (ido-mode 1)
+  (use-package ido
+               :ensure t
+               :config
+               (setq ido-enable-flex-matching t)
+               (setq ido-everywhere t)
+               (ido-mode 1))
+
 #+END_SRC
 
 
 * smex
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-x") 'smex)
+  (use-package smex
+               :ensure t
+               :config
+               (global-set-key (kbd "M-x") 'smex))
 #+END_SRC
 
 
 * org
 #+BEGIN_SRC emacs-lisp
-  (require 'org)
-  (setq org-startup-indented t)
-  (setq org-indent-mode t)
-  (setq org-hide-leading-stars t)
-  (setq org-src-fontify-natively t)
-  ;; The four Org commands org-store-link, org-capture, org-agenda, and
-  ;; org-iswitchb should be accessible through global keys (i.e.,
-  ;; anywhere in Emacs, not just in Org buffers).
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  ;; org capture
-  (setq org-default-notes-file "~/Dropbox/org/capture.org")
+  (use-package org
+               :ensure t
+               :config
+               (setq org-startup-indented t)
+               (setq org-indent-mode t)
+               (setq org-hide-leading-stars t)
+               (setq org-src-fontify-natively t)
+               ;; The four Org commands org-store-link, org-capture, org-agenda, and
+               ;; org-iswitchb should be accessible through global keys (i.e.,
+               ;; anywhere in Emacs, not just in Org buffers).
+               (global-set-key "\C-cl" 'org-store-link)
+               (global-set-key "\C-cc" 'org-capture)
+               (global-set-key "\C-ca" 'org-agenda)
+               (global-set-key "\C-cb" 'org-iswitchb)
+               ;; org capture
+               (setq org-default-notes-file "~/Dropbox/org/capture.org")
 
-
-  ;; Define todo states
-  (setq org-todo-keywords
-        '((sequence "TODO" "IN PROGRESS" "DONE" )))
-
+               ;; Define todo states
+               (setq org-todo-keywords
+                     '((sequence "TODO" "IN PROGRESS" "DONE" ))))
 #+END_SRC
 
 
@@ -261,43 +280,55 @@ Minor mode that displays key bindings
 
 * iy-go-up-to-char
 #+BEGIN_SRC emacs-lisp
-  ;; Emulate vim 'f' and 't'
-  (global-set-key (kbd "C-c f") 'iy-go-to-char)
-  (global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
-  (global-set-key (kbd "C-c t") 'iy-go-up-to-char)
-  (global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
-  ;; make the every key behave normally after these commands
-  (setq iy-go-to-char-override-local-map 'nil)
+  (use-package iy-go-to-char
+    :ensure t
+    :config
+    ;; Emulate vim 'f' and 't'
+    (global-set-key (kbd "C-c f") 'iy-go-to-char)
+    (global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
+    (global-set-key (kbd "C-c t") 'iy-go-up-to-char)
+    (global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
+    ;; make the every key behave normally after these commands
+    (setq iy-go-to-char-override-local-map 'nil))
 #+END_SRC
 
 
 * avy
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-;") 'avy-goto-char)
-  (global-set-key (kbd "C-:") 'avy-goto-line)
+  (use-package avy
+               :ensure t
+               :config
+               (global-set-key (kbd "C-;") 'avy-goto-char)
+               (global-set-key (kbd "C-:") 'avy-goto-line))
 #+END_SRC
 
 
 * js2-mode
 #+BEGIN_SRC emacs-lisp
-  (require 'js2-mode)
-  ;; js2-mode as a defalut for js files
-  (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
-  ;;TODO
-  ;;autocompletion
+  (use-package js2-mode
+               :ensure t
+               :config
+               ;; js2-mode as a defalut for js files
+               (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
+               ;;TODO
+               ;;autocompletion
+               )
 #+END_SRC
 
 
 * Themes
 ** solarized-emacs
 #+BEGIN_SRC emacs-lisp
-  ;; Avoid all font-size changes
-  (setq solarized-height-minus-1 1.0)
-  (setq solarized-height-plus-1 1.0)
-  (setq solarized-height-plus-2 1.0)
-  (setq solarized-height-plus-3 1.0)
-  (setq solarized-height-plus-4 1.0)
+  (use-package solarized-theme
+               :ensure t
+               :config
+               ;; Avoid all font-size changes
+               (setq solarized-height-minus-1 1.0)
+               (setq solarized-height-plus-1 1.0)
+               (setq solarized-height-plus-2 1.0)
+               (setq solarized-height-plus-3 1.0)
+               (setq solarized-height-plus-4 1.0)
 
-  ;; (load-theme 'solarized-light t)
-  (load-theme 'solarized-dark t)
+               ;; (load-theme 'solarized-light t)
+               (load-theme 'solarized-dark t))
 #+END_SRC
