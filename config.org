@@ -370,10 +370,6 @@ Reinclude tetris, which is not present in Fedora.
     
     (defengine treccanivocabolario
       "http://www.treccani.it/vocabolario/ricerca/%s/"
-      :keybinding "t")
-
-    (defengine google
-      "http://www.treccani.it/vocabolario/ricerca/%s/"
       :keybinding "t"))
 #+END_SRC
 
