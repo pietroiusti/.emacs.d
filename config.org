@@ -358,6 +358,25 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* engine-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package engine-mode
+    :ensure t
+    :config
+    (engine-mode t)
+    (defengine oxforddictionaries
+      "https://en.oxforddictionaries.com/definition/%s/"
+      :keybinding "o")
+    
+    (defengine treccanivocabolario
+      "http://www.treccani.it/vocabolario/ricerca/%s/"
+      :keybinding "t")
+
+    (defengine google
+      "http://www.treccani.it/vocabolario/ricerca/%s/"
+      :keybinding "t"))
+#+END_SRC
+
 * Themes
 ** solarized-emacs
 #+BEGIN_SRC emacs-lisp
