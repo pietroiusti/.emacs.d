@@ -373,6 +373,7 @@ Reinclude tetris, which is not present in Fedora.
       :keybinding "t"))
 #+END_SRC
 
+
 * Themes
 ** solarized-emacs
 #+BEGIN_SRC emacs-lisp
@@ -387,5 +388,13 @@ Reinclude tetris, which is not present in Fedora.
     (setq solarized-height-plus-4 1.0)
 
     ;; (load-theme 'solarized-light t)
-    (load-theme 'solarized-dark t))
+    ;; (load-theme 'solarized-dark t)
+)
 #+END_SRC
+** spacemacs-theme
+#+BEGIN_SRC emacs-lisp
+  (use-package spacemacs-theme
+    :ensure t)
+
+  (load-theme 'spacemacs-dark t)
+#+End_SRC
