@@ -368,9 +368,13 @@ Reinclude tetris, which is not present in Fedora.
       "https://en.oxforddictionaries.com/definition/%s/"
       :keybinding "o")
     
+    (defengine google-translate
+      "https://translate.google.com/#en/it/%s/"
+      :keybinding "t")
+
     (defengine treccanivocabolario
       "http://www.treccani.it/vocabolario/ricerca/%s/"
-      :keybinding "t"))
+      :keybinding "i"))
 #+END_SRC
 
 
