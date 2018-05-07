@@ -102,6 +102,11 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* Use y/n instead of yes/no
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
 * Current line highlighting
 #+BEGIN_SRC emacs-lisp
   (when window-system (global-hl-line-mode t))
