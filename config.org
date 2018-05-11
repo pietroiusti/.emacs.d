@@ -48,6 +48,13 @@ Reinclude tetris, which is not present in Fedora.
     (pdf-tools-install))
 #+END_SRC
 
+* Company
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
 
 * Elisp configuration
 #+BEGIN_SRC emacs-lisp
@@ -57,25 +64,27 @@ Reinclude tetris, which is not present in Fedora.
   (use-package rainbow-delimiters
     :ensure t)
 
-  (use-package company
-    :ensure t)
+  
 
   ;; Enable paredit, rainbow-delimiters and show-paren-mode for Emacs lisp
   ;; mode (mode to edit Emacs files *.el) and lisp-interaction-mode (mode
   ;; to edit *scratch* buffer)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (paredit-mode t)
-              (rainbow-delimiters-mode t)
-              (show-paren-mode 1)
-              ))
-  (add-hook 'lisp-interaction-mode
-            (lambda ()
-              (paredit-mode t)
-              (rainbow-delimiters-mode t)
-              (show-paren-mode 1)
-              ))
+
+  ;; not use for the moment
+
+  
+  ;; (add-hook 'emacs-lisp-mode-hook
+  ;;           (lambda ()
+  ;;             (paredit-mode t)
+  ;;             (rainbow-delimiters-mode t)
+  ;;             (show-paren-mode 1)
+  ;;             ))
+  ;; (add-hook 'lisp-interaction-mode
+  ;;           (lambda ()
+  ;;             (paredit-mode t)
+  ;;             (rainbow-delimiters-mode t)
+  ;;             (show-paren-mode 1)
+  ;;             ))
 #+END_SRC
 
 
