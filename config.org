@@ -398,12 +398,14 @@ Reinclude tetris, which is not present in Fedora.
 * Reading news
 ** elfeed
 #+BEGIN_SRC emacs-lisp
-  (use-package elfeed
-    :ensure t
-    :config
-    (setq elfeed-feeds
-          '("https://www.theguardian.com/world/rss"
-            "https://www.ilfattoquotidiano.it/feed/")))
+    (use-package elfeed
+      :ensure t
+      :config
+      (setq elfeed-feeds
+            '("https://www.theguardian.com/world/rss"
+              "https://www.ilfattoquotidiano.it/feed/"
+              "https://www.theguardian.com/football/rss"
+              "https://www.gazzetta.it/rss/calcio.xml")))
 #+END_SRC
 
 
