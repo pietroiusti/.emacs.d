@@ -21,6 +21,12 @@ Reinclude tetris, which is not present in Fedora.
   (require 'cl)
 #+END_SRC
 
+* Disable backup and auto-save
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+#+END_SRC
+
 
 * which-key
 #+BEGIN_SRC emacs-lisp
