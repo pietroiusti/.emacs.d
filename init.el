@@ -68,10 +68,10 @@
  '(magit-diff-use-overlays nil)
  '(org-agenda-files
    (quote
-    ("~/Dropbox/org/todos.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/notes.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
+    ("~/Dropbox/DM3/dinner/dinner.org" "~/Dropbox/DM3/todos.org" "~/Dropbox/org/todos.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/notes.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/activities.org")))
  '(package-selected-packages
    (quote
-    (zenburn-theme apropospriate-theme engine-mode company-tern which-key web-mode use-package solarized-theme smex rainbow-delimiters pdf-tools paredit magit js2-mode iy-go-to-char evil company avy auctex)))
+    (pug-mode elfeed zenburn-theme apropospriate-theme engine-mode company-tern which-key web-mode use-package solarized-theme smex rainbow-delimiters pdf-tools paredit magit js2-mode iy-go-to-char evil company avy auctex)))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))

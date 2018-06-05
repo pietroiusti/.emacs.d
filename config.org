@@ -296,6 +296,11 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* IBuffer instead of Buffer Menu
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+END_SRC
+
 * Delete Selection Mode
 #+BEGIN_SRC emacs-lisp
   ;; If you enable Delete Selection mode, a minor mode, then inserting
