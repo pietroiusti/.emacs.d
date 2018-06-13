@@ -202,6 +202,13 @@ Reinclude tetris, which is not present in Fedora.
   (use-package evil
     :ensure t
     :config
+
+    ;; solve blinking problem with pdf-tools
+    (evil-set-initial-state 'pdf-view-mode 'emacs)
+    (add-hook 'pdf-view-mode-hook
+              (lambda ()
+                (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
     ;; emacs state as default in the following modes 
     ;; (evil-set-initial-state 'dired-mode 'emacs)
     ;; (evil-set-initial-state 'Info-mode 'emacs)
