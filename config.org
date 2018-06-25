@@ -55,6 +55,14 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
+* neotree
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+    :ensure t
+    :config
+    (global-set-key [f8] 'neotree-toggle))
+#+END_SRC
+
 * Company
 #+BEGIN_SRC emacs-lisp
   (use-package company
