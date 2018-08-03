@@ -2,13 +2,6 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
-* Me
-#+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Giulio Pietroiusti"
-        user-mail-address "giulio.pietroiusti@gmail.com")
-#+END_SRC
-
-
 * Tetris
 Reinclude tetris, which is not present in Fedora.
 #+BEGIN_SRC emacs-lisp
@@ -20,6 +13,7 @@ Reinclude tetris, which is not present in Fedora.
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
 #+END_SRC
+
 
 * Disable backup and auto-save
 #+BEGIN_SRC emacs-lisp
@@ -62,6 +56,7 @@ Reinclude tetris, which is not present in Fedora.
     :config
     (global-set-key [f8] 'neotree-toggle))
 #+END_SRC
+
 
 * Company
 #+BEGIN_SRC emacs-lisp
@@ -415,6 +410,7 @@ Reinclude tetris, which is not present in Fedora.
   (use-package impatient-mode
     :ensure t)
 #+END_SRC
+
 
 * pug-mode
 #+BEGIN_SRC emacs-lisp
