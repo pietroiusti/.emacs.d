@@ -2,6 +2,13 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
+* Me
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Giulio Pietroiusti"
+        user-mail-address "giulio.pietroiusti@gmail.com")
+#+END_SRC
+
+
 * Tetris
 Reinclude tetris, which is not present in Fedora.
 #+BEGIN_SRC emacs-lisp
