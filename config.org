@@ -2,6 +2,17 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
+* exwm
+#+BEGIN_SRC emacs-lisp
+  (use-package exwm
+    :ensure t
+    :config
+    (require 'exwm)
+    (require 'exwm-config)
+    (exwm-config-default))
+#+END_SRC
+
+
 * Me
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Giulio Pietroiusti"
