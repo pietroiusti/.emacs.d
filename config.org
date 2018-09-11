@@ -9,7 +9,50 @@
     :config
     (require 'exwm)
     (require 'exwm-config)
-    (exwm-config-default))
+
+    (defun exwm-config-myconf ()
+      "My configuration of EXWM."
+      ;; Set the initial workspace number.
+      (setq exwm-workspace-number 4)
+      ;; Make class name the buffer name
+      (add-hook 'exwm-update-class-hook
+                (lambda ()
+                  (exwm-workspace-rename-buffer exwm-class-name)))
+      ;; 's-r': Reset
+      (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+      ;; 's-w': Switch workspace
+      (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+      ;; 's-N': Switch to certain workspace
+      (dotimes (i 10)
+        (exwm-input-set-key (kbd (format "s-%d" i))
+                            `(lambda ()
+                               (interactive)
+                               (exwm-workspace-switch-create ,i))))
+      ;; 's-&': Launch application
+      (exwm-input-set-key (kbd "s-&")
+                          (lambda (command)
+                            (interactive (list (read-shell-command "$ ")))
+                            (start-process-shell-command command nil command)))
+      ;; Line-editing shortcuts
+      (setq exwm-input-simulation-keys
+            '(([?\C-b] . [left])
+              ([?\C-f] . [right])
+              ([?\C-p] . [up])
+              ([?\C-n] . [down])
+              ([?\C-a] . [home])
+              ([?\C-e] . [end])
+              ([?\M-v] . [prior])
+              ([?\C-v] . [next])
+              ([?\C-d] . [delete])
+              ([?\C-k] . [S-end delete])))
+      ;; Enable EXWM
+      (exwm-enable)
+      ;; Configure Ido
+      (exwm-config-ido)
+      ;; Other configurations
+      (exwm-config-misc))
+
+    (exwm-config-myconf))
 #+END_SRC
 
 
@@ -222,14 +265,63 @@ Reinclude tetris, which is not present in Fedora.
 * evil
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :ensure t
+    :ensure 
     :config
+
+    (evil-mode 1)
+
+    (setq evil-default-state 'emacs
+          evil-insert-state-modes nil
+          evil-motion-state-modes nil)
+
+    ;; automatically start normal state in the following modes
+    (evil-set-initial-state 'fundamental-mode 'normal)
+    (evil-set-initial-state 'text-mode 'normal)
+    (evil-set-initial-state 'org-mode 'normal)
+    (evil-set-initial-state 'emacs-lisp-mode 'normal)
+    (evil-set-initial-state 'lisp-interaction-mode 'normal)
+    (evil-set-initial-state 'js2-mode 'normal)
+    (evil-set-initial-state 'js-mode 'normal)
+    (evil-set-initial-state 'pug-mode 'normal)
+    (evil-set-initial-state 'sh-mode 'normal)
+    
 
     ;; solve blinking problem with pdf-tools
     (evil-set-initial-state 'pdf-view-mode 'emacs)
     (add-hook 'pdf-view-mode-hook
               (lambda ()
                 (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
+
+    ;; change mode-line color by evil state
+    (lexical-let ((default-color (cons (face-background 'mode-line)
+                                       (face-foreground 'mode-line))))
+      (add-hook 'post-command-hook
+                (lambda ()
+                  (let ((color (cond ((minibufferp) default-color)
+                                     ((evil-insert-state-p) '("#e80000" . "#ffffff"))
+                                     ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+                                     ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+                                     (t default-color))))
+                    (set-face-background 'mode-line (car color))
+                    (set-face-foreground 'mode-line (cdr color))))))
+
+
+    ;; Change cursor color in different modes
+    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+    (setq evil-emacs-state-cursor '("#839496" box))
+    (setq evil-motion-state-cursor '("#e80000" box))
+    (setq evil-normal-state-cursor '("#e80000" box))
+    (setq evil-visual-state-cursor '("#e80000" box))
+    (setq evil-insert-state-cursor '("#e80000" bar))
+    (setq evil-replace-state-cursor '("#e80000" bar))
+    (setq evil-operator-state-cursor '("#e80000" hollow))
+    ;; TODO: change color of cursor when it is in the minibuffer
+
+    ;; emacs keybindings as a default
+    ;; (setq evil-default-state 'emacs
+    ;;       evil-insert-state-modes nil
+    ;;       evil-motion-state-modes nil)
 
     ;; emacs state as default in the following modes 
     ;; (evil-set-initial-state 'dired-mode 'emacs)
@@ -239,24 +331,9 @@ Reinclude tetris, which is not present in Fedora.
     ;; (evil-set-initial-state 'calendar-mode 'emacs)
     ;; (evil-set-initial-state 'erc-mode 'emacs)
     ;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
+    )
 
-    (setq evil-search-module 'evil-search)
 
-    ;; Change cursor color in different modes
-    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el
-    (setq evil-emacs-state-cursor '("grey" box))
-    (setq evil-motion-state-cursor '("red" box))
-    (setq evil-normal-state-cursor '("red" box))
-    (setq evil-visual-state-cursor '("red" box))
-    (setq evil-insert-state-cursor '("red" bar))
-    (setq evil-replace-state-cursor '("red" bar))
-    (setq evil-operator-state-cursor '("red" hollow))
-    ;; TODO: change color of cursor when it is in the minibuffer
-
-    ;; emacs keybindings as a default!
-    (setq evil-default-state 'emacs
-          evil-insert-state-modes nil
-          evil-motion-state-modes nil))
 #+END_SRC
 
 
@@ -313,25 +390,6 @@ Reinclude tetris, which is not present in Fedora.
 #+END_SRC
 
 
-* startup
-#+BEGIN_SRC emacs-lisp
-  ;; Show org agenda and my /org folder at startup
-  (setq inhibit-splash-screen t)
-  (org-agenda-list)
-  (switch-to-buffer "*Org Agenda*")
-  (delete-other-windows)
-
-  (split-window-right)
-  (other-window 1)
-  (find-file "~/Dropbox/org/")
-  (beginning-of-buffer)
-  (other-window 1)
-
-  ;; refresh org agenda
-  (add-hook 'after-init-hook 'org-agenda-list)
-#+END_SRC
-
-
 * IBuffer instead of Buffer Menu
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -367,8 +425,8 @@ Reinclude tetris, which is not present in Fedora.
   (use-package avy
     :ensure t
     :config
-    (global-set-key (kbd "C-;") 'avy-goto-char)
-    (global-set-key (kbd "C-:") 'avy-goto-line))
+    (global-set-key (kbd "C-;") 'avy-goto-line))
+    (global-set-key (kbd "C-:") 'avy-goto-char)
 #+END_SRC
 
 
@@ -474,24 +532,28 @@ Reinclude tetris, which is not present in Fedora.
 * Themes
 ** solarized-emacs
 #+BEGIN_SRC emacs-lisp
-  (use-package solarized-theme
-    :ensure t
-    :config
-    ;; Avoid all font-size changes
-    (setq solarized-height-minus-1 1.0)
-    (setq solarized-height-plus-1 1.0)
-    (setq solarized-height-plus-2 1.0)
-    (setq solarized-height-plus-3 1.0)
-    (setq solarized-height-plus-4 1.0)
+    (use-package solarized-theme
+      :ensure t
+      :config
+      ;; Avoid all font-size changes
+      (setq solarized-height-minus-1 1.0)
+      (setq solarized-height-plus-1 1.0)
+      (setq solarized-height-plus-2 1.0)
+      (setq solarized-height-plus-3 1.0)
+      (setq solarized-height-plus-4 1.0)
 
-    ;; (load-theme 'solarized-light t)
-    ;; (load-theme 'solarized-dark t)
-)
+      ;; (load-theme 'solarized-light t)
+      ;; (load-theme 'solarized-dark t))
 #+END_SRC
 ** spacemacs-theme
 #+BEGIN_SRC emacs-lisp
   (use-package spacemacs-theme
     :ensure t)
-
-  (load-theme 'spacemacs-dark t)
 #+End_SRC
+** color-theme-sanityinc-tomorrow
+#+BEGIN_SRC emacs-lisp
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t)
+
+  (load-theme 'solarized-dark t))
+    #+END_SRC
