@@ -3,115 +3,162 @@
 #+LANGUAGE: en
 * exwm
 #+BEGIN_SRC emacs-lisp
-  (use-package exwm
-    :ensure t
+  ;; (use-package exwm
+  ;;   :ensure t
+  ;;   :config
+  ;;   (require 'exwm)
+  ;;   (require 'exwm-config)
+
+  ;;   (defun exwm-config-myconf ()
+  ;;     "My configuration of EXWM."
+  ;;     ;; Set the initial workspace number.
+  ;;     (setq exwm-workspace-number 4)
+  ;;     ;; Make class name the buffer name
+  ;;     (add-hook 'exwm-update-class-hook
+  ;;               (lambda ()
+  ;;                 (exwm-workspace-rename-buffer exwm-class-name)))
+  ;;     ;; 's-r': Reset
+  ;;     (exwm-input-set-key (kbd "s-r") #'exwm-reset)
+  ;;     ;; 's-w': Switch workspace
+  ;;     (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
+  ;;     ;; 's-N': Switch to certain workspace
+  ;;     (dotimes (i 10)
+  ;;       (exwm-input-set-key (kbd (format "s-%d" i))
+  ;;                           `(lambda ()
+  ;;                              (interactive)
+  ;;                              (exwm-workspace-switch-create ,i))))
+  ;;     ;; 's-&': Launch application
+  ;;     (exwm-input-set-key (kbd "s-&")
+  ;;                         (lambda (command)
+  ;;                           (interactive (list (read-shell-command "$ ")))
+  ;;                           (start-process-shell-command command nil command)))
+  ;;     ;; Line-editing shortcuts
+  ;;     (setq exwm-input-simulation-keys
+  ;;           '(([?\C-b] . [left])
+  ;;             ([?\C-f] . [right])
+  ;;             ([?\C-p] . [up])
+  ;;             ([?\C-n] . [down])
+  ;;             ([?\C-a] . [home])
+  ;;             ([?\C-e] . [end])
+  ;;             ([?\M-v] . [prior])
+  ;;             ([?\C-v] . [next])
+  ;;             ([?\C-d] . [delete])
+  ;;             ([?\C-k] . [S-end delete])))
+
+  ;;     ;; window moving
+  ;;     (exwm-input-set-key (kbd "s-h") #'windmove-left)
+  ;;     (exwm-input-set-key (kbd "s-j") #'windmove-down)
+  ;;     (exwm-input-set-key (kbd "s-k") #'windmove-up)
+  ;;     (exwm-input-set-key (kbd "s-l") #'windmove-right)
+
+  ;;     ;; window swapping
+  ;;     (defun ambrevar/swap-windows (&optional w1 w2)
+  ;;       "If 2 windows are up, swap them.
+  ;;   Else if W1 is a window, swap it with current window.
+  ;;   If W2 is a window too, swap both."
+  ;;       (interactive)
+  ;;       (unless (or (= 2 (count-windows))
+  ;;                   (windowp w1)
+  ;;                   (windowp w2))
+  ;;         (error "Ambiguous window selection"))
+  ;;       (let* ((w1 (or w1 (car (window-list))))
+  ;;              (w2 (or w2
+  ;;                      (if (eq w1 (car (window-list)))
+  ;;                          (nth 1 (window-list))
+  ;;                        (car (window-list)))))
+  ;;              (b1 (window-buffer w1))
+  ;;              (b2 (window-buffer w2))
+  ;;              (s1 (window-start w1))
+  ;;              (s2 (window-start w2)))
+  ;;         (with-temp-buffer
+  ;;           ;; Some buffers like EXWM buffers can only be in one live buffer at once.
+  ;;           ;; Switch to a dummy buffer in w2 so that we don't display any buffer twice.
+  ;;           (set-window-buffer w2 (current-buffer))
+  ;;           (set-window-buffer w1 b2)
+  ;;           (set-window-buffer w2 b1))
+  ;;         (set-window-start w1 s2)
+  ;;         (set-window-start w2 s1))
+  ;;       (select-window w1))
+  ;;     (global-set-key (kbd "C-x \\") 'swap-windows)
+
+  ;;     (defun ambrevar/swap-windows-left ()
+  ;;       "Swap current window with the window to the left."
+  ;;       (interactive)
+  ;;       (ambrevar/swap-windows (window-in-direction 'left)))
+  ;;     (defun ambrevar/swap-windows-below ()
+  ;;       "Swap current window with the window below."
+  ;;       (interactive)
+  ;;       (ambrevar/swap-windows (window-in-direction 'below)))
+  ;;     (defun ambrevar/swap-windows-above ()
+  ;;       "Swap current window with the window above."
+  ;;       (interactive)
+  ;;       (ambrevar/swap-windows (window-in-direction 'above)))
+  ;;     (defun ambrevar/swap-windows-right ()
+  ;;       "Swap current window with the window to the right."
+  ;;       (interactive)
+  ;;       (ambrevar/swap-windows (window-in-direction 'right)))
+
+  ;;     (exwm-input-set-key (kbd "s-\\") 'ambrevar/toggle-window-split)
+  ;;     (exwm-input-set-key (kbd "s-H") 'ambrevar/swap-windows-left)
+  ;;     (exwm-input-set-key (kbd "s-J") 'ambrevar/swap-windows-below)
+  ;;     (exwm-input-set-key (kbd "s-K") 'ambrevar/swap-windows-above)
+  ;;     (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
+
+  ;;     ;; Enable EXWM
+  ;;     (exwm-enable)
+  ;;     ;; Configure Ido
+  ;;     (exwm-config-ido)
+  ;;     ;; Other configurations
+  ;;     (exwm-config-misc))
+
+  ;;   (exwm-config-myconf))
+#+END_SRC
+
+
+* evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure 
     :config
-    (require 'exwm)
-    (require 'exwm-config)
 
-    (defun exwm-config-myconf ()
-      "My configuration of EXWM."
-      ;; Set the initial workspace number.
-      (setq exwm-workspace-number 4)
-      ;; Make class name the buffer name
-      (add-hook 'exwm-update-class-hook
-                (lambda ()
-                  (exwm-workspace-rename-buffer exwm-class-name)))
-      ;; 's-r': Reset
-      (exwm-input-set-key (kbd "s-r") #'exwm-reset)
-      ;; 's-w': Switch workspace
-      (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
-      ;; 's-N': Switch to certain workspace
-      (dotimes (i 10)
-        (exwm-input-set-key (kbd (format "s-%d" i))
-                            `(lambda ()
-                               (interactive)
-                               (exwm-workspace-switch-create ,i))))
-      ;; 's-&': Launch application
-      (exwm-input-set-key (kbd "s-&")
-                          (lambda (command)
-                            (interactive (list (read-shell-command "$ ")))
-                            (start-process-shell-command command nil command)))
-      ;; Line-editing shortcuts
-      (setq exwm-input-simulation-keys
-            '(([?\C-b] . [left])
-              ([?\C-f] . [right])
-              ([?\C-p] . [up])
-              ([?\C-n] . [down])
-              ([?\C-a] . [home])
-              ([?\C-e] . [end])
-              ([?\M-v] . [prior])
-              ([?\C-v] . [next])
-              ([?\C-d] . [delete])
-              ([?\C-k] . [S-end delete])))
+    (evil-mode 1)
 
-      ;; window moving
-      (exwm-input-set-key (kbd "s-h") #'windmove-left)
-      (exwm-input-set-key (kbd "s-j") #'windmove-down)
-      (exwm-input-set-key (kbd "s-k") #'windmove-up)
-      (exwm-input-set-key (kbd "s-l") #'windmove-right)
+    (setq evil-default-state 'emacs
+          evil-insert-state-modes nil
+          evil-motion-state-modes nil)
 
-      ;; window swapping
-      (defun ambrevar/swap-windows (&optional w1 w2)
-        "If 2 windows are up, swap them.
-    Else if W1 is a window, swap it with current window.
-    If W2 is a window too, swap both."
-        (interactive)
-        (unless (or (= 2 (count-windows))
-                    (windowp w1)
-                    (windowp w2))
-          (error "Ambiguous window selection"))
-        (let* ((w1 (or w1 (car (window-list))))
-               (w2 (or w2
-                       (if (eq w1 (car (window-list)))
-                           (nth 1 (window-list))
-                         (car (window-list)))))
-               (b1 (window-buffer w1))
-               (b2 (window-buffer w2))
-               (s1 (window-start w1))
-               (s2 (window-start w2)))
-          (with-temp-buffer
-            ;; Some buffers like EXWM buffers can only be in one live buffer at once.
-            ;; Switch to a dummy buffer in w2 so that we don't display any buffer twice.
-            (set-window-buffer w2 (current-buffer))
-            (set-window-buffer w1 b2)
-            (set-window-buffer w2 b1))
-          (set-window-start w1 s2)
-          (set-window-start w2 s1))
-        (select-window w1))
-      (global-set-key (kbd "C-x \\") 'swap-windows)
 
-      (defun ambrevar/swap-windows-left ()
-        "Swap current window with the window to the left."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'left)))
-      (defun ambrevar/swap-windows-below ()
-        "Swap current window with the window below."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'below)))
-      (defun ambrevar/swap-windows-above ()
-        "Swap current window with the window above."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'above)))
-      (defun ambrevar/swap-windows-right ()
-        "Swap current window with the window to the right."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'right)))
+   ;; solve blinking problem with pdf-tools
+    (evil-set-initial-state 'pdf-view-mode 'emacs)
+    (add-hook 'pdf-view-mode-hook
+              (lambda ()
+                (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
 
-      (exwm-input-set-key (kbd "s-\\") 'ambrevar/toggle-window-split)
-      (exwm-input-set-key (kbd "s-H") 'ambrevar/swap-windows-left)
-      (exwm-input-set-key (kbd "s-J") 'ambrevar/swap-windows-below)
-      (exwm-input-set-key (kbd "s-K") 'ambrevar/swap-windows-above)
-      (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
+   ;;  ;; change mode-line color by evil state
+   ;;  (lexical-let ((default-color (cons (face-background 'mode-line)
+   ;;                                     (face-foreground 'mode-line))))
+   ;;    (add-hook 'post-command-hook
+   ;;              (lambda ()
+   ;;                (let ((color (cond ((minibufferp) default-color)
+   ;;                                   ((evil-insert-state-p) '("#e80000" . "#ffffff"))
+   ;;                                   ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+   ;;                                   ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+   ;;                                   (t default-color))))
+   ;;                  (set-face-background 'mode-line (car color))
+   ;;                  (set-face-foreground 'mode-line (cdr color))))))
 
-      ;; Enable EXWM
-      (exwm-enable)
-      ;; Configure Ido
-      (exwm-config-ido)
-      ;; Other configurations
-      (exwm-config-misc))
 
-    (exwm-config-myconf))
+    ;; Change cursor color in different modes
+    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+    (setq evil-emacs-state-cursor '("#839496" box))
+    (setq evil-motion-state-cursor '("#e80000" box))
+    (setq evil-normal-state-cursor '("#e80000" box))
+    (setq evil-visual-state-cursor '("#e80000" box))
+    (setq evil-insert-state-cursor '("#e80000" bar))
+    (setq evil-replace-state-cursor '("#e80000" bar))
+    (setq evil-operator-state-cursor '("#e80000" hollow))
+    ;; TODO: change color of cursor when it is in the minibuffer
+    )
 #+END_SRC
 
 
@@ -269,8 +316,7 @@ Reinclude tetris, which is not present in Fedora.
   ;; Don't show menu bar
   (menu-bar-mode 0)
   ;; Don't show scroll bar
-  (when window-system
-    (scroll-bar-mode 0))
+  (scroll-bar-mode 0)
 #+END_SRC
 
 
@@ -317,81 +363,6 @@ Reinclude tetris, which is not present in Fedora.
     (setq TeX-auto-save t)
     (setq Tex-parse-self t)
     (setq-default TeX-master nil))
-
-#+END_SRC
-
-
-* evil
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :ensure 
-    :config
-
-    (evil-mode 1)
-
-    (setq evil-default-state 'emacs
-          evil-insert-state-modes nil
-          evil-motion-state-modes nil)
-
-    ;; automatically start normal state in the following modes
-    (evil-set-initial-state 'fundamental-mode 'normal)
-    (evil-set-initial-state 'text-mode 'normal)
-    (evil-set-initial-state 'org-mode 'normal)
-    (evil-set-initial-state 'emacs-lisp-mode 'normal)
-    (evil-set-initial-state 'lisp-interaction-mode 'normal)
-    (evil-set-initial-state 'js2-mode 'normal)
-    (evil-set-initial-state 'js-mode 'normal)
-    (evil-set-initial-state 'pug-mode 'normal)
-    (evil-set-initial-state 'sh-mode 'normal)
-    
-
-    ;; solve blinking problem with pdf-tools
-    (evil-set-initial-state 'pdf-view-mode 'emacs)
-    (add-hook 'pdf-view-mode-hook
-              (lambda ()
-                (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
-
-
-    ;; change mode-line color by evil state
-    (lexical-let ((default-color (cons (face-background 'mode-line)
-                                       (face-foreground 'mode-line))))
-      (add-hook 'post-command-hook
-                (lambda ()
-                  (let ((color (cond ((minibufferp) default-color)
-                                     ((evil-insert-state-p) '("#e80000" . "#ffffff"))
-                                     ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-                                     ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
-                                     (t default-color))))
-                    (set-face-background 'mode-line (car color))
-                    (set-face-foreground 'mode-line (cdr color))))))
-
-
-    ;; Change cursor color in different modes
-    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
-    (setq evil-emacs-state-cursor '("#839496" box))
-    (setq evil-motion-state-cursor '("#e80000" box))
-    (setq evil-normal-state-cursor '("#e80000" box))
-    (setq evil-visual-state-cursor '("#e80000" box))
-    (setq evil-insert-state-cursor '("#e80000" bar))
-    (setq evil-replace-state-cursor '("#e80000" bar))
-    (setq evil-operator-state-cursor '("#e80000" hollow))
-    ;; TODO: change color of cursor when it is in the minibuffer
-
-    ;; emacs keybindings as a default
-    ;; (setq evil-default-state 'emacs
-    ;;       evil-insert-state-modes nil
-    ;;       evil-motion-state-modes nil)
-
-    ;; emacs state as default in the following modes 
-    ;; (evil-set-initial-state 'dired-mode 'emacs)
-    ;; (evil-set-initial-state 'Info-mode 'emacs)
-    ;; (evil-set-initial-state 'help-mode 'emacs)
-    ;; (evil-set-initial-state 'eshell-mode 'emacs)
-    ;; (evil-set-initial-state 'calendar-mode 'emacs)
-    ;; (evil-set-initial-state 'erc-mode 'emacs)
-    ;; (evil-set-initial-state 'Buffer-menu-mode 'emacs)
-    )
-
 
 #+END_SRC
 
