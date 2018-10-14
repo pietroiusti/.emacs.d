@@ -134,20 +134,6 @@
               (lambda ()
                 (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
 
-   ;;  ;; change mode-line color by evil state
-   ;;  (lexical-let ((default-color (cons (face-background 'mode-line)
-   ;;                                     (face-foreground 'mode-line))))
-   ;;    (add-hook 'post-command-hook
-   ;;              (lambda ()
-   ;;                (let ((color (cond ((minibufferp) default-color)
-   ;;                                   ((evil-insert-state-p) '("#e80000" . "#ffffff"))
-   ;;                                   ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-   ;;                                   ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
-   ;;                                   (t default-color))))
-   ;;                  (set-face-background 'mode-line (car color))
-   ;;                  (set-face-foreground 'mode-line (cdr color))))))
-
-
     ;; Change cursor color in different modes
     ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
     (setq evil-emacs-state-cursor '("#839496" box))
@@ -212,7 +198,21 @@ Reinclude tetris, which is not present in Fedora.
   (use-package pdf-tools
     :ensure t
     :config
-    (pdf-tools-install))
+    (pdf-tools-install)
+
+    (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+    (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+    (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
+    (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
+    (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
+
+
+  ;; :bind (:map pdf-view-mode-map
+  ;;                 ("j"   . pdf-view-next-line-or-next-page)
+  ;;                 ("k"   . pdf-view-previous-line-or-previous-page)
+  ;;                 ("l"   . image-forward-hscroll)
+  ;;                 ("h"   . image-backward-hscroll)
+  ;;                 ("K"   . image-kill-buffer)))
 #+END_SRC
 
 
@@ -297,7 +297,7 @@ Reinclude tetris, which is not present in Fedora.
 
 * Current line highlighting
 #+BEGIN_SRC emacs-lisp
-  (when window-system (global-hl-line-mode t))
+  (global-hl-line-mode t)
 #+END_SRC
 
 
@@ -324,6 +324,26 @@ Reinclude tetris, which is not present in Fedora.
 #+BEGIN_SRC emacs-lisp
   ;; make scrolling nicer
   (setq scroll-conservatively 100)
+#+END_SRC
+
+
+* Transparency
+#+BEGIN_SRC emacs-lisp
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
+  (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+
+  (defun toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (eql (cond ((numberp alpha) alpha)
+                      ((numberp (cdr alpha)) (cdr alpha))
+                      ;; Also handle undocumented (<active> <inactive>) form.
+                      ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+           '(85 . 75) '(100 . 100)))))
+  (global-set-key (kbd "C-c x") 'toggle-transparency)
 #+END_SRC
 
 
