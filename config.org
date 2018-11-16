@@ -206,6 +206,7 @@ Reinclude tetris, which is not present in Fedora.
 #+BEGIN_SRC emacs-lisp
   (use-package pdf-tools
     :ensure t
+    :pin melpa
     :config
     (pdf-tools-install)
 
