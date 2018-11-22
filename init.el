@@ -73,7 +73,7 @@
     ("~/Dropbox/org/teaching.org" "~/Dropbox/org/activities.org" "~/Dropbox/org/capture.org" "~/Dropbox/org/meetings.org" "~/Dropbox/org/notes.org" "~/Dropbox/org/readings.org" "~/Dropbox/org/todos.org")))
  '(package-selected-packages
    (quote
-    (frames-only-mode buffer-move color-theme-sanityinc-tomorrow blackboard-theme exwm-edit desktop-environment exwm spacemacs-theme solarized-theme elfeed engine-mode pug-mode impatient-mode web-mode company-tern xref-js2 js2-refactor js2-mode avy iy-go-to-char smex evil auctex rainbow-delimiters paredit company neotree pdf-tools magit which-key use-package)))
+    (restclient frames-only-mode buffer-move color-theme-sanityinc-tomorrow blackboard-theme exwm-edit desktop-environment exwm spacemacs-theme solarized-theme elfeed engine-mode pug-mode impatient-mode web-mode company-tern xref-js2 js2-refactor js2-mode avy iy-go-to-char smex evil auctex rainbow-delimiters paredit company neotree pdf-tools magit which-key use-package)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
