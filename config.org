@@ -445,9 +445,8 @@ Reinclude tetris, which is not present in Fedora.
     (setq org-agenda-files
           '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/capture.org"
             "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
-            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/todos.org")))
-
-
+            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/todos.org"
+            "~/Nextcloud/org/teaching.org")))
 #+END_SRC
 
 
