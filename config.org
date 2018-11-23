@@ -10,6 +10,7 @@
     (frames-only-mode))
 #+END_SRC
 
+
 * exwm
 #+BEGIN_SRC emacs-lisp
   ;; (use-package exwm
@@ -435,16 +436,16 @@ Reinclude tetris, which is not present in Fedora.
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cb" 'org-iswitchb)
     ;; org capture
-    (setq org-default-notes-file "~/Dropbox/org/capture.org")
+    (setq org-default-notes-file "~/Nextcloud/org/capture.org")
 
     ;; Define todo states
     (setq org-todo-keywords
           '((sequence "TODO" "IN PROGRESS" "DONE" )))
 
     (setq org-agenda-files
-          '("~/Dropbox/org/activities.org" "~/Dropbox/org/capture.org"
-            "~/Dropbox/org/meetings.org" "~/Dropbox/org/notes.org"
-            "~/Dropbox/org/readings.org" "~/Dropbox/org/todos.org")))
+          '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/capture.org"
+            "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
+            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/todos.org")))
 
 
 #+END_SRC
