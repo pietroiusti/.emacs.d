@@ -1,3 +1,4 @@
+
 #+TITLE: Emacs config
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
@@ -548,6 +549,11 @@ Reinclude tetris, which is not present in Fedora.
       :keybinding "i"))
 #+END_SRC
 
+* writeroom
+#+BEGIN_SRC emacs-lisp
+  (use-package writeroom-mode
+    :ensure t)
+  #+END_SRC
 
 * Reading news
 ** elfeed
