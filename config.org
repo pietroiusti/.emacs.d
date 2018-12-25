@@ -3,6 +3,13 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
+* string manipulation
+#+BEGIN_SRC emacs-lisp
+  (use-package s
+    :ensure t)
+#+END_SRC
+
+
 * only frame
 #+BEGIN_SRC emacs-lisp
   (use-package frames-only-mode
@@ -594,11 +601,6 @@ Reinclude tetris, which is not present in Fedora.
       ;; (load-theme 'solarized-light t)
       ;; (load-theme 'solarized-dark t))
 #+END_SRC
-** spacemacs-theme
-#+BEGIN_SRC emacs-lisp
-  (use-package spacemacs-theme
-    :ensure t)
-#+End_SRC
 ** color-theme-sanityinc-tomorrow
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme-sanityinc-tomorrow
