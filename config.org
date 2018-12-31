@@ -11,11 +11,12 @@
 
 
 * only frame
+I use this package with i3wm.
 #+BEGIN_SRC emacs-lisp
-  (use-package frames-only-mode
-    :ensure t
-    :config
-    (frames-only-mode))
+  ;; (use-package frames-only-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (frames-only-mode))
 #+END_SRC
 
 
@@ -65,9 +66,13 @@
 
       ;; window moving
       (exwm-input-set-key (kbd "s-h") #'windmove-left)
+      (exwm-input-set-key (kbd "s-b") #'windmove-left)
       (exwm-input-set-key (kbd "s-j") #'windmove-down)
+      (exwm-input-set-key (kbd "s-n") #'windmove-down)
       (exwm-input-set-key (kbd "s-k") #'windmove-up)
+      (exwm-input-set-key (kbd "s-p") #'windmove-up)
       (exwm-input-set-key (kbd "s-l") #'windmove-right)
+      (exwm-input-set-key (kbd "s-f") #'windmove-right)
 
       ;; window swapping
       (defun ambrevar/swap-windows (&optional w1 w2)
@@ -118,9 +123,13 @@
 
       (exwm-input-set-key (kbd "s-\\") 'ambrevar/toggle-window-split)
       (exwm-input-set-key (kbd "s-H") 'ambrevar/swap-windows-left)
+      (exwm-input-set-key (kbd "s-B") 'ambrevar/swap-windows-left)
       (exwm-input-set-key (kbd "s-J") 'ambrevar/swap-windows-below)
+      (exwm-input-set-key (kbd "s-N") 'ambrevar/swap-windows-below)
       (exwm-input-set-key (kbd "s-K") 'ambrevar/swap-windows-above)
+      (exwm-input-set-key (kbd "s-P") 'ambrevar/swap-windows-above)
       (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
+      (exwm-input-set-key (kbd "s-F") 'ambrevar/swap-windows-right)
 
       ; Multiple monitors
       (require 'exwm-randr)
@@ -132,6 +141,29 @@
                   (start-process-shell-command
                    "xrandr" nil "xrandr --output HDMI2 --above eDP1 --auto")))
       (exwm-randr-enable)
+
+      ;; system tray
+      (require 'exwm-systemtray)
+      (exwm-systemtray-enable)
+
+      ;; screen brightness
+      (exwm-input-set-key (kbd "<XF86MonBrightnessUp>") (lambda () (interactive) (shell-command "xbacklight -inc 5")))
+      (exwm-input-set-key (kbd "<XF86MonBrightnessDown>") (lambda () (interactive) (shell-command "xbacklight -dec 5")))
+
+      ;; volume
+      (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>") (lambda () (interactive) (shell-command "amixer set Master 3%+")))
+      (exwm-input-set-key (kbd "<XF86AudioLowerVolume>") (lambda () (interactive) (shell-command "amixer set Master 3%-")))
+      (exwm-input-set-key (kbd "<XF86AudioMute>") (lambda () (interactive) (shell-command "amixer set Master toggle")))
+
+      ;; suspend
+      (exwm-input-set-key (kbd "s-S") (lambda () (interactive) (shell-command "i3lock -c 000000 ; systemctl suspend")))
+
+      ;; start compton
+      (shell-command "compton -b")
+
+      ;; disable touchpad TODO
+
+      ;; set background TODO
 
       ;; Enable EXWM
       (exwm-enable)
@@ -617,5 +649,5 @@ Reinclude tetris, which is not present in Fedora.
   (use-package color-theme-sanityinc-tomorrow
     :ensure t)
 
-  (load-theme 'solarized-dark t))
+  (load-theme 'sanityinc-tomorrow-bright t))
     #+END_SRC
