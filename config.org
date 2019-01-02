@@ -161,6 +161,9 @@ I use this package with i3wm.
       ;; start compton
       (shell-command "compton -b")
 
+      ;; set keycodes
+      (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_T460")
+
       ;; disable touchpad TODO
 
       ;; set background TODO
