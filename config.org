@@ -1,4 +1,3 @@
-
 #+TITLE: Emacs config
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
@@ -131,6 +130,10 @@ I use this package with i3wm.
       (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
       (exwm-input-set-key (kbd "s-F") 'ambrevar/swap-windows-right)
 
+      ;; show X windows from any workspace
+      (setq exwm-layout-show-all-buffers t)
+      (setq exwm-layout-show-all-buffers t)
+
       ; Multiple monitors
       (require 'exwm-randr)
       (setq exwm-randr-workspace-output-plist '(1 "HDMI2" 2 "HDMI2"
@@ -160,6 +163,12 @@ I use this package with i3wm.
 
       ;; start compton
       (shell-command "compton -b")
+
+      ;; start nextcloud
+      ;; (shell-command "nextcloud")
+
+      ;;nm-applet
+      ;; (shell-command "nm-applet")
 
       ;; set keycodes
       (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_T460")
