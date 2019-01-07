@@ -2,6 +2,15 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
+* symon: tiny graphical system monitor
+#+BEGIN_SRC emacs-lisp
+  (use-package symon
+    :ensure t
+    :config
+    (setq symon-monitors '(symon-linux-battery-monitor symon-linux-cpu-monitor)))
+#+END_SRC
+
+
 * string manipulation
 #+BEGIN_SRC emacs-lisp
   (use-package s
@@ -131,7 +140,7 @@ I use this package with i3wm.
       (exwm-input-set-key (kbd "s-F") 'ambrevar/swap-windows-right)
 
       ;; show X windows from any workspace
-      (setq exwm-layout-show-all-buffers t)
+      (setq exwm-workspace-show-all-buffers t)
       (setq exwm-layout-show-all-buffers t)
 
       ; Multiple monitors
