@@ -143,6 +143,17 @@ I use this package with i3wm.
       (setq exwm-workspace-show-all-buffers t)
       (setq exwm-layout-show-all-buffers t)
 
+      ;; include exwm-title in buffer name
+      (defun exwm-rename-buffer ()
+        (interactive)
+        (exwm-workspace-rename-buffer
+         (concat exwm-class-name ":"
+                 (if (<= (length exwm-title) 50) exwm-title
+                   (concat (substring exwm-title 0 49) "...")))))
+
+      (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+      (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+
       ; Multiple monitors
       (require 'exwm-randr)
       (setq exwm-randr-workspace-output-plist '(1 "HDMI2" 2 "HDMI2"
