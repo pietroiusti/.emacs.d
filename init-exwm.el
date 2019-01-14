@@ -107,6 +107,16 @@
       (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
       (exwm-input-set-key (kbd "s-F") 'ambrevar/swap-windows-right)
 
+      ;; window
+      (exwm-input-set-key (kbd "<s-f1>") 'delete-other-windows)
+      (exwm-input-set-key (kbd "<s-f2>") 'split-window-below)
+      (exwm-input-set-key (kbd "<s-f3>") 'split-window-right)
+      ;; hide window
+      (exwm-input-set-key (kbd "<s-f4>") 'delete-window)
+      ;; toggle mode line
+      (exwm-input-set-key (kbd "<s-f9>") 'exwm-layout-toggle-mode-line)
+
+
       ;; show X windows from any workspace
       (setq exwm-workspace-show-all-buffers t)
       (setq exwm-layout-show-all-buffers t)
@@ -173,22 +183,34 @@
                             (start-process-shell-command "emacsclient" nil "emacsclient -c")))
 
       ;; TODO quit window with s-Q
+      (exwm-input-set-key (kbd "s-Q")
+			  (lambda ()
+			    (interactive)
+			    (kill-buffer-and-window)))
+
 
       ;; start compton
       (start-process-shell-command "compton" nil "compton -b")
 
-      ;; start nextcloud
-      ;; (shell-command "nextcloud")
+      ;; start emacs daemon (for embedded emacs :D)
+      (defun gp/exwm-start-emacs-daemon ()
+      	(start-process-shell-command "emacs" nil "emacs --daemon"))
+      (add-hook 'exwm-init-hook 'gp/exwm-start-emacs-daemon)
 
-      ;;nm-applet
-      ;; (shell-command "nm-applet")
+      ;; ;; start nextcloud
+      (defun gp/exwm-start-nextcloud ()
+      	(start-process-shell-command "nextcloud" nil "nextcloud"))
+      (add-hook 'exwm-init-hook 'gp/exwm-start-nextcloud)
 
       ;; set keycodes
-      (start-process-shell-command "setxkbmap" nil "setxkbmap -keycodes evdev_custom_thinkpad_X200")
+      (start-process-shell-command "setxkbmap" nil "setxkbmap -keycodes evdev_custom_thinkpad_T460")
 
       ;; disable touchpad TODO
 
-      ;; set background TODO
+      ;; set background
+      (defun gp/exwm-set-background ()
+      	(start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/lievitating_gnu.png"))
+      (add-hook 'exwm-init-hook 'gp/exwm-set-background)
 
       (symon-mode)
 
