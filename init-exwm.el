@@ -188,6 +188,19 @@
 			    (interactive)
 			    (kill-buffer-and-window)))
 
+      ;; autohide minubuffer/echo area
+      (setq exwm-workspace-minibuffer-position 'bottom)
+
+      ;; Detach/Attach minibuffer/echo area
+      (exwm-input-set-key (kbd "s-~")
+			  (lambda ()
+			    (interactive)
+			    (exwm-workspace-attach-minibuffer)))
+
+      (exwm-input-set-key (kbd "s-`")
+			  (lambda ()
+			    (interactive)
+			    (exwm-workspace-detach-minibuffer)))
 
       ;; start compton
       (start-process-shell-command "compton" nil "compton -b")
