@@ -21,10 +21,10 @@
 * only frame
 I use this package with i3wm.
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package frames-only-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (frames-only-mode))
+  (use-package frames-only-mode
+    :ensure t
+    :config
+    (frames-only-mode))
 #+END_SRC
 
 
@@ -465,6 +465,11 @@ Reinclude tetris, which is not present in Fedora.
     :ensure t)
   #+END_SRC
 
+* olivetti
+#+BEGIN_SRC emacs-lisp
+  (use-package olivetti
+    :ensure t)
+#+END_SRC
 
 * centered-window
 #+BEGIN_SRC emacs-lisp
