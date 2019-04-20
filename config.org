@@ -2,6 +2,13 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
+* dired
+** dired-narrow
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-narrow
+    :ensure t)
+#+END_SRC
+
 * symon: tiny graphical system monitor
 #+BEGIN_SRC emacs-lisp
   (use-package symon
