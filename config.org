@@ -9,6 +9,7 @@
     :ensure t)
 #+END_SRC
 
+
 * symon: tiny graphical system monitor
 #+BEGIN_SRC emacs-lisp
   (use-package symon
@@ -79,13 +80,6 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Giulio Pietroiusti"
         user-mail-address "giulio.pietroiusti@gmail.com")
-#+END_SRC
-
-
-* Tetris
-Reinclude tetris, which is not present in Fedora.
-#+BEGIN_SRC emacs-lisp
-  (load "~/.emacs.d/tetris.el")
 #+END_SRC
 
 
