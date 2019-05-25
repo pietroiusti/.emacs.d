@@ -230,10 +230,9 @@ Reinclude tetris, which is not present in Fedora.
 
 
 * Font
-** size
 #+BEGIN_SRC emacs-lisp
-  ;; Font font size 
-  (set-face-attribute 'default (selected-frame) :height 110)
+  (add-to-list 'default-frame-alist
+               '(font . "Inconsolata-11"))
 #+END_SRC
 
 
