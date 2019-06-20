@@ -1,237 +1,137 @@
-(use-package exwm
-    :ensure t
-    :config
-    (require 'exwm)
-    (require 'exwm-config)
+;; Load EXWM.
+(require 'exwm)
 
-    (defun exwm-config-myconf ()
-      "My configuration of EXWM."
-      ;; Set the initial workspace number.
-      (setq exwm-workspace-number 4)
-      ;; Make class name the buffer name
-      (add-hook 'exwm-update-class-hook
-                (lambda ()
-                  (exwm-workspace-rename-buffer exwm-class-name)))
-      ;; 's-r': Reset
-      (exwm-input-set-key (kbd "s-r") #'exwm-reset)
-      ;; 's-w': Switch workspace
-      (exwm-input-set-key (kbd "s-w") #'exwm-workspace-switch)
-      ;; 's-N': Switch to certain workspace
-      (dotimes (i 10)
-        (exwm-input-set-key (kbd (format "s-%d" i))
-                            `(lambda ()
-                               (interactive)
-                               (exwm-workspace-switch-create ,i))))
-      ;; 's-&': Launch application
-      (exwm-input-set-key (kbd "s-&")
-                          (lambda (command)
-                            (interactive (list (read-shell-command "$ ")))
-                            (start-process-shell-command command nil command)))
-      ;; Line-editing shortcuts
-      (setq exwm-input-simulation-keys
-            '(([?\C-b] . [left])
-              ([?\C-f] . [right])
-              ([?\C-p] . [up])
-              ([?\C-n] . [down])
-              ([?\C-a] . [home])
-              ([?\C-e] . [end])
-              ([?\M-v] . [prior])
-              ([?\C-v] . [next])
-              ([?\C-d] . [delete])
-              ([?\C-k] . [S-end delete])))
+;; Fix problems with Ido (if you use it).
+(require 'exwm-config)
+(exwm-config-ido)
 
-      ;; window moving
-      (exwm-input-set-key (kbd "s-h") #'windmove-left)
-      (exwm-input-set-key (kbd "s-b") #'windmove-left)
-      (exwm-input-set-key (kbd "s-j") #'windmove-down)
-      (exwm-input-set-key (kbd "s-n") #'windmove-down)
-      (exwm-input-set-key (kbd "s-k") #'windmove-up)
-      (exwm-input-set-key (kbd "s-p") #'windmove-up)
-      (exwm-input-set-key (kbd "s-l") #'windmove-right)
-      (exwm-input-set-key (kbd "s-f") #'windmove-right)
+;; Set the initial number of workspaces (they can also be created later).
+(setq exwm-workspace-number 4)
 
-      ;; window swapping
-      (defun ambrevar/swap-windows (&optional w1 w2)
-        "If 2 windows are up, swap them.
-      Else if W1 is a window, swap it with current window.
-      If W2 is a window too, swap both."
-        (interactive)
-        (unless (or (= 2 (count-windows))
-                    (windowp w1)
-                    (windowp w2))
-          (error "Ambiguous window selection"))
-        (let* ((w1 (or w1 (car (window-list))))
-               (w2 (or w2
-                       (if (eq w1 (car (window-list)))
-                           (nth 1 (window-list))
-                         (car (window-list)))))
-               (b1 (window-buffer w1))
-               (b2 (window-buffer w2))
-               (s1 (window-start w1))
-               (s2 (window-start w2)))
-          (with-temp-buffer
-            ;; Some buffers like EXWM buffers can only be in one live buffer at once.
-            ;; Switch to a dummy buffer in w2 so that we don't display any buffer twice.
-            (set-window-buffer w2 (current-buffer))
-            (set-window-buffer w1 b2)
-            (set-window-buffer w2 b1))
-          (set-window-start w1 s2)
-          (set-window-start w2 s1))
-        (select-window w1))
-      (global-set-key (kbd "C-x \\") 'swap-windows)
+;; All buffers created in EXWM mode are named "*EXWM*". You may want to
+;; change it in `exwm-update-class-hook' and `exwm-update-title-hook', which
+;; are run when a new X window class name or title is available.  Here's
+;; some advice on this topic:
+;; + Always use `exwm-workspace-rename-buffer` to avoid naming conflict.
+;; + For applications with multiple windows (e.g. GIMP), the class names of
+					;    all windows are probably the same.  Using window titles for them makes
+;;   more sense.
+;; In the following example, we use class names for all windows expect for
+;; Java applications and GIMP.
+(add-hook 'exwm-update-class-hook
+          (lambda ()
+            (unless (or (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                        (string= "gimp" exwm-instance-name))
+              (exwm-workspace-rename-buffer exwm-class-name))))
+(add-hook 'exwm-update-title-hook
+          (lambda ()
+            (when (or (not exwm-instance-name)
+                      (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+                      (string= "gimp" exwm-instance-name))
+              (exwm-workspace-rename-buffer exwm-title))))
 
-      (defun ambrevar/swap-windows-left ()
-        "Swap current window with the window to the left."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'left)))
-      (defun ambrevar/swap-windows-below ()
-        "Swap current window with the window below."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'below)))
-      (defun ambrevar/swap-windows-above ()
-        "Swap current window with the window above."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'above)))
-      (defun ambrevar/swap-windows-right ()
-        "Swap current window with the window to the right."
-        (interactive)
-        (ambrevar/swap-windows (window-in-direction 'right)))
+;; Global keybindings can be defined with `exwm-input-global-keys'.
+;; Here are a few examples:
+(setq exwm-input-global-keys
+      `(
+        ;; Bind "s-r" to exit char-mode and fullscreen mode.
+        ([?\s-r] . exwm-reset)
+        ;; Bind "s-w" to switch workspace interactively.
+        ([?\s-w] . exwm-workspace-switch)
+        ;; Bind "s-0" to "s-9" to switch to a workspace by its index.
+        ,@(mapcar (lambda (i)
+                    `(,(kbd (format "s-%d" i)) .
+                      (lambda ()
+                        (interactive)
+                        (exwm-workspace-switch-create ,i))))
+                  (number-sequence 0 9))
+        ;; Bind "s-&" to launch applications ('M-&' also works if the output
+        ;; buffer does not bother you).
+        ([?\s-&] . (lambda (command)
+		     (interactive (list (read-shell-command "$ ")))
+		     (start-process-shell-command command nil command)))
+        ;; Bind "s-<f2>" to "slock", a simple X display locker.
+        ([s-f2] . (lambda ()
+		    (interactive)
+		    (start-process "" nil "/usr/bin/slock")))))
 
-      (exwm-input-set-key (kbd "s-\\") 'ambrevar/toggle-window-split)
-      (exwm-input-set-key (kbd "s-H") 'ambrevar/swap-windows-left)
-      (exwm-input-set-key (kbd "s-B") 'ambrevar/swap-windows-left)
-      (exwm-input-set-key (kbd "s-J") 'ambrevar/swap-windows-below)
-      (exwm-input-set-key (kbd "s-N") 'ambrevar/swap-windows-below)
-      (exwm-input-set-key (kbd "s-K") 'ambrevar/swap-windows-above)
-      (exwm-input-set-key (kbd "s-P") 'ambrevar/swap-windows-above)
-      (exwm-input-set-key (kbd "s-L") 'ambrevar/swap-windows-right)
-      (exwm-input-set-key (kbd "s-F") 'ambrevar/swap-windows-right)
+;; To add a key binding only available in line-mode, simply define it in
+;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
+(define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
 
-      ;; window
-      (exwm-input-set-key (kbd "<s-f1>") 'delete-other-windows)
-      (exwm-input-set-key (kbd "<s-f2>") 'split-window-below)
-      (exwm-input-set-key (kbd "<s-f3>") 'split-window-right)
-      ;; hide window
-      (exwm-input-set-key (kbd "<s-f4>") 'delete-window)
-      ;; toggle mode line
-      (exwm-input-set-key (kbd "<s-f9>") 'exwm-layout-toggle-mode-line)
+;; The following example demonstrates how to use simulation keys to mimic
+;; the behavior of Emacs.  The value of `exwm-input-simulation-keys` is a
+;; list of cons cells (SRC . DEST), where SRC is the key sequence you press
+;; and DEST is what EXWM actually sends to application.  Note that both SRC
+;; and DEST should be key sequences (vector or string).
+(setq exwm-input-simulation-keys
+      '(
+        ;; movement
+        ([?\C-b] . [left])
+        ([?\M-b] . [C-left])
+        ([?\C-f] . [right])
+        ([?\M-f] . [C-right])
+        ([?\C-p] . [up])
+        ([?\C-n] . [down])
+        ([?\C-a] . [home])
+        ([?\C-e] . [end])
+        ([?\M-v] . [prior])
+        ([?\C-v] . [next])
+        ([?\C-d] . [delete])
+        ([?\C-k] . [S-end delete])
+        ;; cut/paste.
+        ([?\C-w] . [?\C-x])
+        ([?\M-w] . [?\C-c])
+        ([?\C-y] . [?\C-v])
+        ;; search
+        ([?\C-s] . [?\C-f])))
 
+;; see x windows from anywhere
+(setq exwm-workspace-show-all-buffers t)
+(setq exwm-layout-show-all-buffers t)
 
-      ;; show X windows from any workspace
-      (setq exwm-workspace-show-all-buffers t)
-      (setq exwm-layout-show-all-buffers t)
+;; system tray
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
 
-      ;; include exwm-title in buffer name
-      (defun exwm-rename-buffer ()
-        (interactive)
-        (exwm-workspace-rename-buffer
-         (concat exwm-class-name ":"
-                 (if (<= (length exwm-title) 50) exwm-title
-                   (concat (substring exwm-title 0 49) "...")))))
+;; Autohide minibuffer & echo area
+(setq exwm-workspace-minibuffer-position 'bottom)
 
-      (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
-      (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+;; Custom keybindings
+;;
+;; screen brightness
+(exwm-input-set-key (kbd "<XF86MonBrightnessUp>")
+		    (lambda ()
+		      (interactive) (start-process-shell-command "xbacklight" nil "xbacklight -inc 5")))
+(exwm-input-set-key (kbd "<XF86MonBrightnessDown>")
+		    (lambda ()
+		      (interactive) (start-process-shell-command "xbacklight" nil "xbacklight -dec 5")))
+;; volume
+(exwm-input-set-key (kbd "<XF86AudioRaiseVolume>")
+		    (lambda ()
+		      (interactive)
+		      (start-process-shell-command "amixer" nil "amixer set Master 3%+")))
+(exwm-input-set-key (kbd "<XF86AudioLowerVolume>")
+		    (lambda ()
+		      (interactive)
+		      (start-process-shell-command "amixer" nil "amixer set Master 3%-")))
+(exwm-input-set-key (kbd "<XF86AudioMute>")
+		    (lambda ()
+		      (interactive)
+		      (start-process-shell-command "amixer" nil "amixer set Master toggle")))
+;; suspend
+(exwm-input-set-key (kbd "s-S")
+		    (lambda ()
+		      (interactive)
+		      (shell-command "i3lock -c 000000 ; systemctl suspend")))
 
-      ; Multiple monitors
-      (require 'exwm-randr)
-      (setq exwm-randr-workspace-output-plist '(1 "HDMI2" 2 "HDMI2"
-      3 "HDMI2" 4 "HDMI2" 5 "HDMI2" 6 "HDMI2" 7 "HDMI2" 8 "HDMI2"
-      9 "HDMI2"))
-      (add-hook 'exwm-randr-screen-change-hook
-                (lambda ()
-                  (start-process-shell-command
-                   "xrandr" nil "xrandr --output HDMI2 --above eDP1 --auto")))
-      (exwm-randr-enable)
+;; set keycodes
+(start-process-shell-command "setxkbmap" nil "setxkbmap -keycodes evdev_custom_thinkpad_T460")
 
-      ;; system tray
-      (require 'exwm-systemtray)
-      (exwm-systemtray-enable)
+;; You can hide the minibuffer and echo area when they're not used, by
+;; uncommenting the following line.
+					;(setq exwm-workspace-minibuffer-position 'bottom)
 
-
-      ;; screen brightness
-      (exwm-input-set-key (kbd "<XF86MonBrightnessUp>")
-                          (lambda ()
-                            (interactive) (start-process-shell-command "xbacklight" nil "xbacklight -inc 5")))
-      (exwm-input-set-key (kbd "<XF86MonBrightnessDown>")
-                          (lambda ()
-                            (interactive) (start-process-shell-command "xbacklight" nil "xbacklight -dec 5")))
-
-      ;; volume
-      (exwm-input-set-key (kbd "<XF86AudioRaiseVolume>")
-                          (lambda ()
-                            (interactive)
-                            (start-process-shell-command "amixer" nil "amixer set Master 3%+")))
-      (exwm-input-set-key (kbd "<XF86AudioLowerVolume>")
-                          (lambda ()
-                            (interactive)
-                            (start-process-shell-command "amixer" nil "amixer set Master 3%-")))
-      (exwm-input-set-key (kbd "<XF86AudioMute>")
-                          (lambda ()
-                            (interactive)
-                            (start-process-shell-command "amixer" nil "amixer set Master toggle")))
-
-      ;; suspend
-      (exwm-input-set-key (kbd "s-S")
-                          (lambda ()
-                            (interactive)
-                            (shell-command "i3lock -c 000000 ; systemctl suspend")))
-
-      ;; launch emacsclient
-      (exwm-input-set-key (kbd "s-e")
-                          (lambda ()
-                            (interactive)
-                            (start-process-shell-command "emacsclient" nil "emacsclient -c")))
-
-      ;; TODO quit window with s-Q
-      (exwm-input-set-key (kbd "s-Q")
-			  (lambda ()
-			    (interactive)
-			    (kill-buffer-and-window)))
-
-      ;; autohide minubuffer/echo area
-      (setq exwm-workspace-minibuffer-position 'bottom)
-
-      ;; Detach/Attach minibuffer/echo area
-      (exwm-input-set-key (kbd "s-~")
-			  (lambda ()
-			    (interactive)
-			    (exwm-workspace-attach-minibuffer)))
-
-      (exwm-input-set-key (kbd "s-`")
-			  (lambda ()
-			    (interactive)
-			    (exwm-workspace-detach-minibuffer)))
-
-      ;; start compton
-      (start-process-shell-command "compton" nil "compton -b")
-
-      ;; start emacs daemon (for embedded emacs :D)
-      (defun gp/exwm-start-emacs-daemon ()
-      	(start-process-shell-command "emacs" nil "emacs --daemon"))
-      (add-hook 'exwm-init-hook 'gp/exwm-start-emacs-daemon)
-
-      ;; ;; start nextcloud
-      (defun gp/exwm-start-nextcloud ()
-      	(start-process-shell-command "nextcloud" nil "nextcloud"))
-      (add-hook 'exwm-init-hook 'gp/exwm-start-nextcloud)
-
-      ;; set keycodes
-      (start-process-shell-command "setxkbmap" nil "setxkbmap -keycodes evdev_custom_thinkpad_T460")
-
-      ;; disable touchpad TODO
-
-      ;; set background
-      (defun gp/exwm-set-background ()
-      	(start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/lievitating_gnu.png"))
-      (add-hook 'exwm-init-hook 'gp/exwm-set-background)
-
-      (symon-mode)
-
-      ;; Enable EXWM
-      (exwm-enable)
-      ;; Configure Ido
-      (exwm-config-ido)
-      ;; Other configurations
-      (exwm-config-misc))
-
-    (exwm-config-myconf))
+;; Do not forget to enable EXWM. It will start by itself when things are
+;; ready.  You can put it _anywhere_ in your configuration.
+(exwm-enable)
