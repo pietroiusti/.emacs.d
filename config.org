@@ -2,235 +2,89 @@
 #+EMAIL: giulio.pietroiusti@gmail.com
 #+LANGUAGE: en
 
-* dired
-** dired-narrow
-#+BEGIN_SRC emacs-lisp
-  (use-package dired-narrow
-    :ensure t)
-#+END_SRC
-
-
-* symon: tiny graphical system monitor
-#+BEGIN_SRC emacs-lisp
-  (use-package symon
-    :ensure t
-    :config
-    (setq symon-monitors '(symon-linux-battery-monitor symon-linux-cpu-monitor)))
-#+END_SRC
-
-
-* string manipulation
-#+BEGIN_SRC emacs-lisp
-  (use-package s
-    :ensure t)
-#+END_SRC
-
-
-* only frame
-I use this package with i3wm.
-#+BEGIN_SRC emacs-lisp
-  (use-package frames-only-mode
-    :ensure t
-    :config
-    (frames-only-mode))
-#+END_SRC
-
-
-* exwm
-I keep a separate file that is loaded only by the emacs that works as a WM.
-
-In my .xinitrc I have:
-exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
-
-
-* evil
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :ensure t
-    :config
-
-    (evil-mode 1)
-
-    (setq evil-default-state 'emacs
-          evil-insert-state-modes nil
-          evil-motion-state-modes nil)
-
-
-   ;; solve blinking problem with pdf-tools
-    (evil-set-initial-state 'pdf-view-mode 'emacs)
-    (add-hook 'pdf-view-mode-hook
-              (lambda ()
-                (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
-
-    ;; Change cursor color in different modes
-    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
-    (setq evil-emacs-state-cursor '("#839496" box))
-    (setq evil-motion-state-cursor '("#e80000" box))
-    (setq evil-normal-state-cursor '("#e80000" box))
-    (setq evil-visual-state-cursor '("#e80000" box))
-    (setq evil-insert-state-cursor '("#e80000" bar))
-    (setq evil-replace-state-cursor '("#e80000" bar))
-    (setq evil-operator-state-cursor '("#e80000" hollow))
-    ;; TODO: change color of cursor when it is in the minibuffer
-    )
-#+END_SRC
-
-
-* Me
+* General Settings
+** Me
 #+BEGIN_SRC emacs-lisp
   (setq user-full-name "Giulio Pietroiusti"
         user-mail-address "giulio.pietroiusti@gmail.com")
 #+END_SRC
 
-
-* Common lisp functions and macros
-#+BEGIN_SRC emacs-lisp
-  (require 'cl)
-#+END_SRC
-
-
-* Disable backup and auto-save
-#+BEGIN_SRC emacs-lisp
-  (setq make-backup-files nil)
-  (setq auto-save-default nil)
-#+END_SRC
-
-
-* which-key
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config
-    (which-key-mode))
-#+END_SRC
-
-
-* Magit
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :config
-    (global-set-key (kbd "C-x g") 'magit-status))
-#+END_SRC
-
-
-* pdf-tools
-#+BEGIN_SRC emacs-lisp
-  (use-package pdf-tools
-    :ensure t
-    :pin melpa
-    :config
-    (pdf-tools-install)
-
-    (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
-    (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
-    (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
-    (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
-    (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
-
-
-  ;; :bind (:map pdf-view-mode-map
-  ;;                 ("j"   . pdf-view-next-line-or-next-page)
-  ;;                 ("k"   . pdf-view-previous-line-or-previous-page)
-  ;;                 ("l"   . image-forward-hscroll)
-  ;;                 ("h"   . image-backward-hscroll)
-  ;;                 ("K"   . image-kill-buffer)))
-#+END_SRC
-
-
-* neotree
-#+BEGIN_SRC emacs-lisp
-  (use-package neotree
-    :ensure t
-    :config
-    (global-set-key [f8] 'neotree-toggle))
-#+END_SRC
-
-
-* Company
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure t
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
-#+END_SRC
-
-
-* Elisp configuration
-#+BEGIN_SRC emacs-lisp
-  (use-package paredit
-    :ensure t)
-
-  (use-package rainbow-delimiters
-    :ensure t)
-
-  
-
-  ;; Enable paredit, rainbow-delimiters and show-paren-mode for Emacs lisp
-  ;; mode (mode to edit Emacs files *.el) and lisp-interaction-mode (mode
-  ;; to edit *scratch* buffer)
-
-  ;; not use for the moment
-
-  
-  ;; (add-hook 'emacs-lisp-mode-hook
-  ;;           (lambda ()
-  ;;             (paredit-mode t)
-  ;;             (rainbow-delimiters-mode t)
-  ;;             (show-paren-mode 1)
-  ;;             ))
-  ;; (add-hook 'lisp-interaction-mode
-  ;;           (lambda ()
-  ;;             (paredit-mode t)
-  ;;             (rainbow-delimiters-mode t)
-  ;;             (show-paren-mode 1)
-  ;;             ))
-#+END_SRC
-
-
-* C configuration
-#+BEGIN_SRC emacs-lisp
-  ;; C style
-  (setq c-default-style "linux"
-        c-basic-offset 4)
-#+END_SRC
-
-
-* Encoding
+** Encoding
 #+BEGIN_SRC emacs-lisp
   ;; set default file encoding
   (set-language-environment "UTF-8")
   (set-default-coding-systems 'utf-8)
 #+END_SRC
 
+** Disable backup and auto-save
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+#+END_SRC
 
-* Beep
+** Delete Selection Mode
+#+BEGIN_SRC emacs-lisp
+  ;; If you enable Delete Selection mode, a minor mode, then inserting
+  ;; text while the mark is active causes the selected text to be
+  ;; deleted first. This also deactivates the mark.
+  (delete-selection-mode 1)
+#+END_SRC
+
+** Show matching parenthesis
+#+BEGIN_SRC emacs-lisp
+  ;; show matching parenthesis
+  (show-paren-mode 1)
+#+END_SRC
+
+** IBuffer instead of Buffer Menu
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+END_SRC
+
+** Tabs
+#+BEGIN_SRC emacs-lisp
+;; set tab to 4 spaces
+(setq tab-width 4) ; or any other preferred value
+(defvaralias 'c-basic-offset 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
+#+END_SRC
+
+** Auto-fill
+#+BEGIN_SRC emacs-lisp
+  ;; enable auto-fill-mode when in text-mode and org-mode
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (add-hook 'org-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+** Use y/n instead of yes/no
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+** Beep
 #+BEGIN_SRC emacs-lisp
   ;; get visual indication
   (setq visible-bell 1)
 #+END_SRC
 
-
-* Use y/n instead of yes/no
+** Common lisp functions and macros
 #+BEGIN_SRC emacs-lisp
-  (fset 'yes-or-no-p 'y-or-n-p)
+  (require 'cl)
 #+END_SRC
 
-
-* Current line highlighting
+** String manipulation functions
 #+BEGIN_SRC emacs-lisp
-  (global-hl-line-mode t)
+  (use-package s
+    :ensure t)
 #+END_SRC
 
-
-* Font
+* Appearances
+** Font
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
                '(font . "Inconsolata-12"))
 #+END_SRC
-
-
-* Bars
+** Bars
 #+BEGIN_SRC emacs-lisp
   ;; Don't show tool bar
   (tool-bar-mode 0)
@@ -239,16 +93,42 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
   ;; Don't show scroll bar
   (scroll-bar-mode 0)
 #+END_SRC
+** Themes
+*** solarized-emacs
+#+BEGIN_SRC emacs-lisp
+    (use-package solarized-theme
+      :ensure t
+      :config
+      ;; Avoid all font-size changes
+      (setq solarized-height-minus-1 1.0)
+      (setq solarized-height-plus-1 1.0)
+      (setq solarized-height-plus-2 1.0)
+      (setq solarized-height-plus-3 1.0)
+      (setq solarized-height-plus-4 1.0)
 
+      ;; (load-theme 'solarized-light t)
+      ;; (load-theme 'solarized-dark t))
+#+END_SRC
+*** color-theme-sanityinc-tomorrow
+#+BEGIN_SRC emacs-lisp
+  (use-package color-theme-sanityinc-tomorrow
+    :ensure t)
 
-* Scrolling
+  (load-theme 'sanityinc-tomorrow-bright t))
+    #+END_SRC
+
+** Current line highlighting
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode t)
+#+END_SRC
+
+** Scrolling
 #+BEGIN_SRC emacs-lisp
   ;; make scrolling nicer
   (setq scroll-conservatively 100)
 #+END_SRC
 
-
-* Transparency
+** Transparency
 #+BEGIN_SRC emacs-lisp
   (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
   (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
@@ -267,70 +147,15 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
   (global-set-key (kbd "C-c x") 'toggle-transparency)
 #+END_SRC
 
-
-* Show matching parenthesis
+** olivetti-mode
+Best package for minimal reading.
 #+BEGIN_SRC emacs-lisp
-  ;; show matching parenthesis
-  (show-paren-mode 1)
+  (use-package olivetti
+    :ensure t)
 #+END_SRC
 
-
-* Auto-fill
-#+BEGIN_SRC emacs-lisp
-  ;; enable auto-fill-mode when in text-mode and org-mode
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (add-hook 'org-mode-hook 'turn-on-auto-fill)
-#+END_SRC
-
-
-* Tabs
-#+BEGIN_SRC emacs-lisp
-;; set tab to 4 spaces
-(setq tab-width 4) ; or any other preferred value
-(defvaralias 'c-basic-offset 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
-#+END_SRC
-
-
-* AUCTeX
-#+BEGIN_SRC emacs-lisp
-
-  (use-package auctex
-    :defer t
-    :ensure t
-    :config
-    ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
-    ;; documents right away, insert the following in your '.emacs' file. 
-    (setq TeX-auto-save t)
-    (setq Tex-parse-self t)
-    (setq-default TeX-master nil))
-
-#+END_SRC
-
-
-* ido
-#+BEGIN_SRC emacs-lisp
-  (use-package ido
-    :ensure t
-    :config
-    (setq ido-enable-flex-matching t)
-    (setq ido-everywhere t)
-    (setq ido-show-dot-for-dired t)
-    (ido-mode 1))
-
-#+END_SRC
-
-
-* smex
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure t
-    :config
-    (global-set-key (kbd "M-x") 'smex))
-#+END_SRC
-
-
-* org
+* Indispensable
+** org
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure t
@@ -359,39 +184,128 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
             "~/Nextcloud/org/readings.org" "~/Nextcloud/org/todos.org"
             "~/Nextcloud/org/teaching.org")))
 #+END_SRC
-
-
-* IBuffer instead of Buffer Menu
+** evil
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
-#+END_SRC
-
-
-* Delete Selection Mode
-#+BEGIN_SRC emacs-lisp
-  ;; If you enable Delete Selection mode, a minor mode, then inserting
-  ;; text while the mark is active causes the selected text to be
-  ;; deleted first. This also deactivates the mark.
-  (delete-selection-mode 1)
-#+END_SRC
-
-
-* iy-go-up-to-char
-#+BEGIN_SRC emacs-lisp
-  (use-package iy-go-to-char
+  (use-package evil
     :ensure t
     :config
-    ;; Emulate vim 'f' and 't'
-    (global-set-key (kbd "C-c f") 'iy-go-to-char)
-    (global-set-key (kbd "C-c F") 'iy-go-to-char-backward)
-    (global-set-key (kbd "C-c t") 'iy-go-up-to-char)
-    (global-set-key (kbd "C-c T") 'iy-go-up-to-char-backward)
-    ;; make the every key behave normally after these commands
-    (setq iy-go-to-char-override-local-map 'nil))
+
+    (evil-mode 1)
+
+    (setq evil-default-state 'emacs
+          evil-insert-state-modes nil
+          evil-motion-state-modes nil)
+
+
+    ;; solve blinking problem with pdf-tools
+    (evil-set-initial-state 'pdf-view-mode 'emacs)
+    (add-hook 'pdf-view-mode-hook
+              (lambda ()
+                (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
+    ;; Change cursor color in different modes
+    ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+    (setq evil-emacs-state-cursor '("#839496" box))
+    (setq evil-motion-state-cursor '("#e80000" box))
+    (setq evil-normal-state-cursor '("#e80000" box))
+    (setq evil-visual-state-cursor '("#e80000" box))
+    (setq evil-insert-state-cursor '("#e80000" bar))
+    (setq evil-replace-state-cursor '("#e80000" bar))
+    (setq evil-operator-state-cursor '("#e80000" hollow))
+    ;; TODO: change color of cursor when it is in the minibuffer
+    )
 #+END_SRC
 
+** Magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x g") 'magit-status))
+#+END_SRC
 
-* avy
+** pdf-tools
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :pin melpa
+    :config
+    (pdf-tools-install)
+
+    (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+    (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+    (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
+    (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
+    (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
+
+
+  ;; :bind (:map pdf-view-mode-map
+  ;;                 ("j"   . pdf-view-next-line-or-next-page)
+  ;;                 ("k"   . pdf-view-previous-line-or-previous-page)
+  ;;                 ("l"   . image-forward-hscroll)
+  ;;                 ("h"   . image-backward-hscroll)
+  ;;                 ("K"   . image-kill-buffer)))
+#+END_SRC
+
+** Company
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
+** AUCTeX
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex
+    :defer t
+    :ensure t
+    :config
+    ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
+    ;; documents right away, insert the following in your '.emacs' file. 
+    (setq TeX-auto-save t)
+    (setq Tex-parse-self t)
+    (setq-default TeX-master nil))
+#+END_SRC
+** ido
+#+BEGIN_SRC emacs-lisp
+  (use-package ido
+    :ensure t
+    :config
+    (setq ido-enable-flex-matching t)
+    (setq ido-everywhere t)
+    (ido-mode 1))
+
+#+END_SRC
+* Other
+** which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+#+END_SRC
+
+** web-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t)
+#+END_SRC
+
+** dired-narrow
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-narrow
+    :ensure t)
+#+END_SRC
+
+** smex
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure t
+    :config
+    (global-set-key (kbd "M-x") 'smex))
+#+END_SRC
+
+** avy
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :ensure t
@@ -400,47 +314,19 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
     (global-set-key (kbd "C-:") 'avy-goto-char)
 #+END_SRC
 
-
-* JS
-#+BEGIN_SRC emacs-lisp
-  (use-package js2-mode
-    :ensure t
-    :config
-    ;; js2-mode as a defalut for js files
-    (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
-    )
-#+END_SRC
-
-
-* web-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure t)
-#+END_SRC
-
-
-* impatient-mode
+** impatient-mode
 #+BEGIN_SRC emacs-lisp
   (use-package impatient-mode
     :ensure t)
 #+END_SRC
 
-
-* restclient-mode
+** restclient-mode
 #+BEGIN_SRC emacs-lisp
   (use-package restclient
     :ensure t)
 #+END_SRC
 
-
-* pug-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package pug-mode
-    :ensure t)
-#+END_SRC
-
-
-* engine-mode
+** engine-mode
 #+BEGIN_SRC emacs-lisp
   (use-package engine-mode
     :ensure t
@@ -458,61 +344,69 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
       "http://www.treccani.it/vocabolario/ricerca/%s/"
       :keybinding "i"))
 #+END_SRC
-
-
-* writeroom
+** only frame
+I use this package with tiling wms that are not EXWM.
 #+BEGIN_SRC emacs-lisp
-  (use-package writeroom-mode
-    :ensure t)
-  #+END_SRC
-
-* olivetti
-#+BEGIN_SRC emacs-lisp
-  (use-package olivetti
-    :ensure t)
+  (use-package frames-only-mode
+    :ensure t
+    :config
+    (frames-only-mode))
 #+END_SRC
 
-* centered-window
+* Languages configuration
+** Elisp configuration
 #+BEGIN_SRC emacs-lisp
-  (use-package centered-window
-    :ensure t)
-#+END_SRC
-
-
-* Reading news
-** elfeed
-#+BEGIN_SRC emacs-lisp
-    (use-package elfeed
-      :ensure t
-      :config
-      (setq elfeed-feeds
-            '("https://www.theguardian.com/world/rss"
-              "https://www.ilfattoquotidiano.it/feed/"
-              "https://www.theguardian.com/football/rss"
-              "https://www.gazzetta.it/rss/calcio.xml")))
-#+END_SRC
-
-
-* Themes
-** solarized-emacs
-#+BEGIN_SRC emacs-lisp
-    (use-package solarized-theme
-      :ensure t
-      :config
-      ;; Avoid all font-size changes
-      (setq solarized-height-minus-1 1.0)
-      (setq solarized-height-plus-1 1.0)
-      (setq solarized-height-plus-2 1.0)
-      (setq solarized-height-plus-3 1.0)
-      (setq solarized-height-plus-4 1.0)
-
-      ;; (load-theme 'solarized-light t)
-      ;; (load-theme 'solarized-dark t))
-#+END_SRC
-** color-theme-sanityinc-tomorrow
-#+BEGIN_SRC emacs-lisp
-  (use-package color-theme-sanityinc-tomorrow
+  (use-package paredit
     :ensure t)
 
-  (load-theme 'sanityinc-tomorrow-bright t))
-    #+END_SRC
+  (use-package rainbow-delimiters
+    :ensure t)
+
+  ;; Enable paredit, rainbow-delimiters and show-paren-mode for Emacs lisp
+  ;; mode (mode to edit Emacs files *.el) and lisp-interaction-mode (mode
+  ;; to edit *scratch* buffer)
+
+  ;; not using it for the moment
+
+  
+  ;; (add-hook 'emacs-lisp-mode-hook
+  ;;           (lambda ()
+  ;;             (paredit-mode t)
+  ;;             (rainbow-delimiters-mode t)
+  ;;             (show-paren-mode 1)
+  ;;             ))
+  ;; (add-hook 'lisp-interaction-mode
+  ;;           (lambda ()
+  ;;             (paredit-mode t)
+  ;;             (rainbow-delimiters-mode t)
+  ;;             (show-paren-mode 1)
+  ;;             ))
+#+END_SRC
+
+** C configuration
+#+BEGIN_SRC emacs-lisp
+  ;; C style
+  (setq c-default-style "linux"
+        c-basic-offset 4)
+#+END_SRC
+
+** js2-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :config
+    ;; js2-mode as a defalut for js files
+    (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode))
+    )
+#+END_SRC
+
+** pug-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package pug-mode
+    :ensure t)
+#+END_SRC
+* EXWM
+I keep a separate file that is loaded only when Emacs works as X WM.
+
+In my .xinitrc I have something like:
+exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
