@@ -226,7 +226,7 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
 * Font
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
-               '(font . "Inconsolata-11"))
+               '(font . "Inconsolata-12"))
 #+END_SRC
 
 
@@ -315,6 +315,7 @@ exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
     :config
     (setq ido-enable-flex-matching t)
     (setq ido-everywhere t)
+    (setq ido-show-dot-for-dired t)
     (ido-mode 1))
 
 #+END_SRC
