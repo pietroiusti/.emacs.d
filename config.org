@@ -353,6 +353,16 @@ I use this package with tiling wms that are not EXWM.
     (frames-only-mode))
 #+END_SRC
 
+** projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+      :ensure t
+      :config
+      (projectile-mode +1)
+      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+END_SRC
+
+
 * Languages configuration
 ** Elisp configuration
 #+BEGIN_SRC emacs-lisp
