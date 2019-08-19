@@ -297,7 +297,13 @@ Best package for minimal reading.
     :ensure t)
 #+END_SRC
 
-** dired-narrow
+** dired
+*** general
+#+BEGIN_SRC emacs-lisp
+  ; don't show all the details
+  (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+#+END_SRC
+*** dired-narrow
 #+BEGIN_SRC emacs-lisp
   (use-package dired-narrow
     :ensure t)
