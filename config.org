@@ -305,9 +305,23 @@ Best package for minimal reading.
 #+END_SRC
 *** dired-narrow
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-narrow
-    :ensure t)
+    (use-package dired-narrow
+      :ensure t
+      :config
+      (bind-keys :map dired-mode-map
+                 ("M-n" . dired-narrow)))
 #+END_SRC
+*** dired-subtree
+#+BEGIN_SRC emacs-lisp
+  (use-package dired-subtree
+    :ensure t
+    :config
+    (bind-keys :map dired-mode-map
+               ("TAB" . dired-subtree-insert)
+               ("<S-iso-lefttab>" . dired-subtree-remove)
+               ("DEL" . dired-subtree-remove)))
+#+END_SRC
+
 
 ** smex
 #+BEGIN_SRC emacs-lisp
