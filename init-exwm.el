@@ -84,7 +84,7 @@
         ;; Bind "s-<f2>" to "slock", a simple X display locker.
         ([s-f2] . (lambda ()
 		    (interactive)
-		    (start-process "" nil "/usr/bin/slock ; systemctl suspend")))))
+		    (start-process "" nil "/usr/bin/slock")))))
 
 
 ;; To add a key binding only available in line-mode, simply define it in
@@ -122,13 +122,27 @@
 (setq exwm-workspace-show-all-buffers t)
 (setq exwm-layout-show-all-buffers t)
 
+;; name exwm buffers with exwm-titles
+(defun exwm-rename-buffer ()
+  (interactive)
+  (exwm-workspace-rename-buffer
+   (concat exwm-class-name ":"
+           (if (<= (length exwm-title) 50) exwm-title
+             (concat (substring exwm-title 0 49) "...")))))
+(add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+(add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+
+;; Customize ediff to open the *Ediff Control Panel* in a new window
+;; instead of a new frame.
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;; system tray
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
+;; (require 'exwm-systemtray)
+;; (exwm-systemtray-enable)
 
 ;; Autohide minibuffer & echo area
-;;(setq exwm-workspace-minibuffer-position 'bottom) ;; doesn't work well :(
-;;(setq echo-keystrokes 0)
+;; (setq exwm-workspace-minibuffer-position 'bottom) ;; doesn't work well :(
+;; (setq echo-keystrokes 0)                          ;; does it improve something? Not really...
 
 
 ;; Custom keybindings
