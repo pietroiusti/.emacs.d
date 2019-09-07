@@ -110,13 +110,23 @@
         ([?\M-v] . [prior])
         ([?\C-v] . [next])
         ([?\C-d] . [delete])
+	([?\M-d] . [C-delete])
+	([M-backspace] . [C-backspace])
         ([?\C-k] . [S-end delete])
         ;; cut/paste.
         ([?\C-w] . [?\C-x])
         ([?\M-w] . [?\C-c])
         ([?\C-y] . [?\C-v])
         ;; search
-        ([?\C-s] . [?\C-f])))
+        ([?\C-s] . [f3])
+	([?\C-r] . [S-f3])
+	;; newline
+	([?\C-j] . [return])
+	([?\C-o] . [return left])
+	;; undo
+	([?\C-/] . [C-z])
+	;; cancel
+	([?\C-g] . [escape])))
 
 ;; see x windows from anywhere
 (setq exwm-workspace-show-all-buffers t)
