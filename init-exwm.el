@@ -178,6 +178,11 @@
 		      (interactive)
 		      (start-process-shell-command "amixer" nil "amixer set Master toggle")))
 ;; suspend
+(exwm-input-set-key (kbd "s-s")
+		    (lambda ()
+		      (interactive)
+		      (shell-command "systemctl suspend")))
+;; lock and suspend
 (exwm-input-set-key (kbd "s-S")
 		    (lambda ()
 		      (interactive)
