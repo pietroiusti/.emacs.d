@@ -5,26 +5,12 @@
 ;; Also shrink fringes to 1 pixel.
 (fringe-mode 1)
 
-;; Turn on `display-time-mode' if you don't use an external bar.
-(setq display-time-default-load-average nil)
-(display-time-mode t)
-
 ;; You are strongly encouraged to enable something like `ido-mode' to alter
 ;; the default behavior of 'C-x b', or you will take great pains to switch
 ;; to or back from a floating frame (remember 'C-x 5 o' if you refuse this
 ;; proposal however).
 ;; You may also want to call `exwm-config-ido' later (see below).
 (ido-mode 1)
-
-;; Emacs server is not required to run EXWM but it has some interesting uses
-;; (see next section).
-;(server-start)
-
-;;;; Below are configurations for EXWM.
-
-;; Add paths (not required if EXWM is installed from GNU ELPA).
-;(add-to-list 'load-path "/path/to/xelb/")
-;(add-to-list 'load-path "/path/to/exwm/")
 
 ;; Load EXWM.
 (require 'exwm)
@@ -147,8 +133,8 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; system tray
-;; (require 'exwm-systemtray)
-;; (exwm-systemtray-enable)
+(require 'exwm-systemtray)
+(exwm-systemtray-enable)
 
 ;; Autohide minibuffer & echo area
 ;; (setq exwm-workspace-minibuffer-position 'bottom) ;; doesn't work well :(

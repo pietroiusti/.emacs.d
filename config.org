@@ -36,9 +36,20 @@
   (show-paren-mode 1)
 #+END_SRC
 
-** IBuffer instead of Buffer Menu
+** ibuffer instead of buffer Menu
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ibuffer-projectile
+    :ensure t
+    :config
+    (add-hook 'ibuffer-hook
+              (lambda ()
+                (ibuffer-projectile-set-filter-groups)
+                (unless (eq ibuffer-sorting-mode 'alphabetic)
+                  (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 
 ** Tabs
@@ -107,14 +118,14 @@
       (setq solarized-height-plus-4 1.0)
 
       ;; (load-theme 'solarized-light t)
-      ;; (load-theme 'solarized-dark t))
+      (load-theme 'solarized-dark t))
 #+END_SRC
 *** color-theme-sanityinc-tomorrow
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme-sanityinc-tomorrow
     :ensure t)
 
-  (load-theme 'sanityinc-tomorrow-bright t))
+  ;;(load-theme 'sanityinc-tomorrow-bright t))
     #+END_SRC
 
 ** Current line highlighting
@@ -136,21 +147,21 @@
 
 ** Transparency
 #+BEGIN_SRC emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
-  (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+  ;; (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
+  ;; (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
 
-  (defun toggle-transparency ()
-    (interactive)
-    (let ((alpha (frame-parameter nil 'alpha)))
-      (set-frame-parameter
-       nil 'alpha
-       (if (eql (cond ((numberp alpha) alpha)
-                      ((numberp (cdr alpha)) (cdr alpha))
-                      ;; Also handle undocumented (<active> <inactive>) form.
-                      ((numberp (cadr alpha)) (cadr alpha)))
-                100)
-           '(85 . 75) '(100 . 100)))))
-  (global-set-key (kbd "C-c x") 'toggle-transparency)
+  ;; (defun toggle-transparency ()
+  ;;   (interactive)
+  ;;   (let ((alpha (frame-parameter nil 'alpha)))
+  ;;     (set-frame-parameter
+  ;;      nil 'alpha
+  ;;      (if (eql (cond ((numberp alpha) alpha)
+  ;;                     ((numberp (cdr alpha)) (cdr alpha))
+  ;;                     ;; Also handle undocumented (<active> <inactive>) form.
+  ;;                     ((numberp (cadr alpha)) (cadr alpha)))
+  ;;               100)
+  ;;          '(85 . 75) '(100 . 100)))))
+  ;; (global-set-key (kbd "C-c x") 'toggle-transparency)
 #+END_SRC
 
 ** olivetti-mode
@@ -373,10 +384,10 @@ Best package for minimal reading.
 ** only frame
 I use this package with tiling wms that are not EXWM.
 #+BEGIN_SRC emacs-lisp
-  (use-package frames-only-mode
-    :ensure t
-    :config
-    (frames-only-mode))
+  ;; (use-package frames-only-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (frames-only-mode))
 #+END_SRC
 
 ** projectile
