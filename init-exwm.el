@@ -10,14 +10,14 @@
 ;; to or back from a floating frame (remember 'C-x 5 o' if you refuse this
 ;; proposal however).
 ;; You may also want to call `exwm-config-ido' later (see below).
-;;(ido-mode 1)
+(ido-mode 1)
 
 ;; Load EXWM.
 (require 'exwm)
 
 ;; Fix problems with Ido (if you use it).
-;;(require 'exwm-config)
-;;(exwm-config-ido)
+(require 'exwm-config)
+(exwm-config-ido)
 
 ;; Set the initial number of workspaces (they can also be created later).
 (setq exwm-workspace-number 10)
