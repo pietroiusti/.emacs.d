@@ -90,6 +90,11 @@
 #+END_SRC
 
 * Appearances
+** wm
+Remove black border at the bottom in certain window managers
+#+BEGIN_SRC emacs-lisp
+(setq frame-resize-pixelwise t)
+#+END_SRC
 ** Font
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
