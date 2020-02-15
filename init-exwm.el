@@ -12,6 +12,11 @@
 ;; You may also want to call `exwm-config-ido' later (see below).
 (ido-mode 1)
 
+
+;; allow resizing X windows by dragging their right edge
+(setq window-divider-default-right-width 1)
+(window-divider-mode)
+
 ;; Load EXWM.
 (require 'exwm)
 
