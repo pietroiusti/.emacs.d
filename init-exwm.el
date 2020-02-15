@@ -136,10 +136,11 @@
 (require 'exwm-systemtray)
 (exwm-systemtray-enable)
 
-;; Autohide minibuffer & echo area
-;; (setq exwm-workspace-minibuffer-position 'bottom) ;; doesn't work well :(
-;; (setq echo-keystrokes 0)                          ;; does it improve something? Not really...
+;; Hide mode-line by default
+(add-hook 'exwm-manage-finish-hook #'exwm-layout-hide-mode-line)
 
+;; Autohide minibuffer & echo area (might be buggish...)
+(setq exwm-workspace-minibuffer-position 'bottom)
 
 ;; Custom keybindings
 ;;
