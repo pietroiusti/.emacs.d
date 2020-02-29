@@ -119,6 +119,18 @@
 	;; cancel
 	([?\C-g] . [escape])))
 
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "st-256color"))
+              (exwm-input-set-local-simulation-keys nil))))
+
+(add-hook 'exwm-manage-finish-hook
+          (lambda ()
+            (when (and exwm-class-name
+                       (string= exwm-class-name "Xfce4-terminal"))
+              (exwm-input-set-local-simulation-keys nil))))
+
 ;; see x windows from anywhere
 (setq exwm-workspace-show-all-buffers t)
 (setq exwm-layout-show-all-buffers t)
@@ -185,6 +197,11 @@
 		    (lambda ()
 		      (interactive)
 		      (start-process-shell-command "chromium" nil "chromium")))
+
+(exwm-input-set-key (kbd "s-C")
+		    (lambda ()
+		      (interactive)
+		      (start-process-shell-command "chromium" nil "chromium --incognito")))
 
 ;; emacsclient
 (exwm-input-set-key (kbd "s-e")
