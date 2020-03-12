@@ -1,3 +1,6 @@
+(use-package exwm
+    :ensure t)
+
 ;; Disable menu-bar, tool-bar and scroll-bar to increase the usable space.
 (menu-bar-mode -1)
 (tool-bar-mode -1)
