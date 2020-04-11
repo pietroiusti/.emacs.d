@@ -193,18 +193,44 @@ Best package for minimal reading.
     (global-set-key "\C-cc" 'org-capture)
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cb" 'org-iswitchb)
-    ;; org capture
-    (setq org-default-notes-file "~/Nextcloud/org/capture.org")
 
+
+    ;; org capture
+    ;;(setq org-default-notes-file "~/Nextcloud/org/capture.org")
+
+    (setq org-capture-templates
+          '(
+            ("i" "inbox" entry
+             (file "~/Nextcloud/org/inbox.org")
+             "* TODO %?")
+
+            ("n" "notes" entry
+             (file "~/Nextcloud/org/notes.org")
+             "* %?")
+
+            ("r" "readings" entry
+             (file "~/Nextcloud/org/readings.org")
+             "* %?")
+
+            ("m" "meeting")
+            ("md" "Dan" entry
+             (file "~/Nextcloud/org/meetings.org")
+             "* Dan %^t\n%?")
+            ("mt" "Teresa" entry
+             (file "~/Nextcloud/org/meetings.org")
+             "* Teresa %^t\n%?")
+            ("mo" "Other" entry
+             (file "~/Nextcloud/org/meetings.org")
+             "* %?")))
+  
     ;; Define todo states
     (setq org-todo-keywords
           '((sequence "TODO" "IN PROGRESS" "DONE" )))
 
     (setq org-agenda-files
-          '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/capture.org"
+          '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/inbox.org"
             "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
-            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/todos.org"
-            "~/Nextcloud/org/teaching.org")))
+            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org")))
 #+END_SRC
 ** evil
 #+BEGIN_SRC emacs-lisp
