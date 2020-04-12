@@ -197,8 +197,8 @@ Best package for minimal reading.
     ;; org capture
     (setq org-capture-templates
           '(
-            ("i" "inbox" entry
-             (file "~/Nextcloud/org/inbox.org")
+            ("t" "add task" entry
+             (file "~/Nextcloud/org/todo.org")
              "* TODO %?" :prepend t)
 
             ("n" "notes" entry
@@ -209,23 +209,27 @@ Best package for minimal reading.
              (file "~/Nextcloud/org/readings.org")
              "* %?" :prepend t)
 
-            ("m" "meeting")
+            ("a" "activities" entry
+             (file "~/Nextcloud/org/activities.org")
+             "* %?")
+
+            ("m" "meetings")
             ("md" "Dan" entry
              (file "~/Nextcloud/org/meetings.org")
-             "* Dan %^t\n%?")
+             "* Dan \n SCHEDULED: %^t%?")
             ("mt" "Teresa" entry
              (file "~/Nextcloud/org/meetings.org")
-             "* Teresa %^t\n%?")
+             "* Teresa \n SCHEDULED: %^t%?")
             ("mo" "Other" entry
              (file "~/Nextcloud/org/meetings.org")
              "* %?")))
-  
+
     ;; Define todo states
     (setq org-todo-keywords
           '((sequence "TODO" "IN PROGRESS" "DONE" )))
 
     (setq org-agenda-files
-          '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/inbox.org"
+          '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/todo.org"
             "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
             "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org")))
 #+END_SRC
