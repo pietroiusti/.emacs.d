@@ -160,7 +160,7 @@
 (add-hook 'exwm-manage-finish-hook #'exwm-layout-hide-mode-line)
 
 ;; Autohide minibuffer & echo area (might be buggish...)
-(setq exwm-workspace-minibuffer-position 'bottom)
+;;(setq exwm-workspace-minibuffer-position 'bottom)
 
 ;; Custom keybindings
 ;;
