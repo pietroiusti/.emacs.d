@@ -336,6 +336,25 @@ Best package for minimal reading.
 #+END_SRC
 
 * Other
+** shell
+Open shell in current window.
+#+BEGIN_SRC emacs-lisp
+  (defun shell-same-window-advice (orig-fn &optional buffer)
+    "Advice to make `shell' reuse the current window.
+
+    Intended as :around advice."
+    (let* ((buffer-regexp
+            (regexp-quote
+             (cond ((bufferp buffer)  (buffer-name buffer))
+                   ((stringp buffer)  buffer)
+                   (:else             "*shell*"))))
+           (display-buffer-alist
+            (cons `(,buffer-regexp display-buffer-same-window)
+                  display-buffer-alist)))
+      (funcall orig-fn buffer)))
+
+  (advice-add 'shell :around #'shell-same-window-advice)
+#+END_SRC
 ** change-inner
 #+BEGIN_SRC emacs-lisp
   ;; (use-package change-inner
