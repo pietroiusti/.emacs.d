@@ -190,9 +190,9 @@ Best package for minimal reading.
       ;; The four Org commands org-store-link, org-capture, org-agenda, and
       ;; org-iswitchb should be accessible through global keys (i.e.,
       ;; anywhere in Emacs, not just in Org buffers).
-      (global-set-key "\C-c l" 'org-store-link)
-      (global-set-key "\C-c c" 'org-capture)
-      (global-set-key "\C-c a" 'org-agenda)
+      (global-set-key "\C-cl" 'org-store-link)
+      (global-set-key "\C-cc" 'org-capture)
+      (global-set-key "\C-ca" 'org-agenda)
 
       ;; activate special behavior or C-a, C-e, and C-k
       (setq org-special-ctrl-a/e t)
