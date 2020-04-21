@@ -329,6 +329,15 @@ Best package for minimal reading.
     (setq ido-everywhere t)
     (ido-mode 1))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ido-completing-read+
+    :ensure t
+    :config
+    (require 'ido-completing-read+)
+    (setq ido-ubiquitous-mode 1))
+#+END_SRC
+
 ** Ivy
 #+BEGIN_SRC emacs-lisp
   ;; (use-package counsel
