@@ -170,7 +170,7 @@ Remove black border at the bottom in certain window managers
 #+END_SRC
 
 ** olivetti-mode
-Best package for minimal reading.
+Best package for minimal reading/writing.
 #+BEGIN_SRC emacs-lisp
   (use-package olivetti
     :ensure t)
@@ -239,7 +239,8 @@ Best package for minimal reading.
     (setq org-agenda-files
           '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/todo.org"
             "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
-            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org")))
+            "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
+            "~/Nextcloud/org/habits.org")))
 #+END_SRC
 ** evil
 #+BEGIN_SRC emacs-lisp
