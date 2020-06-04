@@ -499,6 +499,12 @@ I use this package with tiling wms that are not EXWM.
     :config
     (global-set-key (kbd "C-c o") 'switch-window))
 #+END_SRC
+
+** buffer-move
+#+BEGIN_SRC emacs-lisp
+  (use-package buffer-move
+    :ensure t)
+#+END_SRC
 * Languages configuration
 ** Elisp configuration
 #+BEGIN_SRC emacs-lisp

@@ -217,6 +217,25 @@
 		      (interactive)
 		      (exwm-workspace-toggle-minibuffer)))
 
+(exwm-input-set-key (kbd "s-h") #'windmove-left)
+(exwm-input-set-key (kbd "s-<left>") #'windmove-left)
+(exwm-input-set-key (kbd "s-j") #'windmove-down)
+(exwm-input-set-key (kbd "s-<down>") #'windmove-down)
+(exwm-input-set-key (kbd "s-k") #'windmove-up)
+(exwm-input-set-key (kbd "s-<up>") #'windmove-up)
+(exwm-input-set-key (kbd "s-l") #'windmove-right)
+(exwm-input-set-key (kbd "s-<right>") #'windmove-right)
+
+(exwm-input-set-key (kbd "s-H") #'buf-move-left)
+(exwm-input-set-key (kbd "S-s-<left>") #'buf-move-left)
+(exwm-input-set-key (kbd "s-J") #'buf-move-down)
+(exwm-input-set-key (kbd "S-s-<down>") #'buf-move-down)
+(exwm-input-set-key (kbd "s-K") #'buf-move-up)
+(exwm-input-set-key (kbd "S-s-<up>") #'buf-move-up)
+(exwm-input-set-key (kbd "s-L") #'buf-move-right)
+(exwm-input-set-key (kbd "S-s-<right>") #'buf-move-right)
+
+
 (require 'exwm-randr)
 ;; (setq exwm-randr-workspace-output-plist '(0 "DP1" 1 "DP1" 2 "DP1"
 ;;  					    3 "DP1" 4 "DP1"
