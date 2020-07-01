@@ -157,7 +157,7 @@
 (exwm-systemtray-enable)
 
 ;; Hide mode-line by default
-(add-hook 'exwm-manage-finish-hook #'exwm-layout-hide-mode-line)
+;;(add-hook 'exwm-manage-finish-hook #'exwm-layout-hide-mode-line)
 
 ;; Autohide minibuffer & echo area (might be buggish...)
 ;;(setq exwm-workspace-minibuffer-position 'bottom)

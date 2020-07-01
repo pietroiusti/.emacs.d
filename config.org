@@ -112,25 +112,26 @@ Remove black border at the bottom in certain window managers
 ** Themes
 *** solarized-emacs
 #+BEGIN_SRC emacs-lisp
-    (use-package solarized-theme
-      :ensure t
-      :config
-      ;; Avoid all font-size changes
-      (setq solarized-height-minus-1 1.0)
-      (setq solarized-height-plus-1 1.0)
-      (setq solarized-height-plus-2 1.0)
-      (setq solarized-height-plus-3 1.0)
-      (setq solarized-height-plus-4 1.0)
+  (use-package solarized-theme
+    :ensure t
+    :config
+    ;; Avoid all font-size changes
+    (setq solarized-height-minus-1 1.0)
+    (setq solarized-height-plus-1 1.0)
+    (setq solarized-height-plus-2 1.0)
+    (setq solarized-height-plus-3 1.0)
+    (setq solarized-height-plus-4 1.0)
 
-      ;; (load-theme 'solarized-light t)
-      (load-theme 'solarized-dark t))
+    ;; (load-theme 'solarized-light t)
+    ;; (load-theme 'solarized-dark t)
+    )
 #+END_SRC
 *** color-theme-sanityinc-tomorrow
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme-sanityinc-tomorrow
     :ensure t)
 
-  ;;(load-theme 'sanityinc-tomorrow-bright t))
+  (load-theme 'sanityinc-tomorrow-bright t)
     #+END_SRC
 
 ** Current line highlighting
@@ -251,8 +252,9 @@ Best package for minimal reading/writing.
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :ensure t
+    :init
+    ;;(setq evil-disable-insert-state-bindings t)
     :config
-
     (evil-mode 1)
 
     (setq evil-default-state 'emacs
@@ -505,6 +507,18 @@ I use this package with tiling wms that are not EXWM.
   (use-package buffer-move
     :ensure t)
 #+END_SRC
+** elfeed
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x w") 'elfeed)
+    (setq elfeed-feeds
+        '("https://www.stallman.org/rss/rss.xml" stallman)
+          ("https://planet.emacslife.com/atom.xml" emacs)
+          ("https://lukesmith.xyz/rss.xml" computing)
+          "https://protesilaos.com/codelog.xml" computing emacs))
+#+end_src
 * Languages configuration
 ** Elisp configuration
 #+BEGIN_SRC emacs-lisp
