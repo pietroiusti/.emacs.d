@@ -514,10 +514,10 @@ I use this package with tiling wms that are not EXWM.
     :config
     (global-set-key (kbd "C-x w") 'elfeed)
     (setq elfeed-feeds
-        '("https://www.stallman.org/rss/rss.xml" stallman)
+        '(("https://www.stallman.org/rss/rss.xml" stallman)
           ("https://planet.emacslife.com/atom.xml" emacs)
           ("https://lukesmith.xyz/rss.xml" computing)
-          "https://protesilaos.com/codelog.xml" computing emacs))
+          ("https://protesilaos.com/codelog.xml" computing emacs))))
 #+end_src
 * Languages configuration
 ** Elisp configuration
