@@ -517,7 +517,8 @@ I use this package with tiling wms that are not EXWM.
         '(("https://www.stallman.org/rss/rss.xml" stallman)
           ("https://planet.emacslife.com/atom.xml" emacs)
           ("https://lukesmith.xyz/rss.xml" computing)
-          ("https://protesilaos.com/codelog.xml" computing emacs))))
+          ("https://protesilaos.com/codelog.xml" computing emacs)
+          ("https://listserv.liv.ac.uk/cgi-bin/wa?RSS&L=PHILOS-L&v=2.0" philos-l))))
 #+end_src
 * Languages configuration
 ** Elisp configuration
