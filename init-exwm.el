@@ -72,9 +72,11 @@
         ([?\s-&] . (lambda (command)
 		     (interactive (list (read-shell-command "$ ")))
 		     (start-process-shell-command command nil command)))
-	([?\s-p] . (lambda (command)
+
+	([s-return] . (lambda (command)
 		     (interactive (list (read-shell-command "$ ")))
 		     (start-process-shell-command command nil command)))
+
         ;; Bind "s-<f2>" to "slock", a simple X display locker.
         ([s-f2] . (lambda ()
 		    (interactive)
@@ -218,21 +220,29 @@
 		      (exwm-workspace-toggle-minibuffer)))
 
 (exwm-input-set-key (kbd "s-h") #'windmove-left)
+(exwm-input-set-key (kbd "s-b") #'windmove-left)
 (exwm-input-set-key (kbd "s-<left>") #'windmove-left)
 (exwm-input-set-key (kbd "s-j") #'windmove-down)
+(exwm-input-set-key (kbd "s-n") #'windmove-down)
 (exwm-input-set-key (kbd "s-<down>") #'windmove-down)
 (exwm-input-set-key (kbd "s-k") #'windmove-up)
+(exwm-input-set-key (kbd "s-p") #'windmove-up)
 (exwm-input-set-key (kbd "s-<up>") #'windmove-up)
 (exwm-input-set-key (kbd "s-l") #'windmove-right)
+(exwm-input-set-key (kbd "s-f") #'windmove-right)
 (exwm-input-set-key (kbd "s-<right>") #'windmove-right)
 
 (exwm-input-set-key (kbd "s-H") #'buf-move-left)
+(exwm-input-set-key (kbd "s-B") #'buf-move-left)
 (exwm-input-set-key (kbd "S-s-<left>") #'buf-move-left)
 (exwm-input-set-key (kbd "s-J") #'buf-move-down)
+(exwm-input-set-key (kbd "s-N") #'buf-move-down)
 (exwm-input-set-key (kbd "S-s-<down>") #'buf-move-down)
 (exwm-input-set-key (kbd "s-K") #'buf-move-up)
+(exwm-input-set-key (kbd "s-P") #'buf-move-up)
 (exwm-input-set-key (kbd "S-s-<up>") #'buf-move-up)
 (exwm-input-set-key (kbd "s-L") #'buf-move-right)
+(exwm-input-set-key (kbd "s-F") #'buf-move-right)
 (exwm-input-set-key (kbd "S-s-<right>") #'buf-move-right)
 
 
