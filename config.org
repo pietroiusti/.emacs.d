@@ -253,7 +253,7 @@ Best package for minimal reading/writing.
   (use-package evil
     :ensure t
     :init
-    ;;(setq evil-disable-insert-state-bindings t)
+    (setq evil-disable-insert-state-bindings t)
     :config
     (evil-mode 1)
 
@@ -552,9 +552,8 @@ I use this package with tiling wms that are not EXWM.
 
 ** C configuration
 #+BEGIN_SRC emacs-lisp
-  ;; C style
-  (setq c-default-style "linux"
-        c-basic-offset 4)
+  (setq-default c-default-style "linux"
+                c-basic-offset 4)
 #+END_SRC
 
 ** js2-mode
