@@ -88,7 +88,11 @@
   (use-package s
     :ensure t)
 #+END_SRC
-
+** bookmarks
+Save bookmarks every time a bookmark is made or deleted.
+#+begin_src emacs-lisp
+(setq bookmark-save-flag 1)
+#+end_src
 * Appearances
 ** wm
 Remove black border at the bottom in certain window managers
