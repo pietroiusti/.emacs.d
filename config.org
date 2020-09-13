@@ -72,12 +72,6 @@
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
-** Beep
-#+BEGIN_SRC emacs-lisp
-  ;; get visual indication
-  (setq visible-bell 1)
-#+END_SRC
-
 ** Common lisp functions and macros
 #+BEGIN_SRC emacs-lisp
   (require 'cl)
@@ -88,17 +82,17 @@
   (use-package s
     :ensure t)
 #+END_SRC
-** bookmarks
+** Bookmarks
 Save bookmarks every time a bookmark is made or deleted.
 #+begin_src emacs-lisp
 (setq bookmark-save-flag 1)
 #+end_src
+** Scrolling by line
+#+begin_src emacs-lisp
+  ;; (global-set-key (kbd "??") 'scroll-up-line)
+  ;; (global-set-key (kbd "??") 'scroll-down-line)
+#+end_src
 * Appearances
-** wm
-Remove black border at the bottom in certain window managers
-#+BEGIN_SRC emacs-lisp
-(setq frame-resize-pixelwise t)
-#+END_SRC
 ** Font
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
@@ -112,6 +106,25 @@ Remove black border at the bottom in certain window managers
   (menu-bar-mode 0)
   ;; Don't show scroll bar
   (scroll-bar-mode 0)
+
+  ;; (tooltip-mode -1)
+  ;;(set-fringe-mode 0)
+#+END_SRC
+** modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+#+end_src
+** Beep
+#+BEGIN_SRC emacs-lisp
+  ;; get visual indication
+  (setq visible-bell 1)
+#+END_SRC
+** wm
+Remove black border at the bottom in certain window managers
+#+BEGIN_SRC emacs-lisp
+(setq frame-resize-pixelwise t)
 #+END_SRC
 ** Themes
 *** solarized-emacs
@@ -143,7 +156,7 @@ Remove black border at the bottom in certain window managers
   (global-hl-line-mode t)
 #+END_SRC
 
-** Scroll one line at a time
+** (Automatic) Scrolling one line at a time
 #+BEGIN_SRC emacs-lisp
   ;; scroll one line at a time
 
@@ -157,21 +170,21 @@ Remove black border at the bottom in certain window managers
 
 ** Transparency
 #+BEGIN_SRC emacs-lisp
-  ;; (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
-  ;; (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+  (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+  (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 
-  ;; (defun toggle-transparency ()
-  ;;   (interactive)
-  ;;   (let ((alpha (frame-parameter nil 'alpha)))
-  ;;     (set-frame-parameter
-  ;;      nil 'alpha
-  ;;      (if (eql (cond ((numberp alpha) alpha)
-  ;;                     ((numberp (cdr alpha)) (cdr alpha))
-  ;;                     ;; Also handle undocumented (<active> <inactive>) form.
-  ;;                     ((numberp (cadr alpha)) (cadr alpha)))
-  ;;               100)
-  ;;          '(85 . 75) '(100 . 100)))))
-  ;; (global-set-key (kbd "C-c x") 'toggle-transparency)
+  (defun toggle-transparency ()
+    (interactive)
+    (let ((alpha (frame-parameter nil 'alpha)))
+      (set-frame-parameter
+       nil 'alpha
+       (if (eql (cond ((numberp alpha) alpha)
+                      ((numberp (cdr alpha)) (cdr alpha))
+                      ;; Also handle undocumented (<active> <inactive>) form.
+                      ((numberp (cadr alpha)) (cadr alpha)))
+                100)
+           '(85 . 85) '(100 . 100)))))
+  (global-set-key (kbd "C-c x") 'toggle-transparency)
 #+END_SRC
 
 ** olivetti-mode
@@ -375,21 +388,21 @@ Best package for minimal reading/writing.
 ** shell
 Open shell in current window.
 #+BEGIN_SRC emacs-lisp
-  (defun shell-same-window-advice (orig-fn &optional buffer)
-    "Advice to make `shell' reuse the current window.
+  ;; (defun shell-same-window-advice (orig-fn &optional buffer)
+  ;;   "Advice to make `shell' reuse the current window.
 
-    Intended as :around advice."
-    (let* ((buffer-regexp
-            (regexp-quote
-             (cond ((bufferp buffer)  (buffer-name buffer))
-                   ((stringp buffer)  buffer)
-                   (:else             "*shell*"))))
-           (display-buffer-alist
-            (cons `(,buffer-regexp display-buffer-same-window)
-                  display-buffer-alist)))
-      (funcall orig-fn buffer)))
+  ;;   Intended as :around advice."
+  ;;   (let* ((buffer-regexp
+  ;;           (regexp-quote
+  ;;            (cond ((bufferp buffer)  (buffer-name buffer))
+  ;;                  ((stringp buffer)  buffer)
+  ;;                  (:else             "*shell*"))))
+  ;;          (display-buffer-alist
+  ;;           (cons `(,buffer-regexp display-buffer-same-window)
+  ;;                 display-buffer-alist)))
+  ;;     (funcall orig-fn buffer)))
 
-  (advice-add 'shell :around #'shell-same-window-advice)
+  ;; (advice-add 'shell :around #'shell-same-window-advice)
 #+END_SRC
 ** change-inner
 #+BEGIN_SRC emacs-lisp
@@ -581,6 +594,24 @@ I use this package with tiling wms that are not EXWM.
   (use-package pug-mode
     :ensure t)
 #+END_SRC
+* Custom functions
+** X keycodes
+#+begin_src emacs-lisp
+(defun gp/set-keycodes-filco ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_filco")
+  (shell-command "xset r rate 200 60"))
+
+(defun gp/set-keycodes-thinkpad_T460 ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_T460")
+  (shell-command "xset r rate 200 60"))
+  
+(defun gp/set-keycodes-thinkpad_X200 ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_X200")
+  (shell-command "xset r rate 200 60"))
+#+end_src
 * EXWM
 I keep a separate file that is loaded only when Emacs works as X WM.
 

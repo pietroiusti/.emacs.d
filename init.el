@@ -16,9 +16,12 @@
 
 (package-initialize)
 
-;; Make sure use-package is installed
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
   (package-install 'use-package))
+
+(require 'use-package)
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
