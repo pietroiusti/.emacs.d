@@ -95,8 +95,19 @@ Save bookmarks every time a bookmark is made or deleted.
 * Appearances
 ** Font
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist
-               '(font . "Inconsolata-12"))
+    ;; (add-to-list 'default-frame-alist
+    ;;              '(font . "Inconsolata-12"))
+
+  ; https://protesilaos.com/codelog/2020-09-05-emacs-note-mixed-font-heights/
+  (set-face-attribute 'default nil :family "Inconsolata" :height 120)
+  (set-face-attribute 'fixed-pitch nil :family "Inconsolata")
+  ;(set-face-attribute 'variable-pitch nil :family "Sans serif" :height 120)
+  ;(set-face-attribute 'variable-pitch nil :family "Sans" :height 120)
+  (set-face-attribute 'variable-pitch nil :family "Noto sans")
+  ;(set-face-attribute 'variable-pitch nil :family "DejaVu sans" :height 120)
+  ;(set-face-attribute 'variable-pitch nil :family "Linux Biolinum")
+  ;(set-face-attribute 'variable-pitch nil :family "Linux Libertine" :height 130)
+  ;(set-face-attribute 'variable-pitch nil :family "Opensans" :height 120)
 #+END_SRC
 ** Bars
 #+BEGIN_SRC emacs-lisp
@@ -196,7 +207,7 @@ Best package for minimal reading/writing.
 #+END_SRC
 
 * Indispensable
-** org
+** org-mode
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure t
@@ -261,6 +272,8 @@ Best package for minimal reading/writing.
             "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
             "~/Nextcloud/org/habits.org"))
 
+    (setq org-agenda-start-with-log-mode t)
+
     ;; enable habits
     (require 'org-habit)
     (add-to-list 'org-modules "org-habit")
@@ -272,6 +285,45 @@ Best package for minimal reading/writing.
        (python . t)
        (js . t))))
 #+END_SRC
+** Presentations in org-mode
+#+begin_src emacs-lisp
+  (use-package org-tree-slide
+    :ensure t
+    :after org
+    :config
+    (setq org-tree-slide-header nil)
+    (setq org-tree-slide-slide-in-effect nil)
+    (setq org-tree-slide-cursor-init t)
+    (setq org-tree-slide-skip-outline-level 0)
+    (setq org-tree-slide-modeline-display 'outside)
+
+    (define-minor-mode gp/org-presentation-mode
+      "Parameters for plain text presentations with `org-mode'."
+      :init-value nil
+      :global nil
+      (if gp/org-presentation-mode
+          (progn
+            (unless (eq major-mode 'org-mode)
+              (user-error "Not in an Org buffer"))
+            (org-tree-slide-mode 1)
+            (olivetti-mode 1)
+            (variable-pitch-mode 1))
+        (org-tree-slide-mode -1)
+        (olivetti-mode -1)
+        (variable-pitch-mode -1)))
+
+    ;; why can I activate the mode with the following keybinding, but
+    ;; not with M-x?
+
+    ;; how to hide org emphasis LOCALLY to buffer?
+    ;; (setq org-hide-emphasis-markers t)
+
+    :bind (("M-C-q" . gp/org-presentation-mode)
+           :map org-tree-slide-mode-map
+           ("<C-down>" . org-tree-slide-display-header-toggle)
+           ("<right>" . org-tree-slide-move-next-tree)
+           ("<left>" . org-tree-slide-move-previous-tree)))
+#+end_src
 ** evil
 #+BEGIN_SRC emacs-lisp
   (use-package evil
@@ -617,3 +669,8 @@ I keep a separate file that is loaded only when Emacs works as X WM.
 
 In my .xinitrc I have something like:
 exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
+* testing
+#+begin_src emacs-lisp
+  (use-package academic-phrases
+    :ensure t)
+#+end_src
