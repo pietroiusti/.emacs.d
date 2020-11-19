@@ -409,31 +409,34 @@ Best package for minimal reading/writing.
 #+END_SRC
 ** ido
 #+BEGIN_SRC emacs-lisp
-  (use-package ido
-    :ensure t
-    :config
-    (setq ido-enable-flex-matching t)
-    (setq ido-everywhere t)
-    (ido-mode 1))
+  ;; (use-package ido
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq ido-enable-flex-matching t)
+  ;;   (setq ido-everywhere t)
+  ;;   (ido-mode 1))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (use-package ido-completing-read+
-    :ensure t
-    :config
-    (require 'ido-completing-read+)
-    (setq ido-ubiquitous-mode 1))
+  ;; (use-package ido-completing-read+
+  ;;   :ensure t
+  ;;   :config
+  ;;   (require 'ido-completing-read+)
+  ;;   (setq ido-ubiquitous-mode 1))
 #+END_SRC
 
 ** Ivy
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package counsel
-  ;;   :ensure t
-  ;;   :config
-  ;;   (ivy-mode 1)
-  ;;   (setq ivy-use-virtual-buffers t)
-  ;;   (setq ivy-count-format "(%d/%d) ")
-  ;;   (setq enable-recursive-minibuffers t))
+  (use-package ivy
+    :ensure t
+    :init
+    (ivy-mode 1)
+    :config
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq enable-recursive-minibuffers t)
+    :bind (:map ivy-minibuffer-map
+           ("RET" . ivy-alt-done)))
 #+END_SRC
 
 * Other
@@ -503,13 +506,12 @@ Open shell in current window.
                ("DEL" . dired-subtree-remove)))
 #+END_SRC
 
-
 ** smex
 #+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure t
-    :config
-    (global-set-key (kbd "M-x") 'smex))
+  ;; (use-package smex
+  ;;   :ensure t
+  ;;   :config
+  ;;   (global-set-key (kbd "M-x") 'smex))
 #+END_SRC
 
 ** avy
