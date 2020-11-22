@@ -432,11 +432,21 @@ Best package for minimal reading/writing.
     :init
     (ivy-mode 1)
     :config
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq enable-recursive-minibuffers t)
-    :bind (:map ivy-minibuffer-map
-           ("RET" . ivy-alt-done)))
+    ;(setq ivy-use-virtual-buffers t)
+    ;(setq ivy-count-format "(%d/%d) ")
+    ;(setq enable-recursive-minibuffers t)
+
+    ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
+
+    ;; :bind (:map ivy-minibuffer-map
+    ;;        ("RET" . ivy-alt-done)) ; why does it bind C-m to ivy-alt-done as well?
+    )
+
+  (use-package ivy-prescient
+    :ensure t
+    :after (ivy)
+    :init
+    (ivy-prescient-mode 1))
 #+END_SRC
 
 * Other
