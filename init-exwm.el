@@ -13,7 +13,7 @@
 ;; to or back from a floating frame (remember 'C-x 5 o' if you refuse this
 ;; proposal however).
 ;; You may also want to call `exwm-config-ido' later (see below).
-(ido-mode 1)
+;;(ido-mode 1)
 
 
 ;; allow resizing X windows by dragging their right edge
@@ -25,7 +25,7 @@
 
 ;; Fix problems with Ido (if you use it).
 (require 'exwm-config)
-(exwm-config-ido)
+;;(exwm-config-ido)
 
 ;; Set the initial number of workspaces (they can also be created later).
 (setq exwm-workspace-number 10)
@@ -70,12 +70,40 @@
         ;; Bind "s-&" to launch applications ('M-&' also works if the output
         ;; buffer does not bother you).
         ([?\s-&] . (lambda (command)
-		     (interactive (list (read-shell-command "$ ")))
-		     (start-process-shell-command command nil command)))
+					 (interactive (list (read-shell-command "$ ")))
+					 (start-process-shell-command command nil command)))
 
-	([s-return] . (lambda (command)
-		     (interactive (list (read-shell-command "$ ")))
-		     (start-process-shell-command command nil command)))
+		;; window selection keybindings
+		([?\s-h] . windmove-left)
+		([?\s-b] . windmove-left)
+		([s-left] . windmove-left) ; with arrow keys somehow with don't have to use the ?\ sintax
+		([?\s-j] . windmove-down)
+		([?\s-n] . windmove-down)
+		([s-down] . windmove-down)
+		([?\s-k] . windmove-up)
+		([?\s-p] . windmove-up)
+		([s-up] . windmove-up)
+		([?\s-l] . windmove-right)
+		([?\s-f] . windmove-right)
+		([s-right] . windmove-right)
+
+		;; swap buffers keybindings
+		([?\s-H] . buf-move-left)
+		([?\s-B] . buf-move-left)
+		([S-s-left] . buf-move-left)
+		([?\s-J] . buf-move-down)
+		([?\s-N] . buf-move-down)
+		([S-s-down] . buf-move-down)
+		([?\s-K] . buf-move-up)
+		([?\s-P] . buf-move-up)
+		([S-s-up] . buf-move-up)
+		([?\s-L] . buf-move-right)
+		([?\s-F] . buf-move-right)
+		([S-s-right] . buf-move-right)
+
+		([s-return] . (lambda (command)
+						(interactive (list (read-shell-command "$ ")))
+						(start-process-shell-command command nil command)))
 
         ;; Bind "s-<f2>" to "slock", a simple X display locker.
         ([s-f2] . (lambda ()
@@ -219,31 +247,38 @@
 		      (interactive)
 		      (exwm-workspace-toggle-minibuffer)))
 
-(exwm-input-set-key (kbd "s-h") #'windmove-left)
-(exwm-input-set-key (kbd "s-b") #'windmove-left)
-(exwm-input-set-key (kbd "s-<left>") #'windmove-left)
-(exwm-input-set-key (kbd "s-j") #'windmove-down)
-(exwm-input-set-key (kbd "s-n") #'windmove-down)
-(exwm-input-set-key (kbd "s-<down>") #'windmove-down)
-(exwm-input-set-key (kbd "s-k") #'windmove-up)
-(exwm-input-set-key (kbd "s-p") #'windmove-up)
-(exwm-input-set-key (kbd "s-<up>") #'windmove-up)
-(exwm-input-set-key (kbd "s-l") #'windmove-right)
-(exwm-input-set-key (kbd "s-f") #'windmove-right)
-(exwm-input-set-key (kbd "s-<right>") #'windmove-right)
+;; this keybindings should be set by changing exwm-input-global-keys
+;; (exwm-input-set-key (kbd "s-h") #'windmove-left)
+;; (exwm-input-set-key (kbd "s-b") #'windmove-left)
+;; (exwm-input-set-key (kbd "s-<left>") #'windmove-left)
 
-(exwm-input-set-key (kbd "s-H") #'buf-move-left)
-(exwm-input-set-key (kbd "s-B") #'buf-move-left)
-(exwm-input-set-key (kbd "S-s-<left>") #'buf-move-left)
-(exwm-input-set-key (kbd "s-J") #'buf-move-down)
-(exwm-input-set-key (kbd "s-N") #'buf-move-down)
-(exwm-input-set-key (kbd "S-s-<down>") #'buf-move-down)
-(exwm-input-set-key (kbd "s-K") #'buf-move-up)
-(exwm-input-set-key (kbd "s-P") #'buf-move-up)
-(exwm-input-set-key (kbd "S-s-<up>") #'buf-move-up)
-(exwm-input-set-key (kbd "s-L") #'buf-move-right)
-(exwm-input-set-key (kbd "s-F") #'buf-move-right)
-(exwm-input-set-key (kbd "S-s-<right>") #'buf-move-right)
+;; (exwm-input-set-key (kbd "s-j") #'windmove-down)
+;; (exwm-input-set-key (kbd "s-n") #'windmove-down)
+;; (exwm-input-set-key (kbd "s-<down>") #'windmove-down)
+
+;; (exwm-input-set-key (kbd "s-k") #'windmove-up)
+;; (exwm-input-set-key (kbd "s-p") #'windmove-up)
+;; (exwm-input-set-key (kbd "s-<up>") #'windmove-up)
+
+;; (exwm-input-set-key (kbd "s-l") #'windmove-right)
+;; (exwm-input-set-key (kbd "s-f") #'windmove-right)
+;; (exwm-input-set-key (kbd "s-<right>") #'windmove-right)
+
+;; (exwm-input-set-key (kbd "s-H") #'buf-move-left)
+;; (exwm-input-set-key (kbd "s-B") #'buf-move-left)
+;; (exwm-input-set-key (kbd "S-s-<left>") #'buf-move-left)
+
+;; (exwm-input-set-key (kbd "s-J") #'buf-move-down)
+;; (exwm-input-set-key (kbd "s-N") #'buf-move-down)
+;; (exwm-input-set-key (kbd "S-s-<down>") #'buf-move-down)
+
+;; (exwm-input-set-key (kbd "s-K") #'buf-move-up)
+;; (exwm-input-set-key (kbd "s-P") #'buf-move-up)
+;; (exwm-input-set-key (kbd "S-s-<up>") #'buf-move-up)
+
+;; (exwm-input-set-key (kbd "s-L") #'buf-move-right)
+;; (exwm-input-set-key (kbd "s-F") #'buf-move-right)
+;; (exwm-input-set-key (kbd "S-s-<right>") #'buf-move-right)
 
 
 (require 'exwm-randr)
