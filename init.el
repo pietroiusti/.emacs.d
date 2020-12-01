@@ -1,18 +1,16 @@
 (require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (proto (if no-ssl "http" "https")))
-  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  (add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/"))))
 
 (setq package-archive-priorities
-      '(("melpa-stable" . 10)
-        ("gnu"          . 5)
-        ("melpa"        . 0)))
+      '(("org"          . 10)
+	("melpa-stable" . 9)
+        ("gnu"          . 8)
+        ("melpa"        . 7)))
 
 (package-initialize)
 
@@ -21,88 +19,425 @@
 
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-
 (require 'use-package)
 
-(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
+(setq user-full-name "Giulio Pietroiusti"
+      user-mail-address "giulio.pietroiusti@gmail.com")
+
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
+(setq make-backup-files nil) ;; Disable backup.
+(setq auto-save-default nil) ;; And auto-save.
+
+(fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
+(setq disabled-command-function nil) ;; enable all commands
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(use-package ibuffer-projectile
+  :ensure t
+  :config
+  (add-hook 'ibuffer-hook
+            (lambda ()
+              (ibuffer-projectile-set-filter-groups)
+              (unless (eq ibuffer-sorting-mode 'alphabetic)
+                (ibuffer-do-sort-by-alphabetic)))))
+
+;; scroll one line at a time
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-follow-mouse 't)
+(setq scroll-step 1 scroll-conservatively  10000)
+
+(tool-bar-mode 0) ;; Don't show tool bar.
+(menu-bar-mode 0) ;; And menu bar.
+(scroll-bar-mode 0) ;; And scroll bar.
+(fringe-mode 1) ;; shrink fringes to 1 pixel.
+
+(setq visible-bell 1) ;; get visual indication
+
+(global-hl-line-mode t) ;; Current line highlighting
+
+;; font
+(set-face-attribute 'default nil :family "Inconsolata" :height 120)
+(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
+(set-face-attribute 'variable-pitch nil :family "Noto sans")
+
+(setq frame-resize-pixelwise t) ;; Remove black border at the bottom
+;; in certain window managers
+
+;; fancy mode line
+(use-package doom-modeline
+  :ensure t
+  :config (doom-modeline-mode 1))
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :config
+  (load-theme 'sanityinc-tomorrow-bright t))
+
+;; transparency
+(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+(add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+(defun toggle-transparency ()
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha)))
+    (set-frame-parameter
+     nil 'alpha
+     (if (eql (cond ((numberp alpha) alpha)
+                    ((numberp (cdr alpha)) (cdr alpha))
+                    ;; Also handle undocumented (<active> <inactive>) form.
+                    ((numberp (cadr alpha)) (cadr alpha)))
+              100)
+         '(85 . 85) '(100 . 100)))))
+(global-set-key (kbd "C-c x") 'toggle-transparency)
+
+;; general editing settings
+(delete-selection-mode 1) ;; inserting text while the mark is active
+;; causes the selected text to be deleted
+;; first. This also deactivates the mark.
+(show-paren-mode 1) ;; highlight matching parenthesis
+
+;; bookmarks
+(setq bookmark-save-flag 1) ;; Save bookmarks every time a bookmark is made or deleted.
+
+(use-package org
+  ;; TODO: use-package, even with ":pin org", doesn't install the org
+  ;; version, but keeps the built-in version.
+  :pin org
+  :ensure t
+  :config
+  (setq org-startup-indented t)
+  (setq org-indent-mode t)
+  (setq org-hide-leading-stars t)
+  (setq org-src-fontify-natively t)
+
+  (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-k t)
+  (setq org-ctrl-k-protect-subtree t)
+
+  (add-hook 'org-mode-hook 'turn-on-auto-fill)
+
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-ca" 'org-agenda)
+
+  (setq org-capture-templates
+        '(
+          ("t" "add task" entry
+           (file "~/Nextcloud/org/todo.org")
+           "* TODO %?" :prepend t)
+
+          ("n" "notes" entry
+           (file "~/Nextcloud/org/notes.org")
+           "* %?" :prepend t)
+
+          ("r" "readings" entry
+           (file "~/Nextcloud/org/readings.org")
+           "* %?" :prepend t)
+
+          ("a" "activities" entry
+           (file "~/Nextcloud/org/activities.org")
+           "* %?")
+
+          ("m" "meetings")
+          ("md" "Dan" entry
+           (file "~/Nextcloud/org/meetings.org")
+           "* Dan \n SCHEDULED: %^t%?")
+          ("mt" "Teresa" entry
+           (file "~/Nextcloud/org/meetings.org")
+           "* Teresa \n SCHEDULED: %^t%?")
+          ("mo" "Other" entry
+           (file "~/Nextcloud/org/meetings.org")
+           "* %?")))
+
+  (setq org-todo-keywords
+        '((sequence "TODO" "IN PROGRESS" "DONE" )))
+
+  ;; add timestamp to item when marked as DONE
+  (setq org-log-done 'time)
+
+  (setq org-agenda-files
+        '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/todo.org"
+          "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
+          "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
+          "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"))
+
+  (setq org-agenda-start-with-log-mode t)
+
+  (require 'org-habit)
+  (add-to-list 'org-modules "org-habit")
+  
+  ;; code block evaluation
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)
+     (js . t))))
+
+(use-package org-tree-slide
+  :ensure t
+  :after org
+  :config
+  (setq org-tree-slide-header nil)
+  (setq org-tree-slide-slide-in-effect nil)
+  (setq org-tree-slide-cursor-init t)
+  (setq org-tree-slide-skip-outline-level 0)
+  (setq org-tree-slide-modeline-display 'outside)
+
+  (define-minor-mode gp/org-presentation-mode
+    "Parameters for plain text presentations with `org-mode'."
+    :init-value nil
+    :global nil
+    (if gp/org-presentation-mode
+        (progn
+          (unless (eq major-mode 'org-mode)
+            (user-error "Not in an Org buffer"))
+          (org-tree-slide-mode 1)
+          (olivetti-mode 1)
+          (variable-pitch-mode 1))
+      (org-tree-slide-mode -1)
+      (olivetti-mode -1)
+      (variable-pitch-mode -1)))
+
+  ;; how to hide org emphasis LOCALLY to buffer?
+  ;; (setq org-hide-emphasis-markers t)
+
+  :bind (("M-C-q" . gp/org-presentation-mode)
+         :map org-tree-slide-mode-map
+         ("<C-down>" . org-tree-slide-display-header-toggle)
+         ("<right>" . org-tree-slide-move-next-tree)
+         ("<left>" . org-tree-slide-move-previous-tree)))
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-disable-insert-state-bindings t)
+  :config
+  (evil-mode 1)
+
+  (setq evil-default-state 'emacs
+        evil-insert-state-modes nil
+        evil-motion-state-modes nil)
+
+  ;; solve blinking problem with pdf-tools
+  (evil-set-initial-state 'pdf-view-mode 'emacs)
+  (add-hook 'pdf-view-mode-hook
+            (lambda ()
+              (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
+  ;; Change cursor color in different modes
+  ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+  ;; TODO: change color of cursor when it is in the minibuffer
+  (setq evil-emacs-state-cursor '("#839496" box))
+  (setq evil-motion-state-cursor '("#e80000" box))
+  (setq evil-normal-state-cursor '("#e80000" box))
+  (setq evil-visual-state-cursor '("#e80000" box))
+  (setq evil-insert-state-cursor '("#e80000" bar))
+  (setq evil-replace-state-cursor '("#e80000" bar))
+  (setq evil-operator-state-cursor '("#e80000" hollow)))
+
+(use-package magit
+  :ensure t
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status))
+
+(use-package pdf-tools
+  :ensure t
+  :pin melpa
+  :config
+  (pdf-tools-install)
+
+  (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+  (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+  (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
+  (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
+  (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
+
+(use-package olivetti
+  :ensure t
+  :pin melpa)
+
+;; (use-package auctex
+;;     :ensure t
+;;     :config
+
+;;     ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
+;;     ;; documents right away, insert the following in your '.emacs' file.
+    
+;;     (setq TeX-auto-save t)
+;;     (setq Tex-parse-self t)
+;;     (setq-default TeX-master nil))
+
+(use-package company
+    :ensure t
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package ivy
+  :ensure t
+  :init
+  (ivy-mode 1)
+  :config
+					;(setq ivy-use-virtual-buffers t)
+					;(setq ivy-count-format "(%d/%d) ")
+					;(setq enable-recursive-minibuffers t)
+  
+  ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
+  
+  ;; :bind (:map ivy-minibuffer-map
+  ;;        ("RET" . ivy-alt-done)) ; why does it bind C-m to ivy-alt-done as well?
+  )
+
+(use-package ivy-prescient
+  :ensure t
+  :after (ivy)
+  :init
+  (ivy-prescient-mode 1))
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+
+(use-package web-mode
+  :ensure t)
+
+(use-package engine-mode
+  :ensure t
+  :config
+  (engine-mode t)
+  (defengine oxforddictionaries
+    "https://en.oxforddictionaries.com/definition/%s/"
+    :keybinding "o")
+
+  (defengine cambridgedictionaries
+    "https://dictionary.cambridge.org/dictionary/english/%s/"
+    :keybinding "c")
+  
+  (defengine google-translate
+    "https://translate.google.com/#en/it/%s/"
+    :keybinding "t")
+
+  (defengine treccanivocabolario
+    "http://www.treccani.it/vocabolario/ricerca/%s/"
+    :keybinding "i"))
+
+;; dired
+(add-hook 'dired-mode-hook 'dired-hide-details-mode)
+(use-package dired-narrow
+  :ensure t
+  :config
+  (bind-keys :map dired-mode-map
+             ("M-n" . dired-narrow)))
+(use-package dired-subtree
+  :ensure t
+  :config
+  (bind-keys :map dired-mode-map
+             ("TAB" . dired-subtree-insert)
+             ("<S-iso-lefttab>" . dired-subtree-remove)
+             ("DEL" . dired-subtree-remove)))
+
+(use-package avy
+  :ensure t
+  :config
+  (global-set-key (kbd "C-;") 'avy-goto-line)
+  (global-set-key (kbd "C-:") 'avy-goto-char))
+
+(use-package impatient-mode
+  :ensure t)
+
+(use-package restclient
+  :ensure t)
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+(use-package switch-window
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c o") 'switch-window))
+
+(use-package buffer-move ;; see exwm config
+  :ensure t)
+
+(use-package elfeed
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x w") 'elfeed)
+    (setq elfeed-feeds
+        '(("https://www.stallman.org/rss/rss.xml" stallman)
+          ("https://planet.emacslife.com/atom.xml" emacs)
+          ("https://listserv.liv.ac.uk/cgi-bin/wa?RSS&L=PHILOS-L&v=2.0" philos-l))))
+
+(use-package academic-phrases
+  :ensure t)
+
+;; languages config stuff
+
+(use-package paredit
+  :ensure t)
+
+(use-package rainbow-delimiters
+  :ensure t)
+
+;; (add-hook 'emacs-lisp-mode-hook
+;;           (lambda ()
+;;             (paredit-mode t)
+;;             (rainbow-delimiters-mode t)
+;;             (show-paren-mode 1)
+;;             ))
+;; (add-hook 'lisp-interaction-mode
+;;           (lambda ()
+;;             (paredit-mode t)
+;;             (rainbow-delimiters-mode t)
+;;             (show-paren-mode 1)
+;;             ))
+
+(setq-default c-default-style "linux"
+              c-basic-offset 4)
+
+(use-package js2-mode
+  :ensure t
+  :config
+  (setq js2-basic-offset 2)
+  ;; js2-mode as a defalut for js files
+  (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode)))
+
+(use-package pug-mode
+  :ensure t)
+
+;; custom functions to load keycodes
+(defun gp/set-keycodes-filco ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_filco")
+  (shell-command "xset r rate 200 60"))
+
+(defun gp/set-keycodes-thinkpad_T460 ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_T460")
+  (shell-command "xset r rate 200 60"))
+
+(defun gp/set-keycodes-thinkpad_X200 ()
+  (interactive)
+  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_X200")
+  (shell-command "xset r rate 200 60"))
+
+;; EXWM
+;; I keep a separate file that is loaded only when Emacs works as X WM.
+;; In my .xinitrc I have something like:
+;; exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
- '(compilation-message-face 'default)
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#657b83")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes '(solarized-light))
- '(custom-safe-themes
-   '("0598c6a29e13e7112cfbc2f523e31927ab7dce56ebb2016b567e1eff6dc1fd4f" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "d91ef4e714f05fff2070da7ca452980999f5361209e679ee988e3c432df24347" default))
- '(fci-rule-color "#eee8d5")
- '(fido-mode t)
- '(highlight-changes-colors '("#d33682" "#6c71c4"))
- '(highlight-symbol-colors
-   (--map
-	(solarized-color-blend it "#fdf6e3" 0.25)
-	'("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2")))
- '(highlight-symbol-foreground-color "#586e75")
- '(highlight-tail-colors
-   '(("#eee8d5" . 0)
-	 ("#B4C342" . 20)
-	 ("#69CABF" . 30)
-	 ("#69B7F0" . 50)
-	 ("#DEB542" . 60)
-	 ("#F2804F" . 70)
-	 ("#F771AC" . 85)
-	 ("#eee8d5" . 100)))
- '(hl-bg-colors
-   '("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342"))
- '(hl-fg-colors
-   '("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3"))
- '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
- '(nrepl-message-colors
-   '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
- '(org-agenda-files
-   '("~/Nextcloud/UNI/PhD/presentations/GRG_2020-1/presentation.org" "~/Nextcloud/org/activities.org" "~/Nextcloud/org/todo.org" "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org" "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org" "~/Nextcloud/org/habits.org"))
  '(package-selected-packages
-   '(hide-mode-line org-present selectrum icomplete-vertical academic-phrases org-tree-slide exwm pug-mode js2-mode rainbow-delimiters paredit elfeed buffer-move switch-window engine-mode restclient impatient-mode avy smex dired-subtree dired-narrow web-mode which-key ido-completing-read+ auctex company pdf-tools magit evil olivetti color-theme-sanityinc-tomorrow solarized-theme doom-modeline s ibuffer-projectile use-package))
- '(pos-tip-background-color "#eee8d5")
- '(pos-tip-foreground-color "#586e75")
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
- '(term-default-bg-color "#fdf6e3")
- '(term-default-fg-color "#657b83")
- '(vc-annotate-background nil)
- '(vc-annotate-background-mode nil)
- '(vc-annotate-color-map
-   '((20 . "#dc322f")
-	 (40 . "#c9485ddd1797")
-	 (60 . "#bf7e73b30bcb")
-	 (80 . "#b58900")
-	 (100 . "#a5a58ee30000")
-	 (120 . "#9d9d91910000")
-	 (140 . "#9595943e0000")
-	 (160 . "#8d8d96eb0000")
-	 (180 . "#859900")
-	 (200 . "#67119c4632dd")
-	 (220 . "#57d79d9d4c4c")
-	 (240 . "#489d9ef365ba")
-	 (260 . "#3963a04a7f29")
-	 (280 . "#2aa198")
-	 (300 . "#288e98cbafe2")
-	 (320 . "#27c19460bb87")
-	 (340 . "#26f38ff5c72c")
-	 (360 . "#268bd2")))
- '(vc-annotate-very-old-color nil)
- '(weechat-color-list
-   '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
- '(xterm-color-names
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
- '(xterm-color-names-bright
-   ["#fdf6e3" "#cb4b16" "#93a1a1" "#839496" "#657b83" "#6c71c4" "#586e75" "#002b36"]))
+   '(exwm pug-mode js2-mode rainbow-delimiters paredit academic-phrases elfeed buffer-move switch-window restclient impatient-mode avy dired-subtree dired-narrow engine-mode web-mode which-key ivy-prescient ivy company auctex olivetti pdf-tools magit evil org-tree-slide color-theme-sanityinc-tomorrow doom-modeline ibuffer-projectile use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
