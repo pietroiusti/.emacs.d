@@ -33,7 +33,7 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
 (setq disabled-command-function nil) ;; enable all commands
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(define-key global-map (kbd "C-x C-b") 'ibuffer)
 
 (use-package ibuffer-projectile
   :ensure t
@@ -91,7 +91,7 @@
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
          '(85 . 85) '(100 . 100)))))
-(global-set-key (kbd "C-c x") 'toggle-transparency)
+(define-key global-map (kbd "C-c x") 'toggle-transparency)
 
 ;; general editing settings
 (delete-selection-mode 1) ;; inserting text while the mark is active
@@ -119,9 +119,9 @@
 
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
+  (define-key global-map "\C-cl" 'org-store-link)
+  (define-key global-map "\C-cc" 'org-capture)
+  (define-key global-map "\C-ca" 'org-agenda)
 
   (setq org-capture-templates
         '(
@@ -241,7 +241,7 @@
 (use-package magit
   :ensure t
   :config
-  (global-set-key (kbd "C-x g") 'magit-status))
+  (define-key global-map (kbd "C-x g") 'magit-status))
 
 (use-package pdf-tools
   :ensure t
@@ -342,8 +342,8 @@
 (use-package avy
   :ensure t
   :config
-  (global-set-key (kbd "C-;") 'avy-goto-line)
-  (global-set-key (kbd "C-:") 'avy-goto-char))
+  (define-key global-map (kbd "C-;") 'avy-goto-line)
+  (define-key global-map (kbd "C-:") 'avy-goto-char))
 
 (use-package impatient-mode
   :ensure t)
@@ -360,7 +360,7 @@
 (use-package switch-window
   :ensure t
   :config
-  (global-set-key (kbd "C-c o") 'switch-window))
+  (define-key global-map (kbd "C-c o") 'switch-window))
 
 (use-package buffer-move ;; see exwm config
   :ensure t)
@@ -368,7 +368,7 @@
 (use-package elfeed
     :ensure t
     :config
-    (global-set-key (kbd "C-x w") 'elfeed)
+    (define-key global-map (kbd "C-x w") 'elfeed)
     (setq elfeed-feeds
         '(("https://www.stallman.org/rss/rss.xml" stallman)
           ("https://planet.emacslife.com/atom.xml" emacs)
