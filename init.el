@@ -166,7 +166,7 @@
         '("~/Nextcloud/org/activities.org" "~/Nextcloud/org/todo.org"
           "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
           "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
-          "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org",
+          "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"
 	  "~/Nextcloud/org/projects.org"))
 
   (setq org-agenda-start-with-log-mode t)
