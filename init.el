@@ -35,15 +35,6 @@
 
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
 
-(use-package ibuffer-projectile
-  :ensure t
-  :config
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-projectile-set-filter-groups)
-              (unless (eq ibuffer-sorting-mode 'alphabetic)
-                (ibuffer-do-sort-by-alphabetic)))))
-
 ;; scroll one line at a time
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 (setq mouse-wheel-progressive-speed nil)
