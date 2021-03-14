@@ -1,16 +1,10 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/"))))
-
-(setq package-archive-priorities
-      '(("org"          . 10)
-	("melpa-stable" . 9)
-        ("gnu"          . 8)
-        ("melpa"        . 7)))
 
 (package-initialize)
 
@@ -96,7 +90,7 @@
 (use-package org
   ;; TODO: use-package, even with ":pin org", doesn't install the org
   ;; version, but keeps the built-in version.
-  :pin org
+  ;; :pin org
   :ensure t
   :config
   (setq org-startup-indented t)
