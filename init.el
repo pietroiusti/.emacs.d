@@ -164,7 +164,32 @@
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
-     (js . t))))
+     (js . t)))
+
+  ;; I use the following to export to pdf
+  ;; At the beginning of the org files I have:
+  ;; #+LATEX_HEADER: \usepackage[backend=biber,style=authoryear]{biblatex}
+  ;; #+LATEX_HEADER: \addbibresource{references.bib}
+  ;;
+  ;; And at the end:
+  ;; \printbibliography
+  ;;
+  ;; If I want to print also those refs I haven't used, before \printbibliography:
+  ;; \nocite{*}
+  (setq org-latex-pdf-process
+	'("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	  "biber %b"
+	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+
+(use-package org-ref
+  :ensure t
+  :after org
+  :config
+  (setq reftex-default-bibliography '("~/Nextcloud/bib/references.bib"))
+  (setq org-ref-default-bibliography '("~/Nextcloud/bib/references.bib"))
+  (setq bibtex-completion-bibliography "~/Nextcloud/bib/references.bib"))
+
 
 (use-package org-tree-slide
   :ensure t
