@@ -194,6 +194,18 @@
   (setq org-ref-default-bibliography '("~/Nextcloud/bib/references.bib"))
   (setq bibtex-completion-bibliography "~/Nextcloud/bib/references.bib"))
 
+  ;; open pdf with pdf-tools
+  (defun my/org-ref-open-pdf-at-point ()
+    "Open the pdf for bibtex key under point if it exists."
+    (interactive)
+    (let* ((results (org-ref-get-bibtex-key-and-file))
+           (key (car results))
+           (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+      (if (file-exists-p pdf-file)
+          (find-file pdf-file)
+	(message "No PDF found for %s" key))))
+
+  (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
 
 (use-package org-tree-slide
   :ensure t
