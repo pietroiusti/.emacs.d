@@ -110,27 +110,31 @@
 
   (setq org-capture-templates
         '(
-          ("t" "add task" entry
+	  ("i" "Add to inbox" entry
+           (file "~/Nextcloud/org/inbox.org")
+           "* TODO %?" :prepend t)
+	  
+          ("t" "Add todo" entry
            (file "~/Nextcloud/org/todo.org")
            "* TODO %?" :prepend t)
 
-          ("n" "notes" entry
+          ("n" "Add note" entry
            (file "~/Nextcloud/org/notes.org")
            "* %?" :prepend t)
 
-          ("r" "readings" entry
+          ("r" "Add reading" entry
            (file "~/Nextcloud/org/readings.org")
            "* %?" :prepend t)
 
-          ("a" "activities" entry
+          ("a" "Add activity" entry
            (file "~/Nextcloud/org/activities.org")
            "* %?")
 
-	  ("p" "add project" entry
+	  ("p" "Add project" entry
            (file "~/Nextcloud/org/projects.org")
            "* %?" :prepend t)
 
-          ("m" "meetings")
+          ("m" "Add meeting")
           ("md" "Dan" entry
            (file "~/Nextcloud/org/meetings.org")
            "* Dan \n SCHEDULED: %^t%?")
@@ -152,7 +156,7 @@
           "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
           "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
           "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"
-	  "~/Nextcloud/org/projects.org"))
+	  "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"))
 
   (setq org-agenda-start-with-log-mode t)
 
