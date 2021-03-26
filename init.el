@@ -96,6 +96,7 @@
   (setq org-startup-indented t)
   (setq org-indent-mode t)
   (setq org-hide-leading-stars t)
+  (setq org-ellipsis " ▼ ")
   (setq org-src-fontify-natively t)
 
   (setq org-special-ctrl-a/e t)
@@ -190,9 +191,14 @@
   :ensure t
   :after org
   :config
-  (setq reftex-default-bibliography '("~/Nextcloud/bib/references.bib"))
-  (setq org-ref-default-bibliography '("~/Nextcloud/bib/references.bib"))
-  (setq bibtex-completion-bibliography "~/Nextcloud/bib/references.bib"))
+  (setq reftex-default-bibliography '("~/Nextcloud/org/references.bib"))
+
+  (setq org-ref-default-bibliography '("~/Nextcloud/org/references.bib")
+	org-ref-pdf-directory "~/Nextcloud/org/pdfs/"
+	org-ref-bibliography-notes "~/Nextcloud/org/readings.org")
+
+  (setq bibtex-completion-bibliography "~/Nextcloud/org/references.bib"
+	bibtex-completion-library-path "~/Nextcloud/org/pdfs/")
 
   ;; open pdf with pdf-tools
   (defun my/org-ref-open-pdf-at-point ()
@@ -206,6 +212,33 @@
 	(message "No PDF found for %s" key))))
 
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
+  
+(use-package org-roam
+  :ensure t
+  :after org
+  :init
+  (add-hook 'after-init-hook 'org-roam-mode)
+  :config
+  (setq org-roam-directory "~/Nextcloud/org/zettelkasten")
+
+  (require 'org-roam-protocol)
+
+  (define-key org-roam-mode-map (kbd "C-c n c") 'org-roam-capture))
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
 
 (use-package org-tree-slide
   :ensure t
@@ -386,6 +419,7 @@
   :ensure t
   :config
   (projectile-mode +1)
+  (setq projectile-project-search-path '("~/Nextcloud/org/"))
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package switch-window
