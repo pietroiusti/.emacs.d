@@ -163,6 +163,8 @@
 
   (require 'org-habit)
   (add-to-list 'org-modules "org-habit")
+
+  (require 'org-id)
   
   ;; code block evaluation
   (org-babel-do-load-languages
