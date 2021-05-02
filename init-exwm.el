@@ -173,7 +173,7 @@
   ;;(setq exwm-workspace-minibuffer-position 'bottom)
 
   ;; Start some processes
-  (start-process "" nil "nextcloud")
+  ;; (start-process "" nil "nextcloud")
   (start-process "" nil "picom" "-b")
   (start-process "" nil "nm-applet" "--no-agent")
   (start-process-shell-command "" nil "feh --bg-scale ~/Pictures/levitating-gnu.png")

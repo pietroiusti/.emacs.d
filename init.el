@@ -96,7 +96,7 @@
   (setq org-startup-indented t)
   (setq org-indent-mode t)
   (setq org-hide-leading-stars t)
-  (setq org-ellipsis " ▼ ")
+  (setq org-ellipsis "▼")
   (setq org-src-fontify-natively t)
 
   (setq org-special-ctrl-a/e t)
@@ -212,33 +212,6 @@
 	(message "No PDF found for %s" key))))
 
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
-  
-(use-package org-roam
-  :ensure t
-  :after org
-  :init
-  (add-hook 'after-init-hook 'org-roam-mode)
-  :config
-  (setq org-roam-directory "~/Nextcloud/org/zettelkasten")
-
-  (require 'org-roam-protocol)
-
-  (define-key org-roam-mode-map (kbd "C-c n c") 'org-roam-capture))
-
-(use-package org-roam-server
-  :ensure t
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
 
 (use-package org-tree-slide
   :ensure t
@@ -436,8 +409,7 @@
     (define-key global-map (kbd "C-x w") 'elfeed)
     (setq elfeed-feeds
         '(("https://www.stallman.org/rss/rss.xml" stallman)
-          ("https://planet.emacslife.com/atom.xml" emacs)
-          ("https://listserv.liv.ac.uk/cgi-bin/wa?RSS&L=PHILOS-L&v=2.0" philos-l))))
+          ("https://planet.emacslife.com/atom.xml" emacs))))
 
 (use-package academic-phrases
   :ensure t)
