@@ -159,7 +159,7 @@
           "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"
 	  "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"))
 
-  (setq org-agenda-start-with-log-mode t)
+  ;;(setq org-agenda-start-with-log-mode t)
 
   (require 'org-habit)
   (add-to-list 'org-modules "org-habit")
@@ -347,6 +347,10 @@
   :ensure t
   :config
   (engine-mode t)
+  (defengine sci-hub
+    "https://sci-hub.do/%s/"
+    :keybinding "s")
+
   (defengine oxforddictionaries
     "https://en.oxforddictionaries.com/definition/%s/"
     :keybinding "o")

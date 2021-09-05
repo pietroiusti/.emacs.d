@@ -222,6 +222,17 @@
 			(interactive)
 			(start-process-shell-command "chromium" nil "chromium --incognito")))
 
+  ;; brave
+  (exwm-input-set-key (kbd "s-d")
+		      (lambda ()
+			(interactive)
+			(start-process-shell-command "brave" nil "brave")))
+
+  (exwm-input-set-key (kbd "s-D")
+		      (lambda ()
+			(interactive)
+			(start-process-shell-command "brave" nil "brave --incognito")))
+
   ;; emacsclient
   (exwm-input-set-key (kbd "s-e")
 		      (lambda ()
