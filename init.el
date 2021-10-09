@@ -355,7 +355,7 @@
   :config
   (engine-mode t)
   (defengine sci-hub
-    "https://sci-hub.do/%s/"
+    "https://sci-hub.se/%s/"
     :keybinding "s")
 
   (defengine oxforddictionaries
