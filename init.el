@@ -341,7 +341,14 @@
   (which-key-mode))
 
 (use-package web-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode))
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
+    )
+  (add-hook 'web-mode-hook  'my-web-mode-hook))
 
 (use-package engine-mode
   :ensure t
