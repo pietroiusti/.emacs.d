@@ -477,6 +477,10 @@
   (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_X200")
   (shell-command "xset r rate 200 60"))
 
+(defun gp/set-key-rate ()
+  (interactive)
+  (shell-command "xset r rate 200 60"))
+
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
 ;; In my .xinitrc I have something like:
