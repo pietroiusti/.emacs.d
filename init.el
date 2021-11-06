@@ -215,39 +215,117 @@
 
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
 
+(use-package diminish
+  :ensure t)
+
+;; Some lisp to prettify org blocks from https://pank.eu/blog/pretty-babel-src-blocks.html
+;; I'm using this for presentations in vanilla org-mode
+(defvar-local rasmus/org-at-src-begin -1
+    "Variable that holds whether last position was a ")
+
+(defvar rasmus/ob-header-symbol ?☰
+  "Symbol used for babel headers")
+
+(defun rasmus/org-prettify-src--update ()
+  (let ((case-fold-search t)
+        (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
+        found)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward re nil t)
+        (goto-char (match-end 0))
+        (let ((args (org-trim
+                     (buffer-substring-no-properties (point)
+                                                     (line-end-position)))))
+          (when (org-string-nw-p args)
+            (let ((new-cell (cons args rasmus/ob-header-symbol)))
+              (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
+              (cl-pushnew new-cell found :test #'equal)))))
+      (setq prettify-symbols-alist
+            (cl-set-difference prettify-symbols-alist
+                               (cl-set-difference
+                                (cl-remove-if-not
+                                 (lambda (elm)
+                                   (eq (cdr elm) rasmus/ob-header-symbol))
+                                 prettify-symbols-alist)
+                                found :test #'equal)))
+      ;; Clean up old font-lock-keywords.
+      (font-lock-remove-keywords nil prettify-symbols--keywords)
+      (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
+      (font-lock-add-keywords nil prettify-symbols--keywords)
+      (while (re-search-forward re nil t)
+        (font-lock-flush (line-beginning-position) (line-end-position))))))
+
+(defun rasmus/org-prettify-src ()
+  "Hide src options via `prettify-symbols-mode'.
+
+  `prettify-symbols-mode' is used because it has uncollpasing. It's
+  may not be efficient."
+  (let* ((case-fold-search t)
+         (at-src-block (save-excursion
+                         (beginning-of-line)
+                         (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
+    ;; Test if we moved out of a block.
+    (when (or (and rasmus/org-at-src-begin
+                   (not at-src-block))
+              ;; File was just opened.
+              (eq rasmus/org-at-src-begin -1))
+      (rasmus/org-prettify-src--update))
+    ;; Remove composition if at line; doesn't work properly.
+    ;; (when at-src-block
+    ;;   (with-silent-modifications
+    ;;     (remove-text-properties (match-end 0)
+    ;;                             (1+ (line-end-position))
+    ;;                             '(composition))))
+    (setq rasmus/org-at-src-begin at-src-block)))
+
+(defun rasmus/org-prettify-symbols ()
+  (mapc (apply-partially 'add-to-list 'prettify-symbols-alist)
+        (cl-reduce 'append
+                   (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                           `(("#+begin_src" . ?✎) ;; ➤ 🖝 ➟ ➤ ✎
+                             ("#+end_src"   . ?□) ;; ⏹
+                             ("#+header:" . ,rasmus/ob-header-symbol)
+                             ("#+begin_quote" . ?«)
+                             ("#+end_quote" . ?»)))))
+  (turn-on-prettify-symbols-mode)
+  (add-hook 'post-command-hook 'rasmus/org-prettify-src t t))
+
+;; vanilla org-mode presentations setup
+(defun gp/presentation-start ()
+  (interactive)
+  (setq org-hide-emphasis-markers t)
+  (org-mode-restart)
+  (variable-pitch-mode)
+  (olivetti-mode)
+  (rasmus/org-prettify-symbols))
+
 (use-package org-tree-slide
   :ensure t
-  :after org
   :config
-  (setq org-tree-slide-header nil)
-  (setq org-tree-slide-slide-in-effect nil)
-  (setq org-tree-slide-cursor-init t)
-  (setq org-tree-slide-skip-outline-level 0)
-  (setq org-tree-slide-modeline-display 'outside)
+  (setq org-tree-slide-slide-in-effect t)
 
-  (define-minor-mode gp/org-presentation-mode
-    "Parameters for plain text presentations with `org-mode'."
-    :init-value nil
-    :global nil
-    (if gp/org-presentation-mode
-        (progn
-          (unless (eq major-mode 'org-mode)
-            (user-error "Not in an Org buffer"))
-          (org-tree-slide-mode 1)
-          (olivetti-mode 1)
-          (variable-pitch-mode 1))
-      (org-tree-slide-mode -1)
-      (olivetti-mode -1)
-      (variable-pitch-mode -1)))
+  (setq org-tree-slide-activate-message "Hello!")
+  (setq org-tree-slide-deactivate-message "Bye!")
+  
+  (defun gp/presentation-setup()
+    ;; (variable-pitch-mode)
+    ;; (olivetti-mode)
+    )
 
-  ;; how to hide org emphasis LOCALLY to buffer?
-  ;; (setq org-hide-emphasis-markers t)
+  (defun gp/presentation-end()
+    ;; (variable-pitch-mode -1)
+    ;; (olivetti-mode -1)
+    )
 
-  :bind (("M-C-q" . gp/org-presentation-mode)
-         :map org-tree-slide-mode-map
-         ("<C-down>" . org-tree-slide-display-header-toggle)
-         ("<right>" . org-tree-slide-move-next-tree)
-         ("<left>" . org-tree-slide-move-previous-tree)))
+  ;; (setq org-tree-slide-cursor-init nil)
+  ;; (setq org-tree-slide-modeline-display 'outside)
+
+  (add-hook 'org-tree-slide-play-hook 'gp/presentation-setup)
+  (add-hook 'org-tree-slide-stop-hook 'gp/presentation-end)
+
+  (define-key global-map (kbd "<f8>") 'org-tree-slide-mode))
+
 
 (use-package evil
   :ensure t
