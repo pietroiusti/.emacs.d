@@ -326,6 +326,8 @@
 
   (define-key global-map (kbd "<f8>") 'org-tree-slide-mode))
 
+(use-package undo-fu
+  :ensure t)
 
 (use-package evil
   :ensure t
@@ -337,6 +339,8 @@
   (setq evil-default-state 'emacs
         evil-insert-state-modes nil
         evil-motion-state-modes nil)
+
+  (evil-set-undo-system 'undo-fu)
 
   ;; solve blinking problem with pdf-tools
   (evil-set-initial-state 'pdf-view-mode 'emacs)
@@ -351,8 +355,8 @@
   (setq evil-motion-state-cursor '("#e80000" box))
   (setq evil-normal-state-cursor '("#e80000" box))
   (setq evil-visual-state-cursor '("#e80000" box))
-  (setq evil-insert-state-cursor '("#e80000" bar))
-  (setq evil-replace-state-cursor '("#e80000" bar))
+  (setq evil-insert-state-cursor '("#e80000" box))
+  (setq evil-replace-state-cursor '("#e80000" box))
   (setq evil-operator-state-cursor '("#e80000" hollow)))
 
 (use-package magit
