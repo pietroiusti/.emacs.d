@@ -189,18 +189,14 @@
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 
+(use-package helm-bibtex
+  :ensure t
+  :after org)
+
 (use-package org-ref
   :ensure t
   :after org
   :config
-  (setq reftex-default-bibliography '("~/Nextcloud/org/references.bib"))
-
-  (setq org-ref-default-bibliography '("~/Nextcloud/org/references.bib")
-	org-ref-pdf-directory "~/Nextcloud/org/pdfs/"
-	org-ref-bibliography-notes "~/Nextcloud/org/readings.org")
-
-  (setq bibtex-completion-bibliography "~/Nextcloud/org/references.bib"
-	bibtex-completion-library-path "~/Nextcloud/org/pdfs/")
 
   ;; open pdf with pdf-tools
   (defun my/org-ref-open-pdf-at-point ()
@@ -213,10 +209,60 @@
           (find-file pdf-file)
 	(message "No PDF found for %s" key))))
 
-  (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
+  (setq bibtex-completion-bibliography '("~/Nextcloud/org/references.bib")
+	bibtex-completion-library-path '("~/Nextcloud/or/pdfs/")
+	bibtex-completion-notes-path "~/Dropbox/org/readings.org"
+	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 
-(use-package diminish
-  :ensure t)
+	bibtex-completion-additional-search-fields '(keywords)
+	bibtex-completion-display-formats
+	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+	  (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+	  (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+	bibtex-completion-pdf-open-function 'my/org-ref-open-pdf-at-point)
+  
+  (require 'org-ref-helm)
+  (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+	org-ref-insert-cite-function 'org-ref-cite-insert-helm
+	org-ref-insert-label-function 'org-ref-insert-label-link
+	org-ref-insert-ref-function 'org-ref-insert-ref-link
+	org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+  
+  (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link))
+
+  ;; OLD CONF:
+  ;; (setq reftex-default-bibliography '("~/Nextcloud/org/references.bib"))
+
+  ;; (setq org-ref-default-bibliography '("~/Nextcloud/org/references.bib")
+  ;; 	org-ref-pdf-directory "~/Nextcloud/org/pdfs/"
+  ;; 	org-ref-bibliography-notes "~/Nextcloud/org/readings.org")
+
+  ;; (setq bibtex-completion-bibliography "~/Nextcloud/org/references.bib"
+  ;; 	bibtex-completion-library-path "~/Nextcloud/org/pdfs/")
+
+  ;; (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link)
+
+  ;; ;; open pdf with pdf-tools
+  ;; (defun my/org-ref-open-pdf-at-point ()
+  ;;   "Open the pdf for bibtex key under point if it exists."
+  ;;   (interactive)
+  ;;   (let* ((results (org-ref-get-bibtex-key-and-file))
+  ;;          (key (car results))
+  ;;          (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+  ;;     (if (file-exists-p pdf-file)
+  ;;         (find-file pdf-file)
+  ;; 	(message "No PDF found for %s" key))))
+
+  ;; (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
+
+  ;; )
+
+
+
+;; (use-package diminish
+;;   :ensure t)
 
 ;; Some lisp to prettify org blocks from https://pank.eu/blog/pretty-babel-src-blocks.html
 ;; I'm using this for presentations in vanilla org-mode
