@@ -161,6 +161,9 @@
 
   ;;(setq org-agenda-start-with-log-mode t)
 
+  (add-to-list 'org-file-apps
+             '("\\.pdf\\'" . emacs ))
+  
   (require 'org-habit)
   (add-to-list 'org-modules "org-habit")
 
@@ -189,6 +192,15 @@
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 
+(use-package helm
+  :ensure t
+  :config
+  ;; (global-set-key (kbd "M-x") #'helm-M-x)
+  ;; (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+  ;; (global-set-key (kbd "C-x C-f") #'helm-find-files)
+  ;; (helm-mode 1)
+  )
+
 (use-package helm-bibtex
   :ensure t
   :after org)
@@ -198,20 +210,9 @@
   :after org
   :config
 
-  ;; open pdf with pdf-tools
-  (defun my/org-ref-open-pdf-at-point ()
-    "Open the pdf for bibtex key under point if it exists."
-    (interactive)
-    (let* ((results (org-ref-get-bibtex-key-and-file))
-           (key (car results))
-           (pdf-file (funcall org-ref-get-pdf-filename-function key)))
-      (if (file-exists-p pdf-file)
-          (find-file pdf-file)
-	(message "No PDF found for %s" key))))
-
   (setq bibtex-completion-bibliography '("~/Nextcloud/org/references.bib")
-	bibtex-completion-library-path '("~/Nextcloud/or/pdfs/")
-	bibtex-completion-notes-path "~/Dropbox/org/readings.org"
+	bibtex-completion-library-path '("~/Nextcloud/org/pdfs/")
+	bibtex-completion-notes-path "~/Nextcloud/org/readings.org"
 	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 
 	bibtex-completion-additional-search-fields '(keywords)
@@ -221,7 +222,10 @@
 	  (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
 	  (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
 	  (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-	bibtex-completion-pdf-open-function 'my/org-ref-open-pdf-at-point)
+	
+	bibtex-completion-pdf-open-function
+	(lambda (fpath)
+	  (call-process "open" nil 0 nil fpath)))
   
   (require 'org-ref-helm)
   (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
@@ -231,35 +235,6 @@
 	org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
   
   (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link))
-
-  ;; OLD CONF:
-  ;; (setq reftex-default-bibliography '("~/Nextcloud/org/references.bib"))
-
-  ;; (setq org-ref-default-bibliography '("~/Nextcloud/org/references.bib")
-  ;; 	org-ref-pdf-directory "~/Nextcloud/org/pdfs/"
-  ;; 	org-ref-bibliography-notes "~/Nextcloud/org/readings.org")
-
-  ;; (setq bibtex-completion-bibliography "~/Nextcloud/org/references.bib"
-  ;; 	bibtex-completion-library-path "~/Nextcloud/org/pdfs/")
-
-  ;; (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link)
-
-  ;; ;; open pdf with pdf-tools
-  ;; (defun my/org-ref-open-pdf-at-point ()
-  ;;   "Open the pdf for bibtex key under point if it exists."
-  ;;   (interactive)
-  ;;   (let* ((results (org-ref-get-bibtex-key-and-file))
-  ;;          (key (car results))
-  ;;          (pdf-file (funcall org-ref-get-pdf-filename-function key)))
-  ;;     (if (file-exists-p pdf-file)
-  ;;         (find-file pdf-file)
-  ;; 	(message "No PDF found for %s" key))))
-
-  ;; (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
-
-  ;; )
-
-
 
 ;; (use-package diminish
 ;;   :ensure t)
