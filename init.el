@@ -97,11 +97,15 @@
   (setq org-indent-mode t)
   (setq org-hide-leading-stars t)
   (setq org-ellipsis "▼")
+  ;;(setq org-stars)
   (setq org-src-fontify-natively t)
 
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
   (setq org-ctrl-k-protect-subtree t)
+
+  ;; In case you want to resize images, you might want uncomment:
+  ;; (setq org-image-actual-width nil)
 
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
@@ -345,7 +349,23 @@
   (add-hook 'org-tree-slide-play-hook 'gp/presentation-setup)
   (add-hook 'org-tree-slide-stop-hook 'gp/presentation-end)
 
-  (define-key global-map (kbd "<f8>") 'org-tree-slide-mode))
+  (define-key global-map (kbd "<f8>") 'org-tree-slide-mode)
+  (define-key org-tree-slide-mode-map (kbd "<next>")
+    'org-tree-slide-move-next-tree)
+  (define-key org-tree-slide-mode-map (kbd "<prior>")
+    'org-tree-slide-move-previous-tree)
+  (define-key org-tree-slide-mode-map (kbd "<f9>")
+    'org-tree-slide-content))
+
+;; org-tree-slide-content
+
+;; TESTING
+;; (use-package org-roam
+;;   :ensure t
+;;   :config
+;;   (setq org-roam-v2-ack t)
+;;   (setq org-roam-directory (file-truename "~/Nextcloud/org-roam-test"))
+;;   (org-roam-db-autosync-mode))
 
 (use-package undo-fu
   :ensure t)
@@ -380,6 +400,12 @@
   (setq evil-replace-state-cursor '("#e80000" box))
   (setq evil-operator-state-cursor '("#e80000" hollow)))
 
+
+(use-package god-mode
+  :ensure t
+  :config
+  (global-set-key (kbd "C-<escape>") #'god-local-mode))
+
 (use-package magit
   :ensure t
   :config
@@ -412,10 +438,10 @@
 ;;     (setq Tex-parse-self t)
 ;;     (setq-default TeX-master nil))
 
-(use-package company
-    :ensure t
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
+;; (use-package company
+;;     :ensure t
+;;     :config
+;;     (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package ivy
   :ensure t
@@ -588,16 +614,3 @@
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
 ;; In my .xinitrc I have something like:
 ;; exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(exwm pug-mode js2-mode rainbow-delimiters paredit academic-phrases elfeed buffer-move switch-window restclient impatient-mode avy dired-subtree dired-narrow engine-mode web-mode which-key ivy-prescient ivy company auctex olivetti pdf-tools magit evil org-tree-slide color-theme-sanityinc-tomorrow doom-modeline ibuffer-projectile use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
