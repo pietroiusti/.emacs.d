@@ -126,6 +126,7 @@
 	  ([?\C-r] . [S-f3])
 	  ;; newline
 	  ([?\C-j] . [return])
+	  ([?\C-m] . [return])
 	  ([?\C-o] . [return left])
 	  ;; undo
 	  ([?\C-/] . [C-z])
