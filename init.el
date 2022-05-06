@@ -194,7 +194,16 @@
 	'("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 	  "biber %b"
 	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+  (add-to-list 'org-latex-classes
+	       '("myreport"
+		 "\\documentclass[11pt]{report}"
+		 ;; ("\\part{%s}" . "\\part*{%s}")
+		 ("\\chapter{%s}" . "\\chapter*{%s}")
+		 ("\\section{%s}" . "\\section*{%s}")
+		 ("\\subsection{%s}" . "\\subsection*{%s}")
+		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
 (use-package helm
   :ensure t
