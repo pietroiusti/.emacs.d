@@ -52,6 +52,9 @@
 (setq frame-resize-pixelwise t) ;; Remove black border at the bottom
 ;; in certain window managers
 
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
+
 ;; fancy mode line
 (use-package doom-modeline
   :ensure t
