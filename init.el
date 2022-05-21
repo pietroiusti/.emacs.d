@@ -118,10 +118,10 @@
 
   (setq org-capture-templates
         '(
-	  ("i" "Add to inbox" entry
+          ("i" "Add to inbox" entry
            (file "~/Nextcloud/org/inbox.org")
            "* TODO %?" :prepend t)
-	  
+          
           ("t" "Add todo" entry
            (file "~/Nextcloud/org/todo.org")
            "* TODO %?" :prepend t)
@@ -138,7 +138,7 @@
            (file "~/Nextcloud/org/activities.org")
            "* %?")
 
-	  ("p" "Add project" entry
+          ("p" "Add project" entry
            (file "~/Nextcloud/org/projects.org")
            "* %?" :prepend t)
 
@@ -164,13 +164,15 @@
           "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
           "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
           "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"
-	  "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"))
+          "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"))
 
   ;;(setq org-agenda-start-with-log-mode t)
 
   (add-to-list 'org-file-apps
-             '("\\.pdf\\'" . emacs ))
-  
+               '("\\.pdf\\'" . emacs ))
+
+  (require 'ox-texinfo)
+
   (require 'org-habit)
   (add-to-list 'org-modules "org-habit")
 
@@ -194,19 +196,19 @@
   ;; If I want to print also those refs I haven't used, before \printbibliography:
   ;; \nocite{*}
   (setq org-latex-pdf-process
-	'("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-	  "biber %b"
-	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-	  "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "biber %b"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
   (add-to-list 'org-latex-classes
-	       '("myreport"
-		 "\\documentclass[11pt]{report}"
-		 ;; ("\\part{%s}" . "\\part*{%s}")
-		 ("\\chapter{%s}" . "\\chapter*{%s}")
-		 ("\\section{%s}" . "\\section*{%s}")
-		 ("\\subsection{%s}" . "\\subsection*{%s}")
-		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+               '("myreport"
+                 "\\documentclass[11pt]{report}"
+                 ;; ("\\part{%s}" . "\\part*{%s}")
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
 (use-package helm
   :ensure t
@@ -227,28 +229,28 @@
   :config
 
   (setq bibtex-completion-bibliography '("~/Nextcloud/org/references.bib")
-	bibtex-completion-library-path '("~/Nextcloud/org/pdfs/")
-	bibtex-completion-notes-path "~/Nextcloud/org/readings.org"
-	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+        bibtex-completion-library-path '("~/Nextcloud/org/pdfs/")
+        bibtex-completion-notes-path "~/Nextcloud/org/readings.org"
+        bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 
-	bibtex-completion-additional-search-fields '(keywords)
-	bibtex-completion-display-formats
-	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
-	  (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
-	  (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-	  (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-	  (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-	
-	bibtex-completion-pdf-open-function
-	(lambda (fpath)
-	  (call-process "open" nil 0 nil fpath)))
+        bibtex-completion-additional-search-fields '(keywords)
+        bibtex-completion-display-formats
+        '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+          (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+          (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+          (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+          (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+        
+        bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (call-process "open" nil 0 nil fpath)))
   
   (require 'org-ref-helm)
   (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
-	org-ref-insert-cite-function 'org-ref-cite-insert-helm
-	org-ref-insert-label-function 'org-ref-insert-label-link
-	org-ref-insert-ref-function 'org-ref-insert-ref-link
-	org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+        org-ref-insert-cite-function 'org-ref-cite-insert-helm
+        org-ref-insert-label-function 'org-ref-insert-label-link
+        org-ref-insert-ref-function 'org-ref-insert-ref-link
+        org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
   
   (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link))
 
@@ -258,7 +260,7 @@
 ;; Some lisp to prettify org blocks from https://pank.eu/blog/pretty-babel-src-blocks.html
 ;; I'm using this for presentations in vanilla org-mode
 (defvar-local rasmus/org-at-src-begin -1
-    "Variable that holds whether last position was a ")
+  "Variable that holds whether last position was a ")
 
 (defvar rasmus/ob-header-symbol ?☰
   "Symbol used for babel headers")
@@ -425,15 +427,20 @@
 
 (use-package pdf-tools
   :ensure t
-  :pin melpa
   :config
-  (pdf-tools-install)
+  (pdf-tools-install))
 
-  (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
-  (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
-  (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
-  (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
-  (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
+;; (use-package pdf-tools
+;;   :ensure t
+;;   :pin melpa
+;;   :config
+;;   (pdf-tools-install)
+
+;;   (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
+;;   (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
+;;   (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
+;;   (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
+;;   (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
 
 (use-package olivetti
   :ensure t
@@ -445,7 +452,7 @@
 
 ;;     ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
 ;;     ;; documents right away, insert the following in your '.emacs' file.
-    
+
 ;;     (setq TeX-auto-save t)
 ;;     (setq Tex-parse-self t)
 ;;     (setq-default TeX-master nil))
@@ -460,9 +467,9 @@
   :init
   (ivy-mode 1)
   :config
-					;(setq ivy-use-virtual-buffers t)
-					;(setq ivy-count-format "(%d/%d) ")
-					;(setq enable-recursive-minibuffers t)
+                                        ;(setq ivy-use-virtual-buffers t)
+                                        ;(setq ivy-count-format "(%d/%d) ")
+                                        ;(setq enable-recursive-minibuffers t)
   
   ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
   
@@ -558,10 +565,10 @@
   :ensure t)
 
 (use-package elfeed
-    :ensure t
-    :config
-    (define-key global-map (kbd "C-x w") 'elfeed)
-    (setq elfeed-feeds
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-x w") 'elfeed)
+  (setq elfeed-feeds
         '(("https://www.stallman.org/rss/rss.xml" stallman)
           ("https://planet.emacslife.com/atom.xml" emacs))))
 
@@ -592,12 +599,12 @@
 (setq-default c-default-style "linux"
               c-basic-offset 4)
 
-(use-package js2-mode
-  :ensure t
-  :config
-  (setq js2-basic-offset 2)
-  ;; js2-mode as a defalut for js files
-  (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode)))
+;; (use-package js2-mode
+;;   :ensure t
+;;   :config
+;;   (setq js2-basic-offset 2)
+;;   ;; js2-mode as a defalut for js files
+;;   (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode)))
 
 (use-package pug-mode
   :ensure t)
