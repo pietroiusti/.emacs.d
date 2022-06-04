@@ -28,6 +28,7 @@
 (setq disabled-command-function nil) ;; enable all commands
 
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
+(define-key global-map (kbd "C-c s") 'shell)
 
 ;; scroll one line at a time
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
@@ -555,13 +556,6 @@
 
 (use-package restclient
   :ensure t)
-
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-mode +1)
-  (setq projectile-project-search-path '("~/Nextcloud/org/"))
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package switch-window
   :ensure t
