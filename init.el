@@ -15,8 +15,7 @@
   (package-install 'use-package))
 (require 'use-package)
 
-(setq user-full-name "Giulio Pietroiusti"
-      user-mail-address "giulio.pietroiusti@gmail.com")
+(load "/home/gp/.emacs.d/custom-functions.el")
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
