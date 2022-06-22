@@ -28,6 +28,7 @@
 
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
 (define-key global-map (kbd "C-c s") 'shell)
+(define-key global-map (kbd "C-c k") 'kill-this-buffer)
 
 ;; scroll one line at a time
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
@@ -40,7 +41,8 @@
 (scroll-bar-mode 0) ;; And scroll bar.
 (fringe-mode 1) ;; shrink fringes to 1 pixel.
 
-(setq visible-bell 1) ;; get visual indication
+(setq ring-bell-function 'ignore)
+;; (setq visible-bell 1) ;; get visual indication
 
 (global-hl-line-mode t) ;; Current line highlighting
 
@@ -462,26 +464,30 @@
 ;;     :config
 ;;     (add-hook 'after-init-hook 'global-company-mode))
 
-(use-package ivy
-  :ensure t
-  :init
-  (ivy-mode 1)
-  :config
-                                        ;(setq ivy-use-virtual-buffers t)
-                                        ;(setq ivy-count-format "(%d/%d) ")
-                                        ;(setq enable-recursive-minibuffers t)
+;; (use-package ivy
+;;   :ensure t
+;;   :init
+;;   (ivy-mode 1)
+;;   :config
+;;                                         ;(setq ivy-use-virtual-buffers t)
+;;                                         ;(setq ivy-count-format "(%d/%d) ")
+;;                                         ;(setq enable-recursive-minibuffers t)
   
-  ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
+;;   ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
   
-  ;; :bind (:map ivy-minibuffer-map
-  ;;        ("RET" . ivy-alt-done)) ; why does it bind C-m to ivy-alt-done as well?
-  )
+;;   ;; :bind (:map ivy-minibuffer-map
+;;   ;;        ("RET" . ivy-alt-done)) ; why does it bind C-m to ivy-alt-done as well?
+;;   )
 
-(use-package ivy-prescient
-  :ensure t
-  :after (ivy)
-  :init
-  (ivy-prescient-mode 1))
+;; (use-package ivy-prescient
+;;   :ensure t
+;;   :after (ivy)
+;;   :init
+;;   (ivy-prescient-mode 1))
+
+;; Since emacs 28.1 we have fido-vertical-mode... It seems to work
+;; very well!
+(fido-vertical-mode)
 
 (use-package which-key
   :ensure t
@@ -563,14 +569,6 @@
 
 (use-package buffer-move ;; see exwm config
   :ensure t)
-
-(use-package elfeed
-  :ensure t
-  :config
-  (define-key global-map (kbd "C-x w") 'elfeed)
-  (setq elfeed-feeds
-        '(("https://www.stallman.org/rss/rss.xml" stallman)
-          ("https://planet.emacslife.com/atom.xml" emacs))))
 
 (use-package academic-phrases
   :ensure t)
