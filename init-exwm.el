@@ -240,6 +240,12 @@
 			(interactive)
 			(start-process-shell-command "emacsclient" nil "emacsclient -c")))
 
+  (exwm-input-set-key (kbd "s-t")
+		      (lambda ()
+			(interactive)
+			(start-process-shell-command "terminator" nil "terminator")))
+  
+
   (exwm-input-set-key (kbd "s-m")
 		      (lambda ()
 			(interactive)

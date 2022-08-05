@@ -28,13 +28,27 @@
 
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
 (define-key global-map (kbd "C-c s") 'shell)
-(define-key global-map (kbd "C-c k") 'kill-this-buffer)
+(define-key global-map (kbd "C-c k") 'kill-current-buffer)
+(define-key global-map (kbd "C-c i") 'indent-region)
+(define-key global-map (kbd "C-c r") 'revert-buffer)
 
-;; scroll one line at a time
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-(setq mouse-wheel-follow-mouse 't)
-(setq scroll-step 1 scroll-conservatively  10000)
+(define-key global-map (kbd "C-c w h") 'windmove-left)
+(define-key global-map (kbd "C-c w b") 'windmove-left)
+(define-key global-map (kbd "C-c w l") 'windmove-right)
+(define-key global-map (kbd "C-c w f") 'windmove-right)
+(define-key global-map (kbd "C-c w j") 'windmove-down)
+(define-key global-map (kbd "C-c w n") 'windmove-down)
+(define-key global-map (kbd "C-c w k") 'windmove-up)
+(define-key global-map (kbd "C-c w p") 'windmove-up)
+
+(define-key global-map (kbd "C-c w C-b") 'buf-move-left)
+(define-key global-map (kbd "C-c w C-f") 'buf-move-right)
+(define-key global-map (kbd "C-c w C-n") 'buf-move-down)
+(define-key global-map (kbd "C-c w C-p") 'buf-move-up)
+
+;; keyboard scrolling
+(setq scroll-step 1)
+(setq scroll-conservatively 1001)
 
 (tool-bar-mode 0) ;; Don't show tool bar.
 (menu-bar-mode 0) ;; And menu bar.
@@ -47,11 +61,11 @@
 (global-hl-line-mode t) ;; Current line highlighting
 
 ;; font
-(set-face-attribute 'default nil :family "Inconsolata" :height 120)
-(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
+(add-to-list 'default-frame-alist
+                       '(font . "Inconsolata-11"))
 (set-face-attribute 'variable-pitch nil :family "Noto sans")
 
-(setq frame-resize-pixelwise t) ;; Remove black border at the bottom
+;; (setq frame-resize-pixelwise t) ;; Remove black border at the bottom
 ;; in certain window managers
 
 (setq-default indent-tabs-mode nil)
@@ -497,12 +511,12 @@
 (use-package web-mode
   :ensure t
   :config
-  (add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
 
-  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+  ;; (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
   (defun web-mode-init-hook ()
     "Hooks for Web mode."
