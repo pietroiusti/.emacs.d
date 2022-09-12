@@ -15,7 +15,7 @@
   (package-install 'use-package))
 (require 'use-package)
 
-(load "/home/gp/.emacs.d/custom-functions.el")
+;;(load "/home/gp/.emacs.d/custom-functions.el")
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -61,15 +61,46 @@
 (global-hl-line-mode t) ;; Current line highlighting
 
 ;; font
+;;
+;; t460
+;;(add-to-list 'default-frame-alist
+;;                       '(font . "Inconsolata-11"))
+;;(set-face-attribute 'variable-pitch nil :family "Noto sans")
+;;
+;; work:
 (add-to-list 'default-frame-alist
-                       '(font . "Inconsolata-11"))
+             '(font . "Inconsolata-10"))
+
+;;(set-face-attribute 'default nil :family "Inconsolata")
+;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
 (set-face-attribute 'variable-pitch nil :family "Noto sans")
 
-;; (setq frame-resize-pixelwise t) ;; Remove black border at the bottom
-;; in certain window managers
+
+(setq frame-resize-pixelwise t) ;; Remove black border or side gap
+                                ;; in certain window managers
+
+;; old ###################################################################
+;;(set-frame-font "Inconsolata-10")
+;;(set-face-attribute 'default t :font "Inconsolata-10")
+;;(set-face-attribute 'default nil :family "Inconsolata" :height 120)
+
+;;(set-frame-font "DejaVu Sans Mono-9")
+;;(set-face-attribute 'default t :font "DejaVu Sans Mono-9")
+;;(set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
+
+;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
+;;(set-frame-font "Inconsolata-10")
+
+;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
+;;(set-face-attribute 'variable-pitch nil :family "Noto sans")
+;; old ###################################################################
 
 (setq-default indent-tabs-mode nil)
 (setq js-indent-level 2)
+(setq-default typescript-indent-level 2)
+
+(use-package typescript-mode
+  :ensure t)
 
 ;; fancy mode line
 (use-package doom-modeline
