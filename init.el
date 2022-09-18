@@ -15,7 +15,7 @@
   (package-install 'use-package))
 (require 'use-package)
 
-;;(load "/home/gp/.emacs.d/custom-functions.el")
+(load "/home/gp/.emacs.d/custom-functions.el")
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -63,13 +63,13 @@
 ;; font
 ;;
 ;; t460
-;;(add-to-list 'default-frame-alist
-;;                       '(font . "Inconsolata-11"))
-;;(set-face-attribute 'variable-pitch nil :family "Noto sans")
+(add-to-list 'default-frame-alist
+                      '(font . "Inconsolata-11"))
+(set-face-attribute 'variable-pitch nil :family "Noto sans")
 ;;
 ;; work:
-(add-to-list 'default-frame-alist
-             '(font . "Inconsolata-10"))
+;; (add-to-list 'default-frame-alist
+;;              '(font . "Inconsolata-10"))
 
 ;;(set-face-attribute 'default nil :family "Inconsolata")
 ;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
@@ -113,20 +113,20 @@
   (load-theme 'sanityinc-tomorrow-bright t))
 
 ;; transparency
-(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
-(add-to-list 'default-frame-alist '(alpha . (85 . 85)))
-(defun toggle-transparency ()
-  (interactive)
-  (let ((alpha (frame-parameter nil 'alpha)))
-    (set-frame-parameter
-     nil 'alpha
-     (if (eql (cond ((numberp alpha) alpha)
-                    ((numberp (cdr alpha)) (cdr alpha))
-                    ;; Also handle undocumented (<active> <inactive>) form.
-                    ((numberp (cadr alpha)) (cadr alpha)))
-              100)
-         '(85 . 85) '(100 . 100)))))
-(define-key global-map (kbd "C-c x") 'toggle-transparency)
+;; (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+;; (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+;; (defun toggle-transparency ()
+;;   (interactive)
+;;   (let ((alpha (frame-parameter nil 'alpha)))
+;;     (set-frame-parameter
+;;      nil 'alpha
+;;      (if (eql (cond ((numberp alpha) alpha)
+;;                     ((numberp (cdr alpha)) (cdr alpha))
+;;                     ;; Also handle undocumented (<active> <inactive>) form.
+;;                     ((numberp (cadr alpha)) (cadr alpha)))
+;;               100)
+;;          '(85 . 85) '(100 . 100)))))
+;; (define-key global-map (kbd "C-c x") 'toggle-transparency)
 
 ;; general editing settings
 (delete-selection-mode 1) ;; inserting text while the mark is active
@@ -671,6 +671,30 @@
 (defun gp/set-key-rate ()
   (interactive)
   (shell-command "xset r rate 200 60"))
+
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c C-l")
+  :hook ((typescript-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(use-package company
+  :ensure t)
+
+(use-package flycheck
+  :ensure t)
+
+(use-package lsp-treemacs
+  :ensure t)
+
+;; (use-package ng2-mode
+;;   :ensure t)
 
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.

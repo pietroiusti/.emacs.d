@@ -24,3 +24,9 @@ directory the file is in."
   (start-process "gvim" nil "gvim" (buffer-file-name)))
 
 (define-key global-map (kbd "C-c v") 'gp/gvim-current-buffer-file)
+
+(defun gp/vscode-current-buffer-file ()
+  (interactive)
+  (start-process "code" nil "code" (buffer-file-name)))
+
+(define-key global-map (kbd "C-c ~ c") 'gp/vscode-current-buffer-file)
