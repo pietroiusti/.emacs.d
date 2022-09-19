@@ -41,10 +41,14 @@
 (define-key global-map (kbd "C-c w k") 'windmove-up)
 (define-key global-map (kbd "C-c w p") 'windmove-up)
 
+(load "/home/gp/.emacs.d/buffer-move.el")
 (define-key global-map (kbd "C-c w C-b") 'buf-move-left)
 (define-key global-map (kbd "C-c w C-f") 'buf-move-right)
 (define-key global-map (kbd "C-c w C-n") 'buf-move-down)
 (define-key global-map (kbd "C-c w C-p") 'buf-move-up)
+
+(define-key global-map (kbd "C-c p") 'previous-buffer)
+(define-key global-map (kbd "C-c n") 'next-buffer)
 
 ;; keyboard scrolling
 (setq scroll-step 1)
@@ -62,7 +66,7 @@
 
 ;; font
 ;;
-;; t460
+;; home
 (add-to-list 'default-frame-alist
                       '(font . "Inconsolata-11"))
 (set-face-attribute 'variable-pitch nil :family "Noto sans")
@@ -612,9 +616,6 @@
   :config
   (define-key global-map (kbd "C-c o") 'switch-window))
 
-(use-package buffer-move ;; see exwm config
-  :ensure t)
-
 (use-package academic-phrases
   :ensure t)
 
@@ -673,19 +674,37 @@
   (shell-command "xset r rate 200 60"))
 
 (use-package lsp-mode
+  :ensure t
   :init
-  (setq lsp-keymap-prefix "C-c C-l")
-  :hook ((typescript-mode . lsp)
-         ;; if you want which-key integration
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((typescript-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  :commands (lsp lsp-deferred)
+  :config
+  (require 'lsp-ido)
+  (setq lsp-eldoc-render-all nil))
+
+(use-package ido-completing-read+
+  :ensure t
+  :config
+  (setq lsp-ido-show-symbol-kind nil
+        lsp-ido-show-symbol-filename nil))
+
+(use-package yasnippet
+  :ensure t)
 
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable nil)) ;;https://github.com/emacs-lsp/lsp-ui/issues/523
 
 (use-package company
-  :ensure t)
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.0) ;; default is 0.2
+  )
 
 (use-package flycheck
   :ensure t)
