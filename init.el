@@ -697,7 +697,30 @@
   :ensure t
   :commands lsp-ui-mode
   :config
-  (setq lsp-ui-doc-enable nil)) ;;https://github.com/emacs-lsp/lsp-ui/issues/523
+
+  ;;see https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+  
+  ;; disable doc on mouse hover
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/523
+  (setq lsp-ui-doc-enable nil) 
+  
+  ;; disable headerline
+  (setq lsp-headerline-breadcrumb-enable nil)
+
+  
+  ;;(setq lsp-ui-sideline-enable nil)
+  ;;(setq lsp-ui-sideline-show-code-actions nil) ;; ??
+  (setq lsp-ui-sideline-show-diagnostics nil) ;; hide only (side) errors?
+
+
+  ;;(setq lsp-modeline-code-actions-enable nil)
+  (setq lsp-eldoc-enable-hover nil)
+
+  ;;(setq lsp-modeline-diagnostics-enable nil)
+
+  (setq lsp-signature-auto-activate nil) ;; you can manually request them via `lsp-signature-activate`
+                                         ;; C-c l h s
+  )
 
 (use-package company
   :ensure t
@@ -710,6 +733,9 @@
   :ensure t)
 
 (use-package lsp-treemacs
+  :ensure t)
+
+(use-package projectile
   :ensure t)
 
 ;; (use-package ng2-mode
