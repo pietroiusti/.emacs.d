@@ -678,6 +678,11 @@
   :init
   (setq lsp-keymap-prefix "C-c l")
   :hook ((typescript-mode . lsp-deferred)
+         (html-mode . lsp-deferred)
+         (css-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (web-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
@@ -731,10 +736,11 @@
 
 (use-package company
   :ensure t
+  :hook (lsp-mode . company-mode)
   :config
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0) ;; default is 0.2
-  (define-key company-active-map (kbd "M-/") #'company-complete))
+  )
   ;; (global-company-mode)
 
   ;; (with-eval-after-load 'company
