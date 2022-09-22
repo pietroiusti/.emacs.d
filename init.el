@@ -687,7 +687,9 @@
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
   (require 'lsp-ido)
-  (setq lsp-eldoc-render-all nil))
+  (setq lsp-eldoc-render-all nil)
+  (bind-keys :map lsp-mode-map
+             ("C-<return>" . lsp-find-definition)))
 
 (use-package ido-completing-read+
   :ensure t
@@ -732,13 +734,13 @@
   :config
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0) ;; default is 0.2
-
+  (define-key company-active-map (kbd "M-/") #'company-complete))
   ;; (global-company-mode)
 
   ;; (with-eval-after-load 'company
   ;;   (define-key company-active-map (kbd "M-/") #'company-complete))
 
-  )
+
 
 
 (use-package flycheck

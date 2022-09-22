@@ -29,4 +29,4 @@ directory the file is in."
   (interactive)
   (start-process "code" nil "code" (buffer-file-name)))
 
-(define-key global-map (kbd "C-c ~ c") 'gp/vscode-current-buffer-file)
+(define-key global-map (kbd "C-c ` c") 'gp/vscode-current-buffer-file)
