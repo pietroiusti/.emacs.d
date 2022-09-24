@@ -15,7 +15,10 @@
   (package-install 'use-package))
 (require 'use-package)
 
-(load "/home/gp/.emacs.d/custom-functions.el")
+(let ((user (getenv "USER")))
+  (when (stringp user)
+    (load (concat "/home/" user "/.emacs.d/custom-functions.el"))
+    (load (concat "/home/" user "/.emacs.d/buffer-move.el"))))
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -41,7 +44,6 @@
 (define-key global-map (kbd "C-c w k") 'windmove-up)
 (define-key global-map (kbd "C-c w p") 'windmove-up)
 
-(load "/home/gp/.emacs.d/buffer-move.el")
 (define-key global-map (kbd "C-c w C-b") 'buf-move-left)
 (define-key global-map (kbd "C-c w C-f") 'buf-move-right)
 (define-key global-map (kbd "C-c w C-n") 'buf-move-down)
