@@ -114,7 +114,8 @@
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
   :config
-  (load-theme 'sanityinc-tomorrow-bright t))
+  ;; (load-theme 'sanityinc-tomorrow-bright t)
+  (load-theme 'modus-operandi t))
 
 ;; transparency
 ;; (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
@@ -461,7 +462,7 @@
   (setq evil-motion-state-cursor '("#e80000" box))
   (setq evil-normal-state-cursor '("#e80000" box))
   (setq evil-visual-state-cursor '("#e80000" box))
-  (setq evil-insert-state-cursor '("#e80000" box))
+  (setq evil-insert-state-cursor '("#e80000" bar))
   (setq evil-replace-state-cursor '("#e80000" box))
   (setq evil-operator-state-cursor '("#e80000" hollow)))
 
@@ -672,7 +673,20 @@
 (defun gp/set-key-rate ()
   (interactive)
   (shell-command "xset r rate 200 60"))
+(gp/set-key-rate)
 
+;; (use-package eglot
+;;   :ensure t)
+
+;; (use-package dap-mode
+;;   :ensure t)
+
+(setenv "LSP_USE_PLISTS" "1")
+;; Do not forget to set LSP_USE_PLISTS as true also at compile time:
+;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
+;;
+;; At the moment not using plists breaks renaming (lsp-rename).
 (use-package lsp-mode
   :ensure t
   :init
@@ -686,7 +700,6 @@
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :config
-
   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
@@ -736,7 +749,7 @@
 
 (use-package company
   :ensure t
-  :hook (lsp-mode . company-mode)
+  ;; :hook (lsp-mode . company-mode)
   :config
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0) ;; default is 0.2
@@ -747,13 +760,11 @@
   ;;   (define-key company-active-map (kbd "M-/") #'company-complete))
 
 
-
-
 (use-package flycheck
   :ensure t)
 
-(use-package lsp-treemacs
-  :ensure t)
+;; (use-package lsp-treemacs
+;;   :ensure t)
 
 (use-package projectile
   :ensure t)
