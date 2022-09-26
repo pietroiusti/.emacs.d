@@ -783,7 +783,9 @@
 ;;   :ensure t)
 
 (use-package projectile
-  :ensure t)
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-x p C-b") 'projectile-ibuffer))
 
 ;; (use-package ng2-mode
 ;;   :ensure t)
