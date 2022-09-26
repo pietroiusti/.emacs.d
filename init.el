@@ -119,6 +119,20 @@
   ;; (load-theme 'sanityinc-tomorrow-bright t)
   (load-theme 'modus-operandi t))
 
+(defun gp/day-theme ()
+  (interactive)
+  (disable-theme 'sanityinc-tomorrow-bright)
+  (load-theme 'modus-operandi))
+
+(defun gp/night-theme ()
+  (interactive)
+  (disable-theme 'modus-operandi)
+  (load-theme 'sanityinc-tomorrow-bright))
+
+(defun gp/find-init ()
+  (interactive)
+  (find-file (concat "/home/" (getenv "USER") "/.emacs.d/init.el" )))
+
 ;; transparency
 ;; (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
 ;; (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
