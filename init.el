@@ -473,6 +473,7 @@
   ;; (setq lsp-headerline-breadcrumb-enable nil)
   ;; (setq lsp-eldoc-enable-hover nil)
   ;; (setq lsp-signature-auto-activate nil)
+  (setq lsp-headerline-breadcrumb-icons-enable nil)
 
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
