@@ -101,53 +101,8 @@
 ;;(set-face-attribute 'variable-pitch nil :family "Noto sans")
 ;; old ###################################################################
 
-(setq-default indent-tabs-mode nil)
-(setq js-indent-level 2)
-(setq-default typescript-indent-level 2)
 
-(use-package typescript-mode
-  :ensure t)
 
-;; fancy mode line
-(use-package doom-modeline
-  :ensure t
-  :config (doom-modeline-mode 1))
-
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :config
-  ;; (load-theme 'sanityinc-tomorrow-bright t)
-  (load-theme 'modus-operandi t))
-
-(defun gp/day-theme ()
-  (interactive)
-  (disable-theme 'sanityinc-tomorrow-bright)
-  (load-theme 'modus-operandi))
-
-(defun gp/night-theme ()
-  (interactive)
-  (disable-theme 'modus-operandi)
-  (load-theme 'sanityinc-tomorrow-bright))
-
-(defun gp/find-init ()
-  (interactive)
-  (find-file (concat "/home/" (getenv "USER") "/.emacs.d/init.el" )))
-
-;; transparency
-;; (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
-;; (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
-;; (defun toggle-transparency ()
-;;   (interactive)
-;;   (let ((alpha (frame-parameter nil 'alpha)))
-;;     (set-frame-parameter
-;;      nil 'alpha
-;;      (if (eql (cond ((numberp alpha) alpha)
-;;                     ((numberp (cdr alpha)) (cdr alpha))
-;;                     ;; Also handle undocumented (<active> <inactive>) form.
-;;                     ((numberp (cadr alpha)) (cadr alpha)))
-;;               100)
-;;          '(85 . 85) '(100 . 100)))))
-;; (define-key global-map (kbd "C-c x") 'toggle-transparency)
 
 ;; general editing settings
 (delete-selection-mode 1) ;; inserting text while the mark is active
@@ -189,7 +144,7 @@
           ("i" "Add to inbox" entry
            (file "~/Nextcloud/org/inbox.org")
            "* TODO %?" :prepend t)
-          
+
           ("t" "Add todo" entry
            (file "~/Nextcloud/org/todo.org")
            "* TODO %?" :prepend t)
@@ -245,7 +200,7 @@
   (add-to-list 'org-modules "org-habit")
 
   (require 'org-id)
-  
+
   ;; code block evaluation
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -308,251 +263,29 @@
           (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
           (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
           (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-        
+
         bibtex-completion-pdf-open-function
         (lambda (fpath)
           (call-process "open" nil 0 nil fpath)))
-  
+
   (require 'org-ref-helm)
   (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
         org-ref-insert-cite-function 'org-ref-cite-insert-helm
         org-ref-insert-label-function 'org-ref-insert-label-link
         org-ref-insert-ref-function 'org-ref-insert-ref-link
         org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
-  
+
   (define-key org-mode-map (kbd "M-]") 'org-ref-insert-link))
-
-;; (use-package diminish
-;;   :ensure t)
-
-;; Some lisp to prettify org blocks from https://pank.eu/blog/pretty-babel-src-blocks.html
-;; I'm using this for presentations in vanilla org-mode
-(defvar-local rasmus/org-at-src-begin -1
-  "Variable that holds whether last position was a ")
-
-(defvar rasmus/ob-header-symbol ?☰
-  "Symbol used for babel headers")
-
-(defun rasmus/org-prettify-src--update ()
-  (let ((case-fold-search t)
-        (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
-        found)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward re nil t)
-        (goto-char (match-end 0))
-        (let ((args (org-trim
-                     (buffer-substring-no-properties (point)
-                                                     (line-end-position)))))
-          (when (org-string-nw-p args)
-            (let ((new-cell (cons args rasmus/ob-header-symbol)))
-              (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
-              (cl-pushnew new-cell found :test #'equal)))))
-      (setq prettify-symbols-alist
-            (cl-set-difference prettify-symbols-alist
-                               (cl-set-difference
-                                (cl-remove-if-not
-                                 (lambda (elm)
-                                   (eq (cdr elm) rasmus/ob-header-symbol))
-                                 prettify-symbols-alist)
-                                found :test #'equal)))
-      ;; Clean up old font-lock-keywords.
-      (font-lock-remove-keywords nil prettify-symbols--keywords)
-      (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
-      (font-lock-add-keywords nil prettify-symbols--keywords)
-      (while (re-search-forward re nil t)
-        (font-lock-flush (line-beginning-position) (line-end-position))))))
-
-(defun rasmus/org-prettify-src ()
-  "Hide src options via `prettify-symbols-mode'.
-
-  `prettify-symbols-mode' is used because it has uncollpasing. It's
-  may not be efficient."
-  (let* ((case-fold-search t)
-         (at-src-block (save-excursion
-                         (beginning-of-line)
-                         (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
-    ;; Test if we moved out of a block.
-    (when (or (and rasmus/org-at-src-begin
-                   (not at-src-block))
-              ;; File was just opened.
-              (eq rasmus/org-at-src-begin -1))
-      (rasmus/org-prettify-src--update))
-    ;; Remove composition if at line; doesn't work properly.
-    ;; (when at-src-block
-    ;;   (with-silent-modifications
-    ;;     (remove-text-properties (match-end 0)
-    ;;                             (1+ (line-end-position))
-    ;;                             '(composition))))
-    (setq rasmus/org-at-src-begin at-src-block)))
-
-(defun rasmus/org-prettify-symbols ()
-  (mapc (apply-partially 'add-to-list 'prettify-symbols-alist)
-        (cl-reduce 'append
-                   (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                           `(("#+begin_src" . ?✎) ;; ➤ 🖝 ➟ ➤ ✎
-                             ("#+end_src"   . ?□) ;; ⏹
-                             ("#+header:" . ,rasmus/ob-header-symbol)
-                             ("#+begin_quote" . ?«)
-                             ("#+end_quote" . ?»)))))
-  (turn-on-prettify-symbols-mode)
-  (add-hook 'post-command-hook 'rasmus/org-prettify-src t t))
-
-;; vanilla org-mode presentations setup
-(defun gp/presentation-start ()
-  (interactive)
-  (setq org-hide-emphasis-markers t)
-  (org-mode-restart)
-  (variable-pitch-mode)
-  (olivetti-mode)
-  (rasmus/org-prettify-symbols))
-
-(use-package org-tree-slide
-  :ensure t
-  :config
-  (setq org-tree-slide-slide-in-effect t)
-
-  (setq org-tree-slide-activate-message "Hello!")
-  (setq org-tree-slide-deactivate-message "Bye!")
-  
-  (defun gp/presentation-setup()
-    ;; (variable-pitch-mode)
-    ;; (olivetti-mode)
-    )
-
-  (defun gp/presentation-end()
-    ;; (variable-pitch-mode -1)
-    ;; (olivetti-mode -1)
-    )
-
-  ;; (setq org-tree-slide-cursor-init nil)
-  ;; (setq org-tree-slide-modeline-display 'outside)
-
-  (add-hook 'org-tree-slide-play-hook 'gp/presentation-setup)
-  (add-hook 'org-tree-slide-stop-hook 'gp/presentation-end)
-
-  (define-key global-map (kbd "<f8>") 'org-tree-slide-mode)
-  (define-key org-tree-slide-mode-map (kbd "<next>")
-    'org-tree-slide-move-next-tree)
-  (define-key org-tree-slide-mode-map (kbd "<prior>")
-    'org-tree-slide-move-previous-tree)
-  (define-key org-tree-slide-mode-map (kbd "<f9>")
-    'org-tree-slide-content))
-
-;; org-tree-slide-content
-
-;; TESTING
-;; (use-package org-roam
-;;   :ensure t
-;;   :config
-;;   (setq org-roam-v2-ack t)
-;;   (setq org-roam-directory (file-truename "~/Nextcloud/org-roam-test"))
-;;   (org-roam-db-autosync-mode))
-
-(use-package undo-fu
-  :ensure t)
-
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-disable-insert-state-bindings t)
-  :config
-  (evil-mode 1)
-
-  (setq evil-default-state 'emacs
-        evil-insert-state-modes nil
-        evil-motion-state-modes nil)
-
-  (evil-set-undo-system 'undo-fu)
-
-  ;; solve blinking problem with pdf-tools
-  (evil-set-initial-state 'pdf-view-mode 'emacs)
-  (add-hook 'pdf-view-mode-hook
-            (lambda ()
-              (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
-
-  ;; Change cursor color in different modes
-  ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
-  ;; TODO: change color of cursor when it is in the minibuffer
-  (setq evil-emacs-state-cursor '("#839496" box))
-  (setq evil-motion-state-cursor '("#e80000" box))
-  (setq evil-normal-state-cursor '("#e80000" box))
-  (setq evil-visual-state-cursor '("#e80000" box))
-  (setq evil-insert-state-cursor '("#e80000" bar))
-  (setq evil-replace-state-cursor '("#e80000" box))
-  (setq evil-operator-state-cursor '("#e80000" hollow)))
-
-
-(use-package god-mode
-  :ensure t
-  :config
-  (global-set-key (kbd "C-<escape>") #'god-local-mode))
-
-(use-package magit
-  :ensure t
-  :config
-  (define-key global-map (kbd "C-x g") 'magit-status))
 
 (use-package pdf-tools
   :ensure t
   :config
   (pdf-tools-install))
 
-;; (use-package pdf-tools
-;;   :ensure t
-;;   :pin melpa
-;;   :config
-;;   (pdf-tools-install)
-
-;;   (define-key pdf-view-mode-map (kbd "j") 'pdf-view-next-line-or-next-page)
-;;   (define-key pdf-view-mode-map (kbd "k") 'pdf-view-previous-line-or-previous-page)
-;;   (define-key pdf-view-mode-map (kbd "l") 'image-forward-hscroll)
-;;   (define-key pdf-view-mode-map (kbd "h") 'image-backward-hscroll)
-;;   (define-key pdf-view-mode-map (kbd "K") 'image-kill-buffer))
-
 (use-package olivetti
   :ensure t
   :pin melpa)
 
-;; (use-package auctex
-;;     :ensure t
-;;     :config
-
-;;     ;; from the manual: If you want to make AUCTeX aware of style files and multi-file
-;;     ;; documents right away, insert the following in your '.emacs' file.
-
-;;     (setq TeX-auto-save t)
-;;     (setq Tex-parse-self t)
-;;     (setq-default TeX-master nil))
-
-;; (use-package company
-;;     :ensure t
-;;     :config
-;;     (add-hook 'after-init-hook 'global-company-mode))
-
-;; (use-package ivy
-;;   :ensure t
-;;   :init
-;;   (ivy-mode 1)
-;;   :config
-;;                                         ;(setq ivy-use-virtual-buffers t)
-;;                                         ;(setq ivy-count-format "(%d/%d) ")
-;;                                         ;(setq enable-recursive-minibuffers t)
-  
-;;   ;; (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done) ; why does it bind C-m to ivy-alt-done as well?
-  
-;;   ;; :bind (:map ivy-minibuffer-map
-;;   ;;        ("RET" . ivy-alt-done)) ; why does it bind C-m to ivy-alt-done as well?
-;;   )
-
-;; (use-package ivy-prescient
-;;   :ensure t
-;;   :after (ivy)
-;;   :init
-;;   (ivy-prescient-mode 1))
-
-;; Since emacs 28.1 we have fido-vertical-mode... It seems to work
-;; very well!
 (fido-vertical-mode)
 
 (use-package which-key
@@ -576,7 +309,7 @@
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2))
   (add-hook 'web-mode-hook  'web-mode-init-hook))
- 
+
 (use-package engine-mode
   :ensure t
   :config
@@ -592,7 +325,7 @@
   (defengine cambridgedictionaries
     "https://dictionary.cambridge.org/dictionary/english/%s/"
     :keybinding "c")
-  
+
   (defengine google-translate
     "https://translate.google.com/#en/it/%s/"
     :keybinding "t")
@@ -670,60 +403,17 @@
 (use-package pug-mode
   :ensure t)
 
-;; custom functions to load keycodes
-(defun gp/set-keycodes-filco ()
-  (interactive)
-  (shell-command "setxkbmap -keycodes evdev_custom_filco")
-  (shell-command "xset r rate 200 60"))
-
-(defun gp/set-keycodes-thinkpad_T460 ()
-  (interactive)
-  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_T460")
-  (shell-command "xset r rate 200 60"))
-
-(defun gp/set-keycodes-thinkpad_X200 ()
-  (interactive)
-  (shell-command "setxkbmap -keycodes evdev_custom_thinkpad_X200")
-  (shell-command "xset r rate 200 60"))
-
-(defun gp/set-key-rate ()
-  (interactive)
-  (shell-command "xset r rate 200 60"))
-(gp/set-key-rate)
-
-;; (use-package eglot
-;;   :ensure t)
-
-;; (use-package dap-mode
-;;   :ensure t)
-
-(setenv "LSP_USE_PLISTS" "1")
-;; Do not forget to set LSP_USE_PLISTS as true also at compile time:
-;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
-;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
-;;
-;; At the moment not using plists breaks renaming (lsp-rename).
-(use-package lsp-mode
+(use-package magit
   :ensure t
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook ((typescript-mode . lsp-deferred)
-         (html-mode . lsp-deferred)
-         (css-mode . lsp-deferred)
-         (js2-mode . lsp-deferred)
-         (js-mode . lsp-deferred)
-         (web-mode . lsp-deferred)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands (lsp lsp-deferred)
   :config
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+  (define-key global-map (kbd "C-x g") 'magit-status))
 
-  (require 'lsp-ido)
-  (setq lsp-eldoc-render-all nil)
-  (bind-keys :map lsp-mode-map
-             ("C-<return>" . lsp-find-definition)))
+(use-package typescript-mode
+  :ensure t)
+
+(setq-default typescript-indent-level 2)
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
 
 (use-package ido-completing-read+
   :ensure t
@@ -732,35 +422,10 @@
         lsp-ido-show-symbol-filename nil))
 
 (use-package yasnippet
-  :ensure t)
-
-(use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode
   :config
-
-  ;;see https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
-  
-  ;; disable doc on mouse hover
-  ;; https://github.com/emacs-lsp/lsp-ui/issues/523
-  (setq lsp-ui-doc-enable nil) 
-  
-  ;; disable headerline
-  (setq lsp-headerline-breadcrumb-enable nil)
-
-  
-  ;;(setq lsp-ui-sideline-enable nil)
-  ;;(setq lsp-ui-sideline-show-code-actions nil) ;; ??
-  (setq lsp-ui-sideline-show-diagnostics nil) ;; hide only (side) errors?
-
-
-  ;;(setq lsp-modeline-code-actions-enable nil)
-  (setq lsp-eldoc-enable-hover nil)
-
-  ;;(setq lsp-modeline-diagnostics-enable nil)
-
-  (setq lsp-signature-auto-activate nil) ;; you can manually request them via `lsp-signature-activate`
-                                         ;; C-c l h s
+  (yas-global-mode)
+  ;; (setq yas-snippet-dirs '("~emacs/elpa/yasnippet-snippets-20220713.1234/snippets"))
   )
 
 (use-package company
@@ -779,18 +444,180 @@
 (use-package flycheck
   :ensure t)
 
-;; (use-package lsp-treemacs
-;;   :ensure t)
+(use-package lsp-treemacs
+  :ensure t)
 
 (use-package projectile
   :ensure t
   :config
   (define-key global-map (kbd "C-x p C-b") 'projectile-ibuffer))
 
-;; (use-package ng2-mode
-;;   :ensure t)
+;; Do not forget to set LSP_USE_PLISTS as true at compile time AND in early-init.el:
+;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
+;;
+;; At the moment not using plists breaks renaming (lsp-rename).
+(setq lsp-keymap-prefix "C-c l")
+(use-package lsp-mode
+  :ensure t
+  :config
+  ;;(setenv "LSP_USE_PLISTS" "1")
+  :init
+  :hook ((typescript-mode . lsp-deferred)
+	 (html-mode . lsp-deferred)
+	 (css-mode . lsp-deferred)
+	 (js2-mode . lsp-deferred)
+	 (js-mode . lsp-deferred)
+	 (web-mode . lsp-deferred))
+  :config
+  ;; (setq lsp-headerline-breadcrumb-enable nil)
+  ;; (setq lsp-eldoc-enable-hover nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
+  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))) ;; 1mb)
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :config
+  (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
+
+  ;;(setq lsp-ui-sideline-show-diagnostics nil)
+  (setq lsp-ui-doc-enable nil) 
+  (setq lsp-ui-sideline-enable nil))
+
+(use-package undo-tree
+  :ensure t)
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-disable-insert-state-bindings t)
+  ;; :preface ; ??
+  :config
+  (setq evil-default-state 'emacs
+        evil-insert-state-modes nil
+        evil-motion-state-modes nil)
+
+  ;; Change cursor color in different modes
+  ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+  ;; TODO: change color of cursor when it is in the minibuffer
+
+  ;;(setq evil-default-cursor '("#839496" box))
+
+  (setq evil-normal-state-cursor '("#e80000" box))
+  (setq evil-emacs-state-cursor '("#839496" box))
+  (setq evil-motion-state-cursor '("#e80000" box))
+  (setq evil-visual-state-cursor '("#e80000" box))
+  (setq evil-insert-state-cursor '("#e80000" bar))
+  (setq evil-replace-state-cursor '("#e80000" box))
+  (setq evil-operator-state-cursor '("#e80000" hollow))
+
+  ;; ;; The color of the cursor sometimes gets reset to evil-emacs-state-cursor...
+  ;; ;;
+  ;; ;; trying to debug...
+  ;; ;;
+  ;; ;; I think that the problem is that certain modes/functions creates
+  ;; ;; buffers that start by default in emacs state. This is shown by
+  ;; ;; the following message calls:
+  ;; ;;
+  ;; (add-hook 'evil-emacs-state-entry-hook '(lambda ()
+  ;;                                           (message
+  ;;                                            (concat "evil-emacs-state-entry-hook" " <" (buffer-name) ">"))))
+  ;; (add-hook 'evil-emacs-state-exit-hook '(lambda ()
+  ;;                                          (message
+  ;;                                           (concat "evil-emacs-state-exit-hook" " <" (buffer-name) ">"))))
+  ;; (add-hook 'evil-normal-state-entry-hook '(lambda ()
+  ;;                                            (message
+  ;;                                             (concat "evil-normal-state-entry-hook" " <" (buffer-name) ">"))))
+  ;; (add-hook 'evil-normal-state-exit-hook '(lambda ()
+  ;;                                           (message
+  ;;                                            (concat "evil-normal-state-exit-hook" " <" (buffer-name) ">"))))
+
+  ;; ;; https://emacs.stackexchange.com/questions/33739/is-there-a-mode-hook-when-you-switch-to-a-buffer-in-eshell-mode
+  ;; (add-hook 'buffer-list-update-hook '(lambda ()
+  ;;                                     (message
+  ;;                                      (concat "buffer-list-update-hook" " <" (buffer-name) ">"))))
+
+  ;; (evil-set-initial-state 'fundamental-mode 'emacs)
+  ;; (add-hook 'fundamental-mode-hook '(lambda () (set-cursor-color "#839496")))
+  ;; (evil-set-initial-state 'lisp-interaction-mode 'emacs)
+  ;; (add-hook 'lisp-interaction-mode-hook '(lambda () (set-cursor-color "#839496")))
+  ;; (evil-set-initial-state 'org-mode 'emacs)
+  ;; (add-hook 'org-mode-hook '(lambda () (set-cursor-color "#839496")))
+  ;; (evil-set-initial-state 'magit-mode 'emacs)
+  ;; (add-hook 'magit-mode-hook '(lambda () (set-cursor-color "#839496")))
+  ;; (evil-set-initial-state 'help-mode 'emacs)
+  ;; (add-hook 'help-mode-hook '(lambda () (set-cursor-color "#839496")))
+  ;; (evil-set-initial-state 'Info-mode 'emacs)
+  ;; (add-hook 'Info-mode-hook '(lambda () (set-cursor-color "#839496")))
+
+
+  ;;(evil-set-undo-system 'undo-fu)
+  (evil-set-undo-system 'undo-redo)
+
+  (evil-set-initial-state 'typescript-mode 'normal)
+  ;; (add-hook 'typescript-mode-hook '(lambda () (set-cursor-color "red")))
+  (evil-set-initial-state 'html-mode 'normal)
+  ;; (add-hook 'html-mode-hook '(lambda () (set-cursor-color "red")))
+  (evil-set-initial-state 'css-mode 'normal)
+  ;; (add-hook 'css-mode-hook '(lambda () (set-cursor-color "red")))
+  (evil-set-initial-state 'js-mode 'normal)
+  ;; (add-hook 'js-mode-hook '(lambda () (set-cursor-color "red")))
+  (evil-set-initial-state 'js2-mode 'normal)
+  ;; (add-hook 'js2-mode-hook '(lambda () (set-cursor-color "red")))
+
+  (evil-mode 1)
+
+  (evil-set-initial-state 'pdf-view-mode 'emacs)
+  (add-hook 'pdf-view-mode-hook
+            (lambda ()
+              (set (make-local-variable 'evil-emacs-state-cursor) (list nil)))))
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :config
+  (load-theme 'sanityinc-tomorrow-bright t))
+
+(use-package modus-themes
+  :ensure t)
+
+(use-package blamer
+  :ensure t
+  ;; :bind (("s-i" . blamer-show-commit-info)
+  ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    :height 140
+                    :italic t)))
+  ;; :config
+  ;; (global-blamer-mode 1)
+  )
 
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
 ;; In my .xinitrc I have something like:
 ;; exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(lsp-treemacs yasnippet-snippets which-key web-mode use-package undo-tree undo-fu typescript-mode switch-window restclient rainbow-delimiters pug-mode projectile pdf-tools paredit org-ref olivetti modus-themes magit lsp-mode impatient-mode ido-completing-read+ helm-bibtex flycheck evil engine-mode dired-subtree dired-narrow company color-theme-sanityinc-tomorrow blamer academic-phrases))
+ '(warning-suppress-types '((comp) (comp) (comp))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blamer-face ((t :foreground "#7a88cf" :background nil :height 140 :italic t))))
