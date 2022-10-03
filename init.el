@@ -460,9 +460,6 @@
 (setq lsp-keymap-prefix "C-c l")
 (use-package lsp-mode
   :ensure t
-  :config
-  ;;(setenv "LSP_USE_PLISTS" "1")
-  :init
   :hook ((typescript-mode . lsp-deferred)
 	 (html-mode . lsp-deferred)
 	 (css-mode . lsp-deferred)
@@ -561,15 +558,15 @@
   ;;(evil-set-undo-system 'undo-fu)
   (evil-set-undo-system 'undo-redo)
 
-  (evil-set-initial-state 'typescript-mode 'normal)
+  ;;(evil-set-initial-state 'typescript-mode 'normal)
   ;; (add-hook 'typescript-mode-hook '(lambda () (set-cursor-color "red")))
-  (evil-set-initial-state 'html-mode 'normal)
+  ;;(evil-set-initial-state 'html-mode 'normal)
   ;; (add-hook 'html-mode-hook '(lambda () (set-cursor-color "red")))
-  (evil-set-initial-state 'css-mode 'normal)
+  ;;(evil-set-initial-state 'css-mode 'normal)
   ;; (add-hook 'css-mode-hook '(lambda () (set-cursor-color "red")))
-  (evil-set-initial-state 'js-mode 'normal)
+  ;;(evil-set-initial-state 'js-mode 'normal)
   ;; (add-hook 'js-mode-hook '(lambda () (set-cursor-color "red")))
-  (evil-set-initial-state 'js2-mode 'normal)
+  ;;(evil-set-initial-state 'js2-mode 'normal)
   ;; (add-hook 'js2-mode-hook '(lambda () (set-cursor-color "red")))
 
   (evil-mode 1)
