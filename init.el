@@ -52,15 +52,31 @@
 (define-key global-map (kbd "C-c p") 'previous-buffer)
 (define-key global-map (kbd "C-c n") 'next-buffer)
 
+;; MINIBUFFER COMPLETION
+(setq completions-detailed t)
+
 (setq icomplete-compute-delay 0)
 (setq icomplete-delay-completions-threshold 0)
 (setq icomplete-max-delay-chars 0)
 
-;; keyboard scrolling
-(setq scroll-conservatively 1001)
+;; SCROLLING BEHAVIOR
+(setq scroll-preserve-screen-position t) ;; don't move cursor when scrolling with C-v and the like
+(setq fast-but-imprecise-scrolling t) ;; allow some imprecision when scrolling fast
+;; bind scroll-up-line’ and ‘M-x scroll-down-line’ ???
+;; (the equivalent, respectively, of vi's C-e and C-y)
+
+;; To avoid automatic centering of the point when scrolling
+;; you can set
+(setq scroll-conservatively 101)
+;; or 
+;;(setq scroll-step ...)
+;; or
+;;(setq scroll-up-aggressively ...)
+
+(setq scroll-margin 3)
 
 (tool-bar-mode 0) ;; Don't show tool bar.
-(menu-bar-mode 0) ;; And menu bar.
+;;(menu-bar-mode 0) ;; And menu bar.
 (scroll-bar-mode 0) ;; And scroll bar.
 (fringe-mode 1) ;; shrink fringes to 1 pixel.
 
