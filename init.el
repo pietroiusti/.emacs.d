@@ -52,8 +52,11 @@
 (define-key global-map (kbd "C-c p") 'previous-buffer)
 (define-key global-map (kbd "C-c n") 'next-buffer)
 
+(setq icomplete-compute-delay 0)
+(setq icomplete-delay-completions-threshold 0)
+(setq icomplete-max-delay-chars 0)
+
 ;; keyboard scrolling
-(setq scroll-step 1)
 (setq scroll-conservatively 1001)
 
 (tool-bar-mode 0) ;; Don't show tool bar.
