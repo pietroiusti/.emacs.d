@@ -51,6 +51,9 @@
 
 (define-key global-map (kbd "C-c p") 'previous-buffer)
 (define-key global-map (kbd "C-c n") 'next-buffer)
+(define-key global-map (kbd "<mouse-8>") 'previous-buffer)
+(define-key global-map (kbd "<mouse-9>") 'next-buffer)
+
 
 ;; MINIBUFFER COMPLETION
 (setq completions-detailed t)
