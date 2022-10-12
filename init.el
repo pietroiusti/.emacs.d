@@ -54,6 +54,7 @@
 (define-key global-map (kbd "<mouse-8>") 'previous-buffer)
 (define-key global-map (kbd "<mouse-9>") 'next-buffer)
 
+(define-key global-map (kbd "C-c b") 'bury-buffer)
 
 ;; MINIBUFFER COMPLETION
 (setq completions-detailed t)
@@ -61,6 +62,9 @@
 (setq icomplete-compute-delay 0)
 (setq icomplete-delay-completions-threshold 0)
 (setq icomplete-max-delay-chars 0)
+
+;; TABS
+(global-tab-line-mode)
 
 ;; SCROLLING BEHAVIOR
 (setq scroll-preserve-screen-position t) ;; don't move cursor when scrolling with C-v and the like
