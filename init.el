@@ -57,9 +57,10 @@
 (define-key global-map (kbd "C-c b") 'bury-buffer)
 
 ;; DISPLAY BUFFER BEHAVIOR
-(setq display-buffer-base-action
-      '((display-buffer-same-window)))
-;; TO READ: Elisp, The Zen of Buffer Display.
+(customize-set-variable
+ 'display-buffer-base-action
+ '((display-buffer-reuse-window display-buffer-same-window)))
+
 (winner-mode)
 
 ;; MINIBUFFER COMPLETION
