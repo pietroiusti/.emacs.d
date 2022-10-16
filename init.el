@@ -101,6 +101,19 @@
 
 ;; font
 ;;
+
+;; tests
+;;
+;; (add-to-list 'default-frame-alist
+;;              '(font . "JetBrains Mono-10"))
+
+;; (set-frame-font 
+;;  (concat
+;;   (car (remove nil (mapcar (lambda (font) (car (member font (font-family-list))))
+;;                            '("JetBrains Mono" "Fira Code" "Menlo" ))))
+;;   "-10"))
+;;(setq-default line-spacing 5)
+
 ;; home
 (add-to-list 'default-frame-alist
                       '(font . "Inconsolata-11"))
@@ -443,17 +456,24 @@
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
 
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'typescript-mode-hook 'company-mode)
+  (add-hook 'js-mode-hook 'company-mode)
+  (add-hook 'js2-mode-hook 'company-mode)
+  (add-hook 'html-mode-hook 'company-mode)
+  (add-hook 'web-mode-hook 'company-mode)
+  (add-hook 'css-mode-hook 'company-mode))
 
 (setq-default typescript-indent-level 2)
 (setq-default indent-tabs-mode nil)
 (setq js-indent-level 2)
 
-(use-package ido-completing-read+
-  :ensure t
-  :config
-  (setq lsp-ido-show-symbol-kind nil
-        lsp-ido-show-symbol-filename nil))
+;; (use-package ido-completing-read+
+;;   :ensure t
+;;   :config
+;;   (setq lsp-ido-show-symbol-kind nil
+;;         lsp-ido-show-symbol-filename nil))
 
 (use-package yasnippet
   :ensure t
@@ -475,11 +495,16 @@
   ;;   (define-key company-active-map (kbd "M-/") #'company-complete))
 
 
-(use-package flycheck
-  :ensure t)
+;; (use-package flycheck
+;;   :ensure t)
 
-(use-package lsp-treemacs
-  :ensure t)
+;; (use-package lsp-treemacs
+;;   :ensure t)
+
+(use-package treemacs
+  :ensure t
+  :config
+  (setq treemacs-no-png-images t))
 
 (use-package projectile
   :ensure t
@@ -491,36 +516,86 @@
 ;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
 ;;
 ;; At the moment not using plists breaks renaming (lsp-rename).
+;; (setq lsp-keymap-prefix "C-c l")
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :hook ((typescript-mode . lsp-deferred)
+;; 	 (html-mode . lsp-deferred)
+;; 	 (css-mode . lsp-deferred)
+;; 	 (js2-mode . lsp-deferred)
+;; 	 (js-mode . lsp-deferred)
+;; 	 (web-mode . lsp-deferred))
+;;   :config
+;;   ;; (setq lsp-headerline-breadcrumb-enable nil)
+;;   ;; (setq lsp-eldoc-enable-hover nil)
+;;   ;; (setq lsp-signature-auto-activate nil)
+;;   (setq lsp-headerline-breadcrumb-icons-enable nil)
+
+;;   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+;;   (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
+;;   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+;;   (setq gc-cons-threshold 100000000)
+;;   (setq read-process-output-max (* 1024 1024))) ;; 1mb)
+
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode
+;;   :config
+;;   (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
+
+;;   ;;(setq lsp-ui-sideline-show-diagnostics nil)
+;;   (setq lsp-ui-doc-enable nil) 
+;;   (setq lsp-ui-sideline-enable nil))
+
 (setq lsp-keymap-prefix "C-c l")
-(use-package lsp-mode
+()
+
+(use-package eglot
   :ensure t
-  :hook ((typescript-mode . lsp-deferred)
-	 (html-mode . lsp-deferred)
-	 (css-mode . lsp-deferred)
-	 (js2-mode . lsp-deferred)
-	 (js-mode . lsp-deferred)
-	 (web-mode . lsp-deferred))
   :config
-  ;; (setq lsp-headerline-breadcrumb-enable nil)
-  ;; (setq lsp-eldoc-enable-hover nil)
-  ;; (setq lsp-signature-auto-activate nil)
-  (setq lsp-headerline-breadcrumb-icons-enable nil)
+  (add-hook 'typescript-mode-hook 'eglot-ensure)
+  ;;(add-hook 'js2-mode-hook 'eglot-ensure)
+  ;;(add-hook 'js-mode-hook 'eglot-ensure)
+  ;;(add-hook 'html-mode-hook 'eglot-ensure)
+  (add-hook 'css-mode-hook 'eglot-ensure)
+  )
 
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))) ;; 1mb)
+(add-to-list 'eglot-server-programs
+             '(html-mode "node"
+                         "/usr/lib/node_modules/@angular/language-server"
+                         "--ngProbeLocations"
+                         "/usr/lib/node_modules"
+                         "--tsProbeLocations"
+                         "/usr/lib/node_modules"
+                         "--stdio"))
 
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :config
-  (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
+;; TESTS
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :hook ((typescript-mode . lsp)
+;; 	 (html-mode . lsp)
+;; 	 (css-mode . lsp)
+;; 	 (js2-mode . lsp)
+;; 	 (js-mode . lsp)
+;; 	 (web-mode . lsp))
+;;   :config
+;;   (setq lsp-headerline-breadcrumb-enable nil)
 
-  ;;(setq lsp-ui-sideline-show-diagnostics nil)
-  (setq lsp-ui-doc-enable nil) 
-  (setq lsp-ui-sideline-enable nil))
+;;   ;; (setq lsp-eldoc-enable-hover nil)
+;;   ;; (setq lsp-signature-auto-activate nil)
+;;   ;;(setq lsp-headerline-breadcrumb-icons-enable nil)
+
+;;   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+
+;;   ;;(define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
+;;   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+;;   (setq gc-cons-threshold 100000000)
+;;   (setq read-process-output-max (* 1024 1024))) ;; 1mb)
+
+(use-package tree-sitter
+  :ensure t)
+(use-package tree-sitter-langs
+  :ensure t)
 
 (use-package undo-tree
   :ensure t)
@@ -618,22 +693,22 @@
 (use-package modus-themes
   :ensure t)
 
-(use-package blamer
-  :ensure t
-  ;; :bind (("s-i" . blamer-show-commit-info)
-  ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
-  :defer 20
-  :custom
-  (blamer-idle-time 0.3)
-  (blamer-min-offset 70)
-  :custom-face
-  (blamer-face ((t :foreground "#7a88cf"
-                    :background nil
-                    :height 140
-                    :italic t)))
-  ;; :config
-  ;; (global-blamer-mode 1)
-  )
+;; (use-package blamer
+;;   :ensure t
+;;   ;; :bind (("s-i" . blamer-show-commit-info)
+;;   ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
+;;   :defer 20
+;;   :custom
+;;   (blamer-idle-time 0.3)
+;;   (blamer-min-offset 70)
+;;   :custom-face
+;;   (blamer-face ((t :foreground "#7a88cf"
+;;                     :background nil
+;;                     :height 140
+;;                     :italic t)))
+;;   ;; :config
+;;   ;; (global-blamer-mode 1)
+;;   )
 
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
