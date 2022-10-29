@@ -70,24 +70,14 @@
 (setq icomplete-delay-completions-threshold 0)
 (setq icomplete-max-delay-chars 0)
 
-;; TABS
+;; window TABS
 (global-tab-line-mode)
 
 ;; SCROLLING BEHAVIOR
-;;(setq scroll-preserve-screen-position t) ;; don't move cursor when scrolling with C-v and the like
-;;(setq fast-but-imprecise-scrolling t) ;; allow some imprecision when scrolling fast
-;; bind scroll-up-line’ and ‘M-x scroll-down-line’ ???
-;; (the equivalent, respectively, of vi's C-e and C-y)
-
-;; To avoid automatic centering of the point when scrolling
-;; you can set
-;; (setq scroll-conservatively 101)
-;; or 
-;;(setq scroll-step ...)
-;; or
-;;(setq scroll-up-aggressively ...)
-
-;;(setq scroll-margin 3)
+(customize-set-variable 'scroll-conservatively 101)
+(customize-set-variable 'scroll-preserve-screen-position t) ;; don't move cursor when scrolling with C-v and the like
+(customize-set-variable 'fast-but-imprecise-scrolling t) ;; allow some imprecision when scrolling fast
+;; bind scroll-up-line’ and ‘M-x scroll-down-line’? (the equivalent, respectively, of vi's C-e and C-y)
 
 (tool-bar-mode 0) ;; Don't show tool bar.
 ;;(menu-bar-mode 0) ;; And menu bar.
