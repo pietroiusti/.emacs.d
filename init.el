@@ -234,6 +234,7 @@
 
   (require 'org-habit)
   (add-to-list 'org-modules "org-habit")
+  (customize-set-variable 'org-habit-show-all-today t)
 
   (require 'org-id)
 
