@@ -233,7 +233,7 @@
   (require 'ox-texinfo)
 
   (require 'org-habit)
-  (add-to-list 'org-modules "org-habit")
+  (add-to-list 'org-modules "ol-habit")
   (customize-set-variable 'org-habit-show-all-today t)
 
   (require 'org-id)
