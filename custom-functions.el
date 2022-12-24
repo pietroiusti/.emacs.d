@@ -31,7 +31,7 @@ directory the file is in."
 
 (define-key global-map (kbd "C-c ` c") 'gp/vscode-current-buffer-file)
 
-(defun gp/vscode-current-buffer-file-at-point ()
+(defun gp/vscode-current-buffer-file-at-point1 ()
   (interactive)
   (start-process-shell-command "code"
                                nil
@@ -41,6 +41,17 @@ directory the file is in."
                                        (number-to-string (1+ (current-line))) ;; +1 who knows why
                                        ":"
                                        (number-to-string (current-column)))))
+
+(defun gp/vscode-current-buffer-file-at-point ()
+  (interactive)
+  (start-process-shell-command "code"
+                               nil
+                               (concat "code --goto "
+                                       (buffer-file-name)
+                                       ":"
+                                       (int-to-string (line-number-at-pos))
+                                       ":"
+                                       (int-to-string (1+ (current-column))))))
 
 (define-key global-map (kbd "C-<escape>") 'gp/vscode-current-buffer-file-at-point)
 

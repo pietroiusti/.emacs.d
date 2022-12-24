@@ -428,7 +428,7 @@
 ;;             ))
 
 (setq-default c-default-style "linux"
-              c-basic-offset 4)
+              c-basic-offset 2)
 
 ;; (use-package js2-mode
 ;;   :ensure t
@@ -448,23 +448,17 @@
 
 (use-package typescript-mode
   :ensure t
-  :config
-  (add-hook 'typescript-mode-hook 'company-mode)
-  (add-hook 'js-mode-hook 'company-mode)
-  (add-hook 'js2-mode-hook 'company-mode)
-  (add-hook 'html-mode-hook 'company-mode)
-  (add-hook 'web-mode-hook 'company-mode)
-  (add-hook 'css-mode-hook 'company-mode))
+  :config)
 
 (setq-default typescript-indent-level 2)
 (setq-default indent-tabs-mode nil)
 (setq js-indent-level 2)
 
-;; (use-package ido-completing-read+
-;;   :ensure t
-;;   :config
-;;   (setq lsp-ido-show-symbol-kind nil
-;;         lsp-ido-show-symbol-filename nil))
+(use-package ido-completing-read+
+  :ensure t
+  :config
+  (setq lsp-ido-show-symbol-kind nil
+        lsp-ido-show-symbol-filename nil))
 
 (use-package yasnippet
   :ensure t
@@ -479,7 +473,12 @@
   :config
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0) ;; default is 0.2
-  )
+  (add-hook 'typescript-mode-hook 'company-mode)
+  (add-hook 'js-mode-hook 'company-mode)
+  (add-hook 'js2-mode-hook 'company-mode)
+  (add-hook 'html-mode-hook 'company-mode)
+  (add-hook 'web-mode-hook 'company-mode)
+  (add-hook 'css-mode-hook 'company-mode))
   ;; (global-company-mode)
 
   ;; (with-eval-after-load 'company
@@ -489,8 +488,8 @@
 ;; (use-package flycheck
 ;;   :ensure t)
 
-;; (use-package lsp-treemacs
-;;   :ensure t)
+(use-package lsp-treemacs
+  :ensure t)
 
 (use-package treemacs
   :ensure t
@@ -506,59 +505,77 @@
 ;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 ;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
 ;;
-;; At the moment not using plists breaks renaming (lsp-rename).
-;; (setq lsp-keymap-prefix "C-c l")
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :hook ((typescript-mode . lsp-deferred)
-;; 	 (html-mode . lsp-deferred)
-;; 	 (css-mode . lsp-deferred)
-;; 	 (js2-mode . lsp-deferred)
-;; 	 (js-mode . lsp-deferred)
-;; 	 (web-mode . lsp-deferred))
-;;   :config
-;;   ;; (setq lsp-headerline-breadcrumb-enable nil)
-;;   ;; (setq lsp-eldoc-enable-hover nil)
-;;   ;; (setq lsp-signature-auto-activate nil)
-;;   (setq lsp-headerline-breadcrumb-icons-enable nil)
+;; At the moment not using plists breaks renaming? (lsp-rename).
+(setq lsp-keymap-prefix "C-c l")
+(use-package lsp-mode
+  :ensure t
+  :hook ((c-mode . lsp-deferred)
+         (typescript-mode . lsp-deferred)
+	 (html-mode . lsp-deferred)
+	 (css-mode . lsp-deferred)
+	 (js2-mode . lsp-deferred)
+	 (js-mode . lsp-deferred)
+	 (web-mode . lsp-deferred))
+  :config
+  ;; (setq lsp-headerline-breadcrumb-enable nil)
+  ;; (setq lsp-eldoc-enable-hover nil)
+  ;; (setq lsp-signature-auto-activate nil)
+  (setq lsp-headerline-breadcrumb-icons-enable nil)
 
-;;   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-;;   (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
-;;   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-;;   (setq gc-cons-threshold 100000000)
-;;   (setq read-process-output-max (* 1024 1024))) ;; 1mb)
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
+  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))) ;; 1mb)
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :config
+  (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
 
-;;   ;;(setq lsp-ui-sideline-show-diagnostics nil)
-;;   (setq lsp-ui-doc-enable nil) 
-;;   (setq lsp-ui-sideline-enable nil))
+  ;;(setq lsp-ui-sideline-show-diagnostics nil)
+  (setq lsp-ui-doc-enable nil) 
+  (setq lsp-ui-sideline-enable nil))
 
 (setq lsp-keymap-prefix "C-c l")
-()
+
+(setq lsp-clients-angular-language-server-command
+      '("node"
+        "/usr/lib/node_modules/@angular/language-server"
+        "--ngProbeLocations"
+        "/usr/lib/node_modules"
+        "--tsProbeLocations"
+        "/usr/lib/node_modules"
+        "--stdio"))
 
 (use-package eglot
   :ensure t
   :config
-  (add-hook 'typescript-mode-hook 'eglot-ensure)
+  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
   ;;(add-hook 'js2-mode-hook 'eglot-ensure)
   ;;(add-hook 'js-mode-hook 'eglot-ensure)
   ;;(add-hook 'html-mode-hook 'eglot-ensure)
-  (add-hook 'css-mode-hook 'eglot-ensure)
+  ;; (add-hook 'css-mode-hook 'eglot-ensure)
   )
 
-(add-to-list 'eglot-server-programs
-             '(html-mode "node"
-                         "/usr/lib/node_modules/@angular/language-server"
-                         "--ngProbeLocations"
-                         "/usr/lib/node_modules"
-                         "--tsProbeLocations"
-                         "/usr/lib/node_modules"
-                         "--stdio"))
+;; (add-to-list 'eglot-server-programs
+;;              '(web-mode "node"
+;;                         "/usr/lib/node_modules/@angular/language-server"
+;;                         "--ngProbeLocations"
+;;                         "/usr/lib/node_modules"
+;;                         "--tsProbeLocations"
+;;                         "/usr/lib/node_modules"
+;;                         "--stdio"))
+
+;; (add-to-list 'eglot-server-programs
+;;              '(html-mode "node"
+;;                          "/usr/lib/node_modules/@angular/language-server"
+;;                          "--ngProbeLocations"
+;;                          "/usr/lib/node_modules"
+;;                          "--tsProbeLocations"
+;;                          "/usr/lib/node_modules"
+;;                          "--stdio"))
 
 ;; TESTS
 ;; (use-package lsp-mode
@@ -705,17 +722,3 @@
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
 ;; In my .xinitrc I have something like:
 ;; exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(lsp-treemacs yasnippet-snippets which-key web-mode use-package undo-tree undo-fu typescript-mode switch-window restclient rainbow-delimiters pug-mode projectile pdf-tools paredit org-ref olivetti modus-themes magit lsp-mode impatient-mode ido-completing-read+ helm-bibtex flycheck evil engine-mode dired-subtree dired-narrow company color-theme-sanityinc-tomorrow blamer academic-phrases))
- '(warning-suppress-types '((comp) (comp) (comp))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blamer-face ((t :foreground "#7a88cf" :background nil :height 140 :italic t))))
