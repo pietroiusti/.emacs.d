@@ -444,6 +444,7 @@
   :ensure t
   :config
   (define-key global-map (kbd "C-x g") 'magit-status)
+  (setq magit-diff-refine-hunk 'all)
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
 
 (use-package typescript-mode
