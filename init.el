@@ -502,11 +502,6 @@
   :config
   (setq treemacs-no-png-images t))
 
-(use-package projectile
-  :ensure t
-  :config
-  (define-key global-map (kbd "C-x p C-b") 'projectile-ibuffer))
-
 ;; Do not forget to set LSP_USE_PLISTS as true at compile time AND in early-init.el:
 ;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 ;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
