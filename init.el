@@ -321,7 +321,8 @@
 (use-package pdf-tools
   :ensure t
   :config
-  (pdf-tools-install))
+  (pdf-tools-install)
+  (setq pdf-view-use-scaling nil))
 
 (use-package olivetti
   :ensure t
