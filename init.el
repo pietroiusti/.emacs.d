@@ -89,6 +89,9 @@
 ;; (setq visible-bell 1) ;; get visual indication
 
 (global-hl-line-mode t) ;; Current line highlighting
+(add-hook 'vterm-mode-hook (lambda ()
+                                    (setq-local global-hl-line-mode
+                                                nil)))
 
 ;; font
 ;;
