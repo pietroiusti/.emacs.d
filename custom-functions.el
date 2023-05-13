@@ -90,7 +90,7 @@ directory the file is in."
   (shell-command "xset r rate 200 60"))
 (gp/set-key-rate)
 
-(defun gp/go-to-line ()
+(defun gp/goto-line ()
   (interactive)
   (let ((initial-state (and (boundp 'display-line-numbers-mode)
                             display-line-numbers-mode)))
@@ -100,4 +100,4 @@ directory the file is in."
       (when (not initial-state)
         (display-line-numbers-mode -1)))))
 
-(define-key global-map (kbd "M-g M-g") 'gp/go-to-line)
+(define-key global-map (kbd "M-g M-g") 'gp/goto-line)
