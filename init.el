@@ -29,6 +29,9 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
 (setq disabled-command-function nil) ;; enable all commands
 
+;; (setq-default show-trailing-whitespace t)
+;; (setq-default indicate-empty-lines t)
+
 (define-key global-map (kbd "C-x C-b") 'ibuffer)
 (define-key global-map (kbd "C-c s") 'shell)
 (define-key global-map (kbd "C-c k") 'kill-current-buffer)
@@ -57,15 +60,18 @@
 (define-key global-map (kbd "C-c b") 'bury-buffer)
 
 ;; DISPLAY BUFFER BEHAVIOR
-(customize-set-variable
- 'display-buffer-base-action
- '((display-buffer-reuse-window display-buffer-same-window)))
+;; (customize-set-variable
+;;  'display-buffer-base-action
+;;  '((display-buffer-reuse-window display-buffer-same-window)))
 
 (winner-mode)
+(define-key global-map (kbd "C-c w <backspace>") 'winner-undo)
+(define-key global-map (kbd "C-c w SPC") 'winner-redo)
 
 ;; MINIBUFFER COMPLETION
 (setq completions-detailed t)
 
+(fido-vertical-mode)
 (setq icomplete-compute-delay 0)
 (setq icomplete-delay-completions-threshold 0)
 (setq icomplete-max-delay-chars 0)
@@ -79,70 +85,26 @@
 (customize-set-variable 'fast-but-imprecise-scrolling t) ;; allow some imprecision when scrolling fast
 ;; bind scroll-up-line’ and ‘M-x scroll-down-line’? (the equivalent, respectively, of vi's C-e and C-y)
 (setq isearch-allow-scroll 'unlimited)
+(setq isearch-lazy-count t)
 
-(tool-bar-mode 0) ;; Don't show tool bar.
-;;(menu-bar-mode 0) ;; And menu bar.
-(scroll-bar-mode 0) ;; And scroll bar.
-(fringe-mode 1) ;; shrink fringes to 1 pixel.
+;; (tool-bar-mode 0) ;; Don't show tool bar.
+;; (menu-bar-mode 0) ;; And menu bar.
+;; (scroll-bar-mode 0) ;; And scroll bar.
+;; (fringe-mode 1) ;; shrink fringes to 1 pixel.
 
 (setq ring-bell-function 'ignore)
 ;; (setq visible-bell 1) ;; get visual indication
 
-(global-hl-line-mode t) ;; Current line highlighting
-(add-hook 'vterm-mode-hook (lambda ()
-                                    (setq-local global-hl-line-mode
-                                                nil)))
-
 ;; font
 ;;
-
-;; tests
-;;
-;; (add-to-list 'default-frame-alist
-;;              '(font . "JetBrains Mono-10"))
-
-;; (set-frame-font 
-;;  (concat
-;;   (car (remove nil (mapcar (lambda (font) (car (member font (font-family-list))))
-;;                            '("JetBrains Mono" "Fira Code" "Menlo" ))))
-;;   "-10"))
-;;(setq-default line-spacing 5)
 
 ;; home
 (add-to-list 'default-frame-alist
                       '(font . "Inconsolata-11"))
 (set-face-attribute 'variable-pitch nil :family "Noto sans")
-;;
-;; work:
-;; (add-to-list 'default-frame-alist
-;;              '(font . "Inconsolata-10"))
-
-;;(set-face-attribute 'default nil :family "Inconsolata")
-;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
-(set-face-attribute 'variable-pitch nil :family "Noto sans")
-
 
 (setq frame-resize-pixelwise t) ;; Remove black border or side gap
                                 ;; in certain window managers
-
-;; old ###################################################################
-;;(set-frame-font "Inconsolata-10")
-;;(set-face-attribute 'default t :font "Inconsolata-10")
-;;(set-face-attribute 'default nil :family "Inconsolata" :height 120)
-
-;;(set-frame-font "DejaVu Sans Mono-9")
-;;(set-face-attribute 'default t :font "DejaVu Sans Mono-9")
-;;(set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono")
-
-;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
-;;(set-frame-font "Inconsolata-10")
-
-;;(set-face-attribute 'fixed-pitch nil :family "Inconsolata")
-;;(set-face-attribute 'variable-pitch nil :family "Noto sans")
-;; old ###################################################################
-
-
-
 
 ;; general editing settings
 (delete-selection-mode 1) ;; inserting text while the mark is active
@@ -328,8 +290,6 @@
   :ensure t
   :pin melpa)
 
-(fido-vertical-mode)
-
 (use-package which-key
   :ensure t
   :config
@@ -378,18 +338,18 @@
 
 ;; dired
 (add-hook 'dired-mode-hook 'dired-hide-details-mode)
-(use-package dired-narrow
-  :ensure t
-  :config
-  (bind-keys :map dired-mode-map
-             ("M-n" . dired-narrow)))
-(use-package dired-subtree
-  :ensure t
-  :config
-  (bind-keys :map dired-mode-map
-             ("TAB" . dired-subtree-insert)
-             ("<S-iso-lefttab>" . dired-subtree-remove)
-             ("DEL" . dired-subtree-remove)))
+;; (use-package dired-narrow
+;;   :ensure t
+;;   :config
+;;   (bind-keys :map dired-mode-map
+;;              ("M-n" . dired-narrow)))
+;; (use-package dired-subtree
+;;   :ensure t
+;;   :config
+;;   (bind-keys :map dired-mode-map
+;;              ("TAB" . dired-subtree-insert)
+;;              ("<S-iso-lefttab>" . dired-subtree-remove)
+;;              ("DEL" . dired-subtree-remove)))
 
 (use-package avy
   :ensure t
@@ -397,19 +357,19 @@
   (define-key global-map (kbd "C-;") 'avy-goto-line)
   (define-key global-map (kbd "C-:") 'avy-goto-char))
 
-(use-package impatient-mode
-  :ensure t)
+;; (use-package impatient-mode
+;;   :ensure t)
 
 (use-package restclient
   :ensure t)
 
-(use-package switch-window
-  :ensure t
-  :config
-  (define-key global-map (kbd "C-c o") 'switch-window))
+;; (use-package switch-window
+;;   :ensure t
+;;   :config
+;;   (define-key global-map (kbd "C-c o") 'switch-window))
 
-(use-package academic-phrases
-  :ensure t)
+;; (use-package academic-phrases
+;;   :ensure t)
 
 ;; languages config stuff
 
@@ -442,49 +402,55 @@
 ;;   ;; js2-mode as a defalut for js files
 ;;   (add-to-list 'auto-mode-alist `(,(rx ".js" string-end) . js2-mode)))
 
-(use-package pug-mode
-  :ensure t)
+;; (use-package pug-mode
+;;   :ensure t)
 
 (use-package magit
   :ensure t
   :config
   (define-key global-map (kbd "C-x g") 'magit-status)
   (setq magit-diff-refine-hunk 'all)
-  (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
-
-(use-package typescript-mode
-  :ensure t
-  :config)
-
-(setq-default typescript-indent-level 2)
-(setq-default indent-tabs-mode nil)
-(setq js-indent-level 2)
-
-(use-package ido-completing-read+
-  :ensure t
-  :config
-  (setq lsp-ido-show-symbol-kind nil
-        lsp-ido-show-symbol-filename nil))
-
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode)
-  ;; (setq yas-snippet-dirs '("~emacs/elpa/yasnippet-snippets-20220713.1234/snippets"))
+  ;; (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
   )
+
+;; (use-package typescript-mode
+;;   :ensure t
+;;   :config)
+
+;; (setq-default typescript-indent-level 2)
+;; (setq-default indent-tabs-mode nil)
+;; (setq js-indent-level 2)
+
+;; (use-package ido-completing-read+
+;;   :ensure t
+;;   :config
+;;   (setq lsp-ido-show-symbol-kind nil
+;;         lsp-ido-show-symbol-filename nil))
+
+;; (use-package yasnippet
+;;   :ensure t
+;;   :config
+;;   (yas-global-mode)
+;;   ;; (setq yas-snippet-dirs '("~emacs/elpa/yasnippet-snippets-20220713.1234/snippets"))
+;;   )
 
 (use-package company
   :ensure t
-  ;; :hook (lsp-mode . company-mode)
+  :init
+  (global-company-mode)
+  :bind (:map company-active-map
+	      ("C-n" . company-select-next-or-abort)
+	      ("C-p" . company-select-previous-or-abort))
   :config
   (setq company-minimum-prefix-length 1
-        company-idle-delay 0.0) ;; default is 0.2
-  (add-hook 'typescript-mode-hook 'company-mode)
-  (add-hook 'js-mode-hook 'company-mode)
-  (add-hook 'js2-mode-hook 'company-mode)
-  (add-hook 'html-mode-hook 'company-mode)
-  (add-hook 'web-mode-hook 'company-mode)
-  (add-hook 'css-mode-hook 'company-mode))
+        company-idle-delay 0.0))
+ ;; default is 0.2
+  ;; (add-hook 'typescript-mode-hook 'company-mode)
+  ;; (add-hook 'js-mode-hook 'company-mode)
+  ;; (add-hook 'js2-mode-hook 'company-mode)
+  ;; (add-hook 'html-mode-hook 'company-mode)
+  ;; (add-hook 'web-mode-hook 'company-mode)
+  ;; (add-hook 'css-mode-hook 'company-mode))
   ;; (global-company-mode)
 
   ;; (with-eval-after-load 'company
@@ -494,117 +460,13 @@
 ;; (use-package flycheck
 ;;   :ensure t)
 
-(use-package lsp-treemacs
-  :ensure t)
+;; (use-package lsp-treemacs
+;;   :ensure t)
 
-(use-package treemacs
-  :ensure t
-  :config
-  (setq treemacs-no-png-images t))
-
-;; Do not forget to set LSP_USE_PLISTS as true at compile time AND in early-init.el:
-;; - https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
-;; - https://discourse.doomemacs.org/t/using-lsp-use-plists-with-rust-analyzer-stops-updating-diagnostics-on-save/2832
-;;
-;; At the moment not using plists breaks renaming? (lsp-rename).
-(setq lsp-keymap-prefix "C-c l")
-(use-package lsp-mode
-  :ensure t
-  :hook ((c-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-	 (html-mode . lsp-deferred)
-	 (css-mode . lsp-deferred)
-	 (js2-mode . lsp-deferred)
-	 (js-mode . lsp-deferred)
-	 (web-mode . lsp-deferred))
-  :config
-  ;; (setq lsp-headerline-breadcrumb-enable nil)
-  ;; (setq lsp-eldoc-enable-hover nil)
-  ;; (setq lsp-signature-auto-activate nil)
-  (setq lsp-headerline-breadcrumb-icons-enable nil)
-
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))) ;; 1mb)
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :config
-  (define-key lsp-ui-mode-map (kbd "C-c l d") 'lsp-ui-doc-toggle)
-
-  ;;(setq lsp-ui-sideline-show-diagnostics nil)
-  (setq lsp-ui-doc-enable nil) 
-  (setq lsp-ui-sideline-enable nil))
-
-(setq lsp-keymap-prefix "C-c l")
-
-(setq lsp-clients-angular-language-server-command
-      '("node"
-        "/usr/lib/node_modules/@angular/language-server"
-        "--ngProbeLocations"
-        "/usr/lib/node_modules"
-        "--tsProbeLocations"
-        "/usr/lib/node_modules"
-        "--stdio"))
-
-(use-package eglot
-  :ensure t
-  :config
-  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
-  ;;(add-hook 'js2-mode-hook 'eglot-ensure)
-  ;;(add-hook 'js-mode-hook 'eglot-ensure)
-  ;;(add-hook 'html-mode-hook 'eglot-ensure)
-  ;; (add-hook 'css-mode-hook 'eglot-ensure)
-  )
-
-;; (add-to-list 'eglot-server-programs
-;;              '(web-mode "node"
-;;                         "/usr/lib/node_modules/@angular/language-server"
-;;                         "--ngProbeLocations"
-;;                         "/usr/lib/node_modules"
-;;                         "--tsProbeLocations"
-;;                         "/usr/lib/node_modules"
-;;                         "--stdio"))
-
-;; (add-to-list 'eglot-server-programs
-;;              '(html-mode "node"
-;;                          "/usr/lib/node_modules/@angular/language-server"
-;;                          "--ngProbeLocations"
-;;                          "/usr/lib/node_modules"
-;;                          "--tsProbeLocations"
-;;                          "/usr/lib/node_modules"
-;;                          "--stdio"))
-
-;; TESTS
-;; (use-package lsp-mode
+;; (use-package treemacs
 ;;   :ensure t
-;;   :hook ((typescript-mode . lsp)
-;; 	 (html-mode . lsp)
-;; 	 (css-mode . lsp)
-;; 	 (js2-mode . lsp)
-;; 	 (js-mode . lsp)
-;; 	 (web-mode . lsp))
 ;;   :config
-;;   (setq lsp-headerline-breadcrumb-enable nil)
-
-;;   ;; (setq lsp-eldoc-enable-hover nil)
-;;   ;; (setq lsp-signature-auto-activate nil)
-;;   ;;(setq lsp-headerline-breadcrumb-icons-enable nil)
-
-;;   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
-;;   ;;(define-key lsp-mode-map (kbd "C-<return>") 'lsp-find-definition)
-;;   ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-;;   (setq gc-cons-threshold 100000000)
-;;   (setq read-process-output-max (* 1024 1024))) ;; 1mb)
-
-(use-package tree-sitter
-  :ensure t)
-(use-package tree-sitter-langs
-  :ensure t)
+;;   (setq treemacs-no-png-images t))
 
 (use-package undo-tree
   :ensure t)
@@ -695,31 +557,58 @@
               (set (make-local-variable 'evil-emacs-state-cursor) (list nil)))))
 
 (use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :config
-  (load-theme 'sanityinc-tomorrow-bright t))
+  :ensure t)
 
 (use-package modus-themes
   :ensure t)
-
-;; (use-package blamer
-;;   :ensure t
-;;   ;; :bind (("s-i" . blamer-show-commit-info)
-;;   ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
-;;   :defer 20
-;;   :custom
-;;   (blamer-idle-time 0.3)
-;;   (blamer-min-offset 70)
-;;   :custom-face
-;;   (blamer-face ((t :foreground "#7a88cf"
-;;                     :background nil
-;;                     :height 140
-;;                     :italic t)))
-;;   ;; :config
-;;   ;; (global-blamer-mode 1)
-;;   )
 
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
 ;; In my .xinitrc I have something like:
 ;; exec dbus-launch --exit-with-session emacs -l ~/.emacs.d/exwm.el
+
+
+
+
+;; NEW STUFF ##################################################
+;;
+;; lsp
+(setq eglot-events-buffer-size 0);; makes tsserver usable...
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+(add-hook 'html-mode-hook 'eglot-ensure)
+(add-hook 'css-mode-hook 'eglot-ensure)
+(add-hook 'c-ts-mode-hook 'eglot-ensure)
+
+;; (add-to-list 'eglot-server-programs
+;;              '(html-mode "node"
+;;                          "/usr/lib/node_modules/@angular/language-server"
+;;                          "--ngProbeLocations"
+;;                          "/usr/lib/node_modules"
+;;                          "--tsProbeLocations"
+;;                          "/usr/lib/node_modules"
+;;                          "--stdio"))
+
+;; scrolling stuff
+(pixel-scroll-precision-mode)
+(setq isearch-allow-scroll 'unlimited)
+
+;; tests to improve performance
+;; see https://emacs-lsp.github.io/lsp-mode/page/performance/
+;; and https://joaotavora.github.io/eglot/
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+;; language modes
+(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts?$" . typescript-ts-mode))
+
+(setq native-comp-async-report-warnings-errors nil)
+;;
+;; NEW STUFF ##################################################
+
+
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode)
+  (custom-set-variables '(git-gutter:update-interval 2)))
