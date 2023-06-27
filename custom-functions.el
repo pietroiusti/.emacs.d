@@ -101,3 +101,17 @@ directory the file is in."
         (display-line-numbers-mode -1)))))
 
 (define-key global-map (kbd "M-g M-g") 'gp/goto-line)
+
+(defun gp/xref-directory-find-regex ()
+  (interactive)
+  (require 'xref)
+  (require 'grep)
+  (let ((rgx (thing-at-point 'symbol t)))
+    (when rgx
+      (let ((files
+             (project--files-in-directory default-directory
+                                          nil
+                                          '())))
+        (xref-show-xrefs
+         (apply-partially #'project--find-regexp-in-files rgx files)
+         nil)))))

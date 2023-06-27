@@ -29,6 +29,8 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
 (setq disabled-command-function nil) ;; enable all commands
 
+(setq-default indent-tabs-mode nil)
+
 ;; (setq-default show-trailing-whitespace t)
 ;; (setq-default indicate-empty-lines t)
 
@@ -114,6 +116,9 @@
 
 ;; bookmarks
 (setq bookmark-save-flag 1) ;; Save bookmarks every time a bookmark is made or deleted.
+
+;; ediff
+(setq ediff-window-setup-function 'ediff-setup-windows-plain) ;; don't use litte nasty frame
 
 (use-package org
   ;; TODO: use-package, even with ":pin org", doesn't install the org
@@ -597,6 +602,9 @@
 ;; and https://joaotavora.github.io/eglot/
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+;; I hate the minibuffer expanding so rudely
+(setq eldoc-echo-area-use-multiline-p nil)
 
 ;; language modes
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
