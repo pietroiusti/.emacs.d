@@ -102,16 +102,18 @@ directory the file is in."
 
 (define-key global-map (kbd "M-g M-g") 'gp/goto-line)
 
-(defun gp/xref-directory-find-regex ()
+(defun gp/xref-directory-find-symbol-at-point ()
   (interactive)
+  "Find all matches for symbol at point in the current directory."
   (require 'xref)
   (require 'grep)
   (let ((rgx (thing-at-point 'symbol t)))
     (when rgx
       (let ((files
              (project--files-in-directory default-directory
-                                          nil
-                                          '())))
+                                          nil)))
         (xref-show-xrefs
          (apply-partially #'project--find-regexp-in-files rgx files)
          nil)))))
+
+(define-key global-map (kbd "C-c g") 'gp/xref-directory-find-symbol-at-point)
