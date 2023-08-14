@@ -31,6 +31,8 @@
 
 (setq-default indent-tabs-mode nil)
 
+(setq help-window-select t)
+
 ;; (setq-default show-trailing-whitespace t)
 ;; (setq-default indicate-empty-lines t)
 
@@ -400,6 +402,8 @@
 (setq-default c-default-style "linux"
               c-basic-offset 2)
 
+(setq c-ts-mode-indent-offset 2)
+
 ;; (use-package js2-mode
 ;;   :ensure t
 ;;   :config
@@ -423,8 +427,8 @@
 ;;   :config)
 
 ;; (setq-default typescript-indent-level 2)
-;; (setq-default indent-tabs-mode nil)
-;; (setq js-indent-level 2)
+(setq-default indent-tabs-mode nil)
+(setq js-indent-level 2)
 
 ;; (use-package ido-completing-read+
 ;;   :ensure t
@@ -476,6 +480,18 @@
 (use-package undo-tree
   :ensure t)
 
+;; (use-package evil
+;;   :ensure t
+;;   :config
+;;   ;; (define-key evil-insert-state-map (kbd "C-<return>") 'evil-normal-state)
+;;   ;; (define-key evil-insert-state-map (kbd "<escape>") nil)
+;;   (setq evil-disable-insert-state-bindings t)
+;;   (setq evil-default-state 'emacs)
+
+;;   (setq evil-normal-state-cursor '("#e80000" box))
+;;   (setq evil-insert-state-cursor '("#e80000" bar))
+;;   (setq evil-emacs-state-cursor '("#839496" box)))
+
 (use-package evil
   :ensure t
   :init
@@ -492,13 +508,27 @@
 
   ;;(setq evil-default-cursor '("#839496" box))
 
-  (setq evil-normal-state-cursor '("#e80000" box))
-  (setq evil-emacs-state-cursor '("#839496" box))
-  (setq evil-motion-state-cursor '("#e80000" box))
-  (setq evil-visual-state-cursor '("#e80000" box))
-  (setq evil-insert-state-cursor '("#e80000" bar))
-  (setq evil-replace-state-cursor '("#e80000" box))
-  (setq evil-operator-state-cursor '("#e80000" hollow))
+
+
+
+
+
+  ;; this crap doesn't work as it should
+  ;; (setq evil-normal-state-cursor '("#e80000" box))
+  ;; (setq evil-emacs-state-cursor '("#839496" box))
+  ;; (setq evil-motion-state-cursor '("#e80000" box))
+  ;; (setq evil-visual-state-cursor '("#e80000" box))
+  ;; (setq evil-insert-state-cursor '("#e80000" bar))
+  ;; (setq evil-replace-state-cursor '("#e80000" box))
+  ;; (setq evil-operator-state-cursor '("#e80000" hollow))
+
+
+
+
+
+
+
+
 
   ;; ;; The color of the cursor sometimes gets reset to evil-emacs-state-cursor...
   ;; ;;
@@ -575,6 +605,10 @@
 
 
 
+
+
+(setq enable-recursive-minibuffers t)
+
 ;; NEW STUFF ##################################################
 ;;
 ;; lsp
@@ -583,6 +617,9 @@
 (add-hook 'html-mode-hook 'eglot-ensure)
 (add-hook 'css-mode-hook 'eglot-ensure)
 (add-hook 'c-ts-mode-hook 'eglot-ensure)
+
+;; Disable inlay hints
+(add-hook 'eglot-managed-mode-hook '(lambda () (eglot-inlay-hints-mode -1)))
 
 ;; (add-to-list 'eglot-server-programs
 ;;              '(html-mode "node"
@@ -608,15 +645,88 @@
 
 ;; language modes
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+;;(add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode)) ;; why doesn't this work?
 (add-to-list 'auto-mode-alist '("\\.ts?$" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.js?$" . js-ts-mode))
+
+(add-hook 'typescript-ts-mode-hook '(lambda () (display-line-numbers-mode)))
+(add-hook 'js-ts-mode-hook '(lambda () (display-line-numbers-mode)))
+
+(add-hook 'c-ts-mode-hook '(lambda () (display-line-numbers-mode)))
 
 (setq native-comp-async-report-warnings-errors nil)
-;;
-;; NEW STUFF ##################################################
-
 
 (use-package git-gutter
   :ensure t
   :config
   (global-git-gutter-mode)
   (custom-set-variables '(git-gutter:update-interval 2)))
+
+(use-package vertico
+  :ensure t)
+
+(use-package marginalia
+  :ensure t
+
+  :config
+  (marginalia-mode)
+
+  ;; https://github.com/minad/marginalia/issues/142
+  (add-hook 'icomplete-minibuffer-setup-hook
+          (lambda () (setq truncate-lines t))))
+
+(use-package consult
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-c l") 'consult-line)
+  (define-key global-map (kbd "C-c s") 'consult-ripgrep))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package embark
+  :ensure t
+
+  :bind
+
+  (("C-c e a" . embark-act)         ;; pick some comfortable binding
+   ("C-c e d" . embark-dwim)        ;; good alternative: M-.
+   ("C-c e h" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+  ;; strategy, if you want to see the documentation from multiple providers.
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package wgrep
+  :ensure t)
+
+;(load-file "./meow.el")
+
+;;
+;; NEW STUFF ##################################################
+
+
+
+
