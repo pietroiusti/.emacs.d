@@ -29,9 +29,13 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
 (setq disabled-command-function nil) ;; enable all commands
 
-(setq-default indent-tabs-mode nil)
+;; I've used the default double spaces for sentences, but I don't
+;; think it makes sense keeping it.
+(setq sentence-end-double-space nil)
 
-(setq help-window-select t)
+(setq indent-tabs-mode nil)
+
+(setq help-window-select t) ;; automatically switch to help window
 
 ;; (setq-default show-trailing-whitespace t)
 ;; (setq-default indicate-empty-lines t)
@@ -693,10 +697,20 @@
   ;; (setq vertico-cycle t)
 
   :config
-  (define-key vertico-map (kbd "C-m") 'vertico-insert)
+  ;;(define-key vertico-map (kbd "C-m") 'vertico-directory-enter) ;; ido-like behavior.
+  ;; I moved this commented config below following documentation's reccomendation
   (define-key vertico-map (kbd "<return>") 'vertico-exit)
   (define-key vertico-map (kbd "C-j") 'vertico-exit)
   (define-key vertico-map (kbd "M-j") 'vertico-exit-input))
+
+;; (f)ido-like behavior
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("C-m" . 'vertico-directory-enter)))
+
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
