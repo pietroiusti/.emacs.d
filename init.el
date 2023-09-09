@@ -207,6 +207,8 @@
 
   ;;(setq org-agenda-start-with-log-mode t)
 
+  (setq org-refile-targets '(( "/home/gp/Nextcloud/org/notes.org" . (:tag . "zkinbox"))))
+
   (add-to-list 'org-file-apps
                '("\\.pdf\\'" . emacs ))
 
