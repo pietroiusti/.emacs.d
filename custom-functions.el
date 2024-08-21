@@ -17,7 +17,7 @@ directory the file is in."
 ;;   (cond
 ;;    ( (or (char-equal (preceding-char) ?\()
 ;;          (char-equal (following-char) ?\)))
-;;      (forward-sexp ... 
+;;      (forward-sexp ...
 
 (defun gp/gvim-current-buffer-file ()
   (interactive)
@@ -53,7 +53,7 @@ directory the file is in."
                                        ":"
                                        (int-to-string (1+ (current-column))))))
 
-(define-key global-map (kbd "C-<escape>") 'gp/vscode-current-buffer-file-at-point)
+;; (define-key global-map (kbd "C-<escape>") 'gp/vscode-current-buffer-file-at-point)
 
 (defun gp/day-theme ()
   (interactive)
@@ -117,3 +117,33 @@ directory the file is in."
          nil)))))
 
 (define-key global-map (kbd "C-c g") 'gp/xref-directory-find-symbol-at-point)
+
+(defun gp/lint ()
+  (interactive)
+  (shell-command (concat "yarn eslint " (buffer-file-name))))
+
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
+;;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region)))
+
+;; Apparently we can use strings as registers names (and not only
+;; characters. Cf. https://irreal.org/blog/?p=12386)
+(defun gp/copy-to-register-with-name (s)
+    (interactive "sRegister name:")
+    (copy-to-register s (point) (mark)))
+(defun gp/get-register(key alist)
+  (if (null alist)
+      (message "register not found")
+    (let* ((first-el (car alist))
+           (first-el-key (car first-el))
+           (first-el-val (cdr first-el)))
+      (if (equal first-el-key key)
+          (insert
+           (substring-no-properties first-el-val)))
+      (funcall #'gp/get-register key (cdr alist)))))
