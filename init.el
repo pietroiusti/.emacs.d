@@ -29,13 +29,15 @@
 (fset 'yes-or-no-p 'y-or-n-p) ;; Use y/n instead of yes/no
 (setq disabled-command-function nil) ;; enable all commands
 
-;; I've used the default double spaces for sentences, but I don't
-;; think it makes sense keeping it.
-(setq sentence-end-double-space nil)
+(setq-default truncate-lines t)
 
 (setq indent-tabs-mode nil)
 
 (setq help-window-select t) ;; automatically switch to help window
+
+;; fit windows to buffer horizontally too when using
+;; `fit-window-to-buffer`
+(setq fit-window-to-buffer-horizontally t)
 
 ;; (setq-default show-trailing-whitespace t)
 ;; (setq-default indicate-empty-lines t)
@@ -67,6 +69,9 @@
 
 (define-key global-map (kbd "C-c b") 'bury-buffer)
 
+(define-key global-map (kbd "C-c f n") 'flymake-goto-next-error)
+(define-key global-map (kbd "C-c f p") 'flymake-goto-prev-error)
+
 ;; DISPLAY BUFFER BEHAVIOR
 ;; (customize-set-variable
 ;;  'display-buffer-base-action
@@ -88,7 +93,13 @@
 ;(setq icomplete-max-delay-chars 0)
 
 ;; window TABS
-(global-tab-line-mode)
+;;(global-tab-line-mode)
+
+;; avoid prompt for dictionary source which defaults to dict.org
+(setq dictionary-server "dict.org")
+
+;; modeline
+(column-number-mode)
 
 ;; SCROLLING BEHAVIOR
 (customize-set-variable 'scroll-conservatively 101)
@@ -98,9 +109,9 @@
 (setq isearch-allow-scroll 'unlimited)
 (setq isearch-lazy-count t)
 
-;; (tool-bar-mode 0) ;; Don't show tool bar.
-;; (menu-bar-mode 0) ;; And menu bar.
-;; (scroll-bar-mode 0) ;; And scroll bar.
+(tool-bar-mode 0) ;; Don't show tool bar.
+(menu-bar-mode 0) ;; And menu bar.
+(scroll-bar-mode 0) ;; And scroll bar.
 ;; (fringe-mode 1) ;; shrink fringes to 1 pixel.
 
 (setq ring-bell-function 'ignore)
@@ -110,12 +121,23 @@
 ;;
 
 ;; home
+;; (add-to-list 'default-frame-alist
+;;              '(font . "Inconsolata-11"))
 (add-to-list 'default-frame-alist
-                      '(font . "Inconsolata-11"))
+                      '(font . "Liberation Mono-11"))
 (set-face-attribute 'variable-pitch nil :family "Noto sans")
 
 (setq frame-resize-pixelwise t) ;; Remove black border or side gap
                                 ;; in certain window managers
+
+
+
+;; transparency
+;; (set-frame-parameter nil 'alpha-background 85)
+
+;; (add-to-list 'default-frame-alist '(alpha-background . 70))
+
+
 
 ;; general editing settings
 (delete-selection-mode 1) ;; inserting text while the mark is active
@@ -203,7 +225,10 @@
           "~/Nextcloud/org/meetings.org" "~/Nextcloud/org/notes.org"
           "~/Nextcloud/org/readings.org" "~/Nextcloud/org/teaching.org"
           "~/Nextcloud/org/habits.org" "~/Nextcloud/org/workouts.org"
-          "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"))
+          "~/Nextcloud/org/projects.org" "~/Nextcloud/org/inbox.org"
+          "~/Nextcloud/org/reminders.org" "~/Nextcloud/org/nextactions.org"
+          "~/Nextcloud/org/journal.org" "~/Nextcloud/org/reference.org"
+          "~/Nextcloud/org/somedaymaybe.org" "~/Nextcloud/org/zettelkasten.org"))
 
   ;;(setq org-agenda-start-with-log-mode t)
 
@@ -224,6 +249,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (C . t)
      (python . t)
      (js . t)))
 
@@ -306,10 +332,12 @@
   :ensure t
   :pin melpa)
 
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
+;; which-key is in emacs 30 now!
+;; (use-package which-key
+;;   :ensure t
+;;   :config
+;;   (which-key-mode))
+(which-key-mode)
 
 (use-package web-mode
   :ensure t
@@ -409,9 +437,9 @@
 ;;             ))
 
 (setq-default c-default-style "linux"
-              c-basic-offset 2)
+              c-basic-offset 4)
 
-(setq c-ts-mode-indent-offset 2)
+(setq c-ts-mode-indent-offset 4)
 
 ;; (use-package js2-mode
 ;;   :ensure t
@@ -429,7 +457,10 @@
   (define-key global-map (kbd "C-x g") 'magit-status)
   (setq magit-diff-refine-hunk 'all)
   ;; (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
-  )
+
+  ;; Why do I have to add the following line to restore the original
+  ;; value? (Only with my build of emacs)
+  (setq magit-section-visibility-indicator '(magit-fringe-bitmap> . magit-fringe-bitmapv)))
 
 ;; (use-package typescript-mode
 ;;   :ensure t
@@ -460,6 +491,7 @@
 	      ("C-n" . company-select-next-or-abort)
 	      ("C-p" . company-select-previous-or-abort))
   :config
+  ;;(define-key company-mode-map (kbd "C-<tab>") #'company-complete)
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0))
  ;; default is 0.2
@@ -501,110 +533,216 @@
 ;;   (setq evil-insert-state-cursor '("#e80000" bar))
 ;;   (setq evil-emacs-state-cursor '("#839496" box)))
 
+
+
+
+;; (defun gp/is-buffer-to-ignore (orig-fun &rest args)
+;;   ;; (if (string-match "eldoc" (buffer-name))
+;;   ;;     (message (buffer-name))
+;;   ;;   (message (buffer-name)))
+
+;;   (if (or (string-match "*eldoc" (buffer-name))
+;;           (string-match " *temp*" (buffer-name))
+;;           (string-match "*org-src-fontification" (buffer-name))
+;;           (string-match " markdown-code-fontification:" (buffer-name)))
+;;       nil
+;;     (apply orig-fun args)))
+
+;; (advice-add 'evil-initialize-state :around #'gp/is-buffer-to-ignore)
+
+
+
+
+;; Possible setting: in insert mode bind 'i' to (evil-emacs-state) and
+;; use C-z to switch from emacs state to normal state probably not the
+;; best idea: hitting 'i' is not the only context in which we switch
+;; to insert mode
+
+
+
+;; Possible setting:
+;;
+;; In insert mode bing escape to escape. so we can do stuff like escape-<
+;;
+;; Switch to normal state with C-z
+;;
+;; and we don't need to switch to emacs state because we have already emacs keybinding in insert mode
+
+;; :O :O
+;;(defalias 'evil-insert-state 'evil-emacs-state)
+
+
 (use-package evil
   :ensure t
   :init
+  (setq evil-default-state 'emacs)
+
+  (setq evil-motion-state-modes nil)
+  (setq evil-insert-state-modes nil)
+
   (setq evil-disable-insert-state-bindings t)
-  ;; :preface ; ??
+
+  (setq evil-normal-state-cursor '("red" box))
+  (setq evil-insert-state-cursor '("red" bar))
+  ;; (setq evil-emacs-state-cursor '("black" box))
+  (setq evil-emacs-state-cursor '("white" box))
+  ;;(setq evil-default-cursor '("#e80000" box))
+
+  ;;evil-normal-state-map
+  ;; i -> evil-emacs-state
   :config
-  (setq evil-default-state 'emacs
-        evil-insert-state-modes nil
-        evil-motion-state-modes nil)
-
-  ;; Change cursor color in different modes
-  ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
-  ;; TODO: change color of cursor when it is in the minibuffer
-
-  ;;(setq evil-default-cursor '("#839496" box))
-
-
-
-
-
-
-  ;; this crap doesn't work as it should
-  ;; (setq evil-normal-state-cursor '("#e80000" box))
-  ;; (setq evil-emacs-state-cursor '("#839496" box))
-  ;; (setq evil-motion-state-cursor '("#e80000" box))
-  ;; (setq evil-visual-state-cursor '("#e80000" box))
-  ;; (setq evil-insert-state-cursor '("#e80000" bar))
-  ;; (setq evil-replace-state-cursor '("#e80000" box))
-  ;; (setq evil-operator-state-cursor '("#e80000" hollow))
-
-
-
-
-
-
-
-
-
-  ;; ;; The color of the cursor sometimes gets reset to evil-emacs-state-cursor...
-  ;; ;;
-  ;; ;; trying to debug...
-  ;; ;;
-  ;; ;; I think that the problem is that certain modes/functions creates
-  ;; ;; buffers that start by default in emacs state. This is shown by
-  ;; ;; the following message calls:
-  ;; ;;
-  ;; (add-hook 'evil-emacs-state-entry-hook '(lambda ()
-  ;;                                           (message
-  ;;                                            (concat "evil-emacs-state-entry-hook" " <" (buffer-name) ">"))))
-  ;; (add-hook 'evil-emacs-state-exit-hook '(lambda ()
-  ;;                                          (message
-  ;;                                           (concat "evil-emacs-state-exit-hook" " <" (buffer-name) ">"))))
-  ;; (add-hook 'evil-normal-state-entry-hook '(lambda ()
-  ;;                                            (message
-  ;;                                             (concat "evil-normal-state-entry-hook" " <" (buffer-name) ">"))))
-  ;; (add-hook 'evil-normal-state-exit-hook '(lambda ()
-  ;;                                           (message
-  ;;                                            (concat "evil-normal-state-exit-hook" " <" (buffer-name) ">"))))
-
-  ;; ;; https://emacs.stackexchange.com/questions/33739/is-there-a-mode-hook-when-you-switch-to-a-buffer-in-eshell-mode
-  ;; (add-hook 'buffer-list-update-hook '(lambda ()
-  ;;                                     (message
-  ;;                                      (concat "buffer-list-update-hook" " <" (buffer-name) ">"))))
-
-  ;; (evil-set-initial-state 'fundamental-mode 'emacs)
-  ;; (add-hook 'fundamental-mode-hook '(lambda () (set-cursor-color "#839496")))
-  ;; (evil-set-initial-state 'lisp-interaction-mode 'emacs)
-  ;; (add-hook 'lisp-interaction-mode-hook '(lambda () (set-cursor-color "#839496")))
-  ;; (evil-set-initial-state 'org-mode 'emacs)
-  ;; (add-hook 'org-mode-hook '(lambda () (set-cursor-color "#839496")))
-  ;; (evil-set-initial-state 'magit-mode 'emacs)
-  ;; (add-hook 'magit-mode-hook '(lambda () (set-cursor-color "#839496")))
-  ;; (evil-set-initial-state 'help-mode 'emacs)
-  ;; (add-hook 'help-mode-hook '(lambda () (set-cursor-color "#839496")))
-  ;; (evil-set-initial-state 'Info-mode 'emacs)
-  ;; (add-hook 'Info-mode-hook '(lambda () (set-cursor-color "#839496")))
-
-
-  ;;(evil-set-undo-system 'undo-fu)
-  (evil-set-undo-system 'undo-redo)
-
-  ;;(evil-set-initial-state 'typescript-mode 'normal)
-  ;; (add-hook 'typescript-mode-hook '(lambda () (set-cursor-color "red")))
-  ;;(evil-set-initial-state 'html-mode 'normal)
-  ;; (add-hook 'html-mode-hook '(lambda () (set-cursor-color "red")))
-  ;;(evil-set-initial-state 'css-mode 'normal)
-  ;; (add-hook 'css-mode-hook '(lambda () (set-cursor-color "red")))
-  ;;(evil-set-initial-state 'js-mode 'normal)
-  ;; (add-hook 'js-mode-hook '(lambda () (set-cursor-color "red")))
-  ;;(evil-set-initial-state 'js2-mode 'normal)
-  ;; (add-hook 'js2-mode-hook '(lambda () (set-cursor-color "red")))
-
   (evil-mode 1)
+
+  ;; Dealing with https://github.com/emacs-evil/evil/issues/1835
+  (add-hook 'special-mode-hook (lambda () (turn-off-evil-mode)))
+  (defun gp/is-buffer-to-ignore (orig-fun &rest args)
+    (if (string-match " markdown-code-fontification" (buffer-name))
+        nil
+      (apply orig-fun args)))
+  (advice-add 'evil-initialize-state :around #'gp/is-buffer-to-ignore)
+
+
+  ;; (define-key evil-insert-state-map (kbd "C-z") 'evil-normal-state)
+  ;; (define-key evil-insert-state-map (kbd "<escape>") nil)
+  ;; (define-key evil-normal-state-map (kbd "C-z") 'evil-insert-state)
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; ;; avoid insert state.
+  ;; ;; Only switch between emacs state and normal state
+  ;; sketchy
+  ;;(define-key evil-normal-state-map (kbd "i") 'evil-emacs-state)
+
+  ;; how to make insert-state-inducing commands switch to emacs-state
+  ;; without screwing up the undo?
+
+  ;; ;; Possible different approach: In order to avoid being in evil mode
+  ;; ;; all the time, with `C-z` perhaps we could enable evil mode
+  ;; ;; locally to the bufffer, and when hitting `i`, or some
+  ;; ;; insert-state-inducing command, just disable the locally activate
+  ;; ;; evil-mode.
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   (evil-set-initial-state 'pdf-view-mode 'emacs)
   (add-hook 'pdf-view-mode-hook
             (lambda ()
-              (set (make-local-variable 'evil-emacs-state-cursor) (list nil)))))
+              (set (make-local-variable 'evil-emacs-state-cursor) (list nil))))
+
+
+  (evil-set-undo-system 'undo-redo))
+
+
+;;(debug-on-entry 'evil-normal-state)
+;;(debug-on-entry 'set-cursor-color)
+;;(debug-on-entry 'evil-change-state)
+
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-disable-insert-state-bindings t)
+;;   ;; :preface ; ??
+;;   :config
+;;   (setq evil-default-state 'emacs
+;;         evil-insert-state-modes nil
+;;         evil-motion-state-modes nil)
+
+;;   ;; Change cursor color in different modes
+;;   ;; https://github.com/bling/dotemacs/blob/master/config/init-evil.el (setq evil-emacs-state-cursor '("grey" box))
+;;   ;; TODO: change color of cursor when it is in the minibuffer
+
+;;   ;;(setq evil-default-cursor '("#839496" box))
+
+
+
+
+
+
+;;   ;; this crap doesn't work as it should
+;;   ;; (setq evil-normal-state-cursor '("#e80000" box))
+;;   ;; (setq evil-emacs-state-cursor '("#839496" box))
+;;   ;; (setq evil-motion-state-cursor '("#e80000" box))
+;;   ;; (setq evil-visual-state-cursor '("#e80000" box))
+;;   ;; (setq evil-insert-state-cursor '("#e80000" bar))
+;;   ;; (setq evil-replace-state-cursor '("#e80000" box))
+;;   ;; (setq evil-operator-state-cursor '("#e80000" hollow))
+
+
+
+
+
+
+
+
+
+;;   ;; ;; The color of the cursor sometimes gets reset to evil-emacs-state-cursor...
+;;   ;; ;;
+;;   ;; ;; trying to debug...
+;;   ;; ;;
+;;   ;; ;; I think that the problem is that certain modes/functions creates
+;;   ;; ;; buffers that start by default in emacs state. This is shown by
+;;   ;; ;; the following message calls:
+;;   ;; ;;
+;;   ;; (add-hook 'evil-emacs-state-entry-hook '(lambda ()
+;;   ;;                                           (message
+;;   ;;                                            (concat "evil-emacs-state-entry-hook" " <" (buffer-name) ">"))))
+;;   ;; (add-hook 'evil-emacs-state-exit-hook '(lambda ()
+;;   ;;                                          (message
+;;   ;;                                           (concat "evil-emacs-state-exit-hook" " <" (buffer-name) ">"))))
+;;   ;; (add-hook 'evil-normal-state-entry-hook '(lambda ()
+;;   ;;                                            (message
+;;   ;;                                             (concat "evil-normal-state-entry-hook" " <" (buffer-name) ">"))))
+;;   ;; (add-hook 'evil-normal-state-exit-hook '(lambda ()
+;;   ;;                                           (message
+;;   ;;                                            (concat "evil-normal-state-exit-hook" " <" (buffer-name) ">"))))
+
+;;   ;; ;; https://emacs.stackexchange.com/questions/33739/is-there-a-mode-hook-when-you-switch-to-a-buffer-in-eshell-mode
+;;   ;; (add-hook 'buffer-list-update-hook '(lambda ()
+;;   ;;                                     (message
+;;   ;;                                      (concat "buffer-list-update-hook" " <" (buffer-name) ">"))))
+
+;;   ;; (evil-set-initial-state 'fundamental-mode 'emacs)
+;;   ;; (add-hook 'fundamental-mode-hook '(lambda () (set-cursor-color "#839496")))
+;;   ;; (evil-set-initial-state 'lisp-interaction-mode 'emacs)
+;;   ;; (add-hook 'lisp-interaction-mode-hook '(lambda () (set-cursor-color "#839496")))
+;;   ;; (evil-set-initial-state 'org-mode 'emacs)
+;;   ;; (add-hook 'org-mode-hook '(lambda () (set-cursor-color "#839496")))
+;;   ;; (evil-set-initial-state 'magit-mode 'emacs)
+;;   ;; (add-hook 'magit-mode-hook '(lambda () (set-cursor-color "#839496")))
+;;   ;; (evil-set-initial-state 'help-mode 'emacs)
+;;   ;; (add-hook 'help-mode-hook '(lambda () (set-cursor-color "#839496")))
+;;   ;; (evil-set-initial-state 'Info-mode 'emacs)
+;;   ;; (add-hook 'Info-mode-hook '(lambda () (set-cursor-color "#839496")))
+
+
+;;   ;;(evil-set-undo-system 'undo-fu)
+;;   (evil-set-undo-system 'undo-redo)
+
+;;   ;;(evil-set-initial-state 'typescript-mode 'normal)
+;;   ;; (add-hook 'typescript-mode-hook '(lambda () (set-cursor-color "red")))
+;;   ;;(evil-set-initial-state 'html-mode 'normal)
+;;   ;; (add-hook 'html-mode-hook '(lambda () (set-cursor-color "red")))
+;;   ;;(evil-set-initial-state 'css-mode 'normal)
+;;   ;; (add-hook 'css-mode-hook '(lambda () (set-cursor-color "red")))
+;;   ;;(evil-set-initial-state 'js-mode 'normal)
+;;   ;; (add-hook 'js-mode-hook '(lambda () (set-cursor-color "red")))
+;;   ;;(evil-set-initial-state 'js2-mode 'normal)
+;;   ;; (add-hook 'js2-mode-hook '(lambda () (set-cursor-color "red")))
+
+;;   (evil-mode 1)
+
+;;   (evil-set-initial-state 'pdf-view-mode 'emacs)
+;;   (add-hook 'pdf-view-mode-hook
+;;             (lambda ()
+;;               (set (make-local-variable 'evil-emacs-state-cursor) (list nil)))))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t)
 
 (use-package modus-themes
   :ensure t)
+
+(load-theme 'modus-operandi t)
 
 ;; EXWM
 ;; I keep a separate file that is loaded only when Emacs works as X WM.
@@ -654,6 +792,7 @@
 
 ;; language modes
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 ;;(add-to-list 'major-mode-remap-alist '(js-mode . js-ts-mode)) ;; why doesn't this work?
 (add-to-list 'auto-mode-alist '("\\.ts?$" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.js?$" . js-ts-mode))
@@ -679,7 +818,7 @@
 
 ;; Enable vertico
 (use-package vertico
-
+  :ensure t
   ;; :bind
   ;; (("C-j" . 'vertico-insert))
 
@@ -748,6 +887,7 @@
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
+  :ensure t
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
@@ -828,6 +968,27 @@
 
 (use-package wgrep
   :ensure t)
+
+(use-package fold-this
+  :ensure t)
+
+(use-package eldoc-box
+  :ensure t
+  :bind
+  (("C-c h". eldoc-box-help-at-point)))
+
+(use-package vterm
+  :ensure t)
+
+(use-package eat
+  :ensure t)
+
+
+
+;; (require 'keyfreq)
+;; (keyfreq-mode 1)
+;; (keyfreq-autosave-mode 1)
+
 
 ;(load-file "./meow.el")
 
