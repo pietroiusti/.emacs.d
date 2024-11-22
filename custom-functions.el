@@ -147,3 +147,20 @@ directory the file is in."
           (insert
            (substring-no-properties first-el-val)))
       (funcall #'gp/get-register key (cdr alist)))))
+
+(defun gp/reverse-words-in-region ()
+  "Reverse order of strings delimited by spaces in region.
+E.g., AA EE FF --> FF EE AA
+Useful when having to convert little endian to big endian and vice versa.
+See https://lists.gnu.org/archive/html/help-gnu-emacs/2008-07/msg00814.html
+  "
+  (interactive)
+  (if (use-region-p)
+      (let ((region (buffer-substring (region-beginning) (region-end))))
+        (let ((split-region (split-string region)))
+          (let ((reverse-split-region (reverse split-region)))
+            (replace-region-contents
+             (region-beginning)
+             (region-end)
+             (lambda ()
+               (mapconcat #'(lambda (x) x) reverse-split-region " "))))))))
